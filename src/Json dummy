@@ -1,0 +1,222 @@
+New users
+{
+    "data": {
+        "count": 13021,
+        "percentage": 124,
+        "increment": true
+    }
+}
+
+New leads
+{
+    "data": {
+        "count": 1520,
+        "percentage": 59,
+        "increment": true
+    }
+}
+
+New Customers
+{
+    "data": {
+        "count": 780,
+        "percentage": 35,
+        "increment": true
+    }
+}
+
+Lead generation rate
+{
+    "data": {
+        "count": null,
+        "percentage": 34,
+        "increment": true
+    }
+}
+
+Customer generation rate
+{
+    "data": {
+        "count": null,
+        "percentage": 21,
+        "increment": true
+    }
+}
+
+Bar chart of Top 5 Geographies- City (by new users)
+{
+    "data": {
+        "categories": ["Jakarta", "New York", "Delhi", "Bangkok", "Berlin"],
+        "data": [
+            {
+                "category": "Jakarta",
+                "count": 21280
+            },
+            {
+                "category": "New York",
+                "count": 17490
+            },
+            {
+                "category": "Delhi",
+                "count": 32091
+            },
+            {
+                "category": "Bangkok",
+                "count": 24019
+            },
+            {
+                "category": "Berlin",
+                "count": 12280
+            }
+        ]
+    }
+}
+
+Bar chart of Top 5 channels (by new users)
+{
+    "data": {
+        "categories": ["Channel1", "Channel2", "Channel3", "Channel4", "Channel5"],
+        "data": [
+            {
+                "category": "Channel1",
+                "count": 21280
+            },
+            {
+                "category": "Channel2",
+                "count": 17490
+            },
+            {
+                "category": "Channel3",
+                "count": 32091
+            },
+            {
+                "category": "Channel4",
+                "count": 24019
+            },
+            {
+                "category": "Channel5",
+                "count": 12280
+            }
+        ]
+    }
+}
+
+Bar chart of Top 5 sources- source/med combo (by new users)
+{
+    "data": {
+        "categories": ["Facebook", "Instagram", "Google", "Twitter", "Source"],
+        "data": [
+            {
+                "category": "Facebook",
+                "count": 21280
+            },
+            {
+                "category": "Instagram",
+                "count": 17490
+            },
+            {
+                "category": "Google",
+                "count": 32091
+            },
+            {
+                "category": "Twitter",
+                "count": 24019
+            },
+            {
+                "category": "Source",
+                "count": 12280
+            }
+        ]
+    }
+}
+
+
+
+
+Bar chart of top 5 campaigns (by new users),
+{
+    "data": {
+        "categories": ["Campaign1", "Campaign2", "Campaign3", "Campaign4", "Campaign5"],
+        "data": [
+            {
+                "category": "Campaign1",
+                "count": 21280
+            },
+            {
+                "category": "Campaign2",
+                "count": 17490
+            },
+            {
+                "category": "Campaign3",
+                "count": 32091
+            },
+            {
+                "category": "Campaign4",
+                "count": 24019
+            },
+            {
+                "category": "Campaign5",
+                "count": 12280
+            }
+        ]
+    }
+}
+
+
+New users (line chart)
+Dates will be in timestamp, u have to show them by day/week/month wise accordingly to the length of data
+{
+    "data": {
+        "categories": ["date1", "date2", "date3", "date4", "date5", "date1", "date2", "date3", "date4", "date5"],
+        "data": [
+            {
+                "category": "date1",
+                "count": 20
+            },
+            {
+                "category": "date2",
+                "count": 35
+            },
+            {
+                "category": "date3",
+                "count": 23
+            },
+            {
+                "category": "date4",
+                "count": 12
+            },
+            {
+                "category": "date5",
+                "count": 41
+            },
+            {
+                "category": "date1",
+                "count": 20
+            },
+            {
+                "category": "date2",
+                "count": 35
+            },
+            {
+                "category": "date3",
+                "count": 23
+            },
+            {
+                "category": "date4",
+                "count": 12
+            },
+            {
+                "category": "date5",
+                "count": 41
+            }
+        ]
+    }
+}
+
+New leads
+Same as above
+Lead generation rate
+Same as above
+
+
+
