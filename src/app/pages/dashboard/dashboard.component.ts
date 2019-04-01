@@ -28,10 +28,10 @@ export class BarChartData {
 export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   private alive = true;
-  profitChartData: ProfitChart;
+  profitChartData: BarChartData;
   barChartData: BarChartData;
   ordersChartData: OrdersChart;
-
+  eTheme: any;
   echartsIntance: any;
   echartInstance: any;
   options: any = {};
@@ -126,8 +126,9 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
   constructor(private themeService: NbThemeService, private ordersProfitChartService: OrdersProfitChartData,
     private solarService: SolarData, private layoutService: LayoutService,
     private dashboardService: DashboardSampleService) {
-    this.getProfitChartData(this.period);
+    //  this.getProfitChartData(this.period);
     this.getOrdersChartData(this.period);
+    this.getGraphData();
 
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
@@ -152,9 +153,8 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.dashboardService.getJSON()
       .pipe(takeWhile(() => this.alive))
       .subscribe(data => {
-        console.log('data', data);
-        this.barChartData = data;
-        console.log('barChartData', this.barChartData);
+        this.profitChartData = data;
+        this.setOptions(this.eTheme);
 
       });
   }
@@ -164,7 +164,6 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
       .pipe(takeWhile(() => this.alive))
       .subscribe(profitChartData => {
         this.profitChartData = profitChartData;
-        console.log('prfit', this.profitChartData);
       });
   }
 
@@ -188,11 +187,13 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(config => {
-        const eTheme: any = config.variables.profit;
+        this.eTheme = config.variables.profit;
         const oTheme: any = config.variables.orders;
+        if (this.profitChartData) {
+          this.setOptions(this.eTheme);
+        }
         this.setOption(oTheme);
         this.updateOrdersChartOptions(this.ordersChartData);
-        this.setOptions(eTheme);
       });
   }
 
