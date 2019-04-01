@@ -5,58 +5,31 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { ThemeModule } from '../../@theme/theme.module';
 import { DashboardComponent } from './dashboard.component';
 import { StatusCardComponent } from './status-card/status-card.component';
-import { ContactsComponent } from './contacts/contacts.component';
-import { RoomsComponent } from './rooms/rooms.component';
-import { RoomSelectorComponent } from './rooms/room-selector/room-selector.component';
-import { TemperatureComponent } from './temperature/temperature.component';
-import { TemperatureDraggerComponent } from './temperature/temperature-dragger/temperature-dragger.component';
-import { TeamComponent } from './team/team.component';
-import { KittenComponent } from './kitten/kitten.component';
-import { SecurityCamerasComponent } from './security-cameras/security-cameras.component';
-import { ElectricityComponent } from './electricity/electricity.component';
-import { ElectricityChartComponent } from './electricity/electricity-chart/electricity-chart.component';
-import { WeatherComponent } from './weather/weather.component';
-import { SolarComponent } from './solar/solar.component';
-import { PlayerComponent } from './rooms/player/player.component';
-import { TrafficComponent } from './traffic/traffic.component';
-import { TrafficChartComponent } from './traffic/traffic-chart.component';
 import { CountryOrdersComponent } from './country-orders/country-orders.component';
 import { CountryOrdersMapComponent } from './country-orders/map/country-orders-map.component';
 import { CountryOrdersChartComponent } from './country-orders/chart/country-orders-chart.component';
 import { CountryOrdersMapService } from './country-orders/map/country-orders-map.service';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { DashboardSampleService } from '../../@core/mock/dashboard-sample.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
     ThemeModule,
     NgxEchartsModule,
     LeafletModule,
-
+    HttpClientModule,
   ],
   declarations: [
     DashboardComponent,
     StatusCardComponent,
-    TemperatureDraggerComponent,
-    ContactsComponent,
-    RoomSelectorComponent,
-    TemperatureComponent,
-    RoomsComponent,
-    TeamComponent,
-    KittenComponent,
-    SecurityCamerasComponent,
-    ElectricityComponent,
-    ElectricityChartComponent,
-    WeatherComponent,
-    PlayerComponent,
-    SolarComponent,
-    TrafficComponent,
-    TrafficChartComponent,
     CountryOrdersComponent,
     CountryOrdersMapComponent,
     CountryOrdersChartComponent,
   ],
   providers: [
     CountryOrdersMapService,
+    DashboardSampleService,
   ],
 })
 export class DashboardModule { }

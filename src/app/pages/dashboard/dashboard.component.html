@@ -1,7 +1,7 @@
 <div class="row">
-  <div class="col-xxxl-3 col-md-3" *ngFor="let statusCard of statusCards">
-    <ngx-status-card [title]="statusCard.title" [type]="statusCard.type">
-      <i [ngClass]="statusCard.iconClass"></i>
+  <div class="col-xxxl-15 col-half-offset col-md-15 col-xs-15 col-lg-15 col-sm-15" *ngFor="let statusCard of statusCards">
+    <ngx-status-card [title]="statusCard.title" [count]="statusCard.count" [percentage]="statusCard.percentage">
+      <!-- <i [ngClass]="statusCard.iconClass"></i> -->
     </ngx-status-card>
   </div>
 </div>

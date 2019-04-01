@@ -4,6 +4,7 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
+    "resolveJsonModule": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -15,8 +16,8 @@
       "es2017",
       "dom"
     ],
-    "plugins": [
-      { "name": "tslint-language-service"}
-    ]
+    "plugins": [{
+      "name": "tslint-language-service"
+    }]
   }
 }

@@ -6,11 +6,18 @@ import { ProfitChart } from '../../@core/data/profit-chart';
 import { OrdersProfitChartData } from '../../@core/data/orders-profit-chart';
 import { LayoutService } from '../../@core/utils/layout.service';
 import { OrdersChart } from '../../@core/data/orders-chart';
+import { DashboardSampleService } from '../../@core/mock/dashboard-sample.service';
 
 interface CardSettings {
   title: string;
-  iconClass: string;
-  type: string;
+  count: number;
+  percentage: number;
+  increement: boolean;
+}
+
+export class BarChartData {
+  chartLabel: string[];
+  data: number[][];
 }
 
 @Component({
@@ -22,6 +29,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   private alive = true;
   profitChartData: ProfitChart;
+  barChartData: BarChartData;
   ordersChartData: OrdersChart;
 
   echartsIntance: any;
@@ -30,35 +38,46 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
   option: any = {};
 
   solarValue: number;
-  lightCard: CardSettings = {
-    title: 'Light',
-    iconClass: 'nb-lightbulb',
-    type: 'primary',
+  newUsers: CardSettings = {
+    title: 'New users',
+    count: 13021,
+    percentage: 124,
+    increement: true,
   };
-  rollerShadesCard: CardSettings = {
-    title: 'Roller Shades',
-    iconClass: 'nb-roller-shades',
-    type: 'success',
+  newLeads: CardSettings = {
+    title: 'New leads',
+    count: 1520,
+    percentage: 59,
+    increement: true,
   };
-  wirelessAudioCard: CardSettings = {
-    title: 'Wireless Audio',
-    iconClass: 'nb-audio',
-    type: 'info',
+  newCustomer: CardSettings = {
+    title: 'New Customers',
+    count: 780,
+    percentage: 35,
+    increement: true,
   };
-  coffeeMakerCard: CardSettings = {
-    title: 'Coffee Maker',
-    iconClass: 'nb-coffee-maker',
-    type: 'warning',
+  leadGenerationRate: CardSettings = {
+    title: 'Lead generation rate',
+    count: 0,
+    percentage: 34,
+    increement: true,
+  };
+  customerGenerationRate: CardSettings = {
+    title: 'Customer generation rate',
+    count: 0,
+    percentage: 21,
+    increement: true,
   };
 
   statusCards: string;
   period: string = 'week';
 
   commonStatusCardsSet: CardSettings[] = [
-    this.lightCard,
-    this.rollerShadesCard,
-    this.wirelessAudioCard,
-    this.coffeeMakerCard,
+    this.newUsers,
+    this.newLeads,
+    this.newCustomer,
+    this.leadGenerationRate,
+    this.customerGenerationRate,
   ];
 
   statusCardsByThemes: {
@@ -70,26 +89,43 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
       cosmic: this.commonStatusCardsSet,
       corporate: [
         {
-          ...this.lightCard,
-          type: 'warning',
+          ...this.newUsers,
         },
         {
-          ...this.rollerShadesCard,
-          type: 'primary',
+          ...this.newLeads,
         },
         {
-          ...this.wirelessAudioCard,
-          type: 'danger',
+          ...this.newCustomer,
         },
         {
-          ...this.coffeeMakerCard,
-          type: 'secondary',
+          ...this.leadGenerationRate,
+        },
+        {
+          ...this.customerGenerationRate,
         },
       ],
     };
 
+  // corporate: [
+  //   {
+  //     ...this.lightCard,
+  //     type: 'warning',
+  //   },
+  //   {
+  //     ...this.rollerShadesCard,
+  //     type: 'primary',
+  //   },
+  //   {
+  //     ...this.wirelessAudioCard,
+  //     type: 'danger',
+  //   },
+  //   {
+  //     ...this.coffeeMakerCard,
+  //     type: 'secondary',
+  //   },
   constructor(private themeService: NbThemeService, private ordersProfitChartService: OrdersProfitChartData,
-    private solarService: SolarData, private layoutService: LayoutService) {
+    private solarService: SolarData, private layoutService: LayoutService,
+    private dashboardService: DashboardSampleService) {
     this.getProfitChartData(this.period);
     this.getOrdersChartData(this.period);
 
@@ -112,11 +148,23 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
       });
   }
 
+  getGraphData() {
+    this.dashboardService.getJSON()
+      .pipe(takeWhile(() => this.alive))
+      .subscribe(data => {
+        console.log('data', data);
+        this.barChartData = data;
+        console.log('barChartData', this.barChartData);
+
+      });
+  }
+
   getProfitChartData(period: string) {
     this.ordersProfitChartService.getProfitChartData(period)
       .pipe(takeWhile(() => this.alive))
       .subscribe(profitChartData => {
         this.profitChartData = profitChartData;
+        console.log('prfit', this.profitChartData);
       });
   }
 
@@ -141,7 +189,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
       .pipe(takeWhile(() => this.alive))
       .subscribe(config => {
         const eTheme: any = config.variables.profit;
-        const oTheme:any = config.variables.orders;
+        const oTheme: any = config.variables.orders;
         this.setOption(oTheme);
         this.updateOrdersChartOptions(this.ordersChartData);
         this.setOptions(eTheme);

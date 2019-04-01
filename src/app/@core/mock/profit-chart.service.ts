@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { PeriodsService } from './periods.service';
 import { ProfitChart, ProfitChartData } from '../data/profit-chart';
+import { DashboardSampleService } from './dashboard-sample.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ProfitChartService extends ProfitChartData {
@@ -16,14 +18,17 @@ export class ProfitChartService extends ProfitChartData {
   ];
 
   private data = { };
-
-  constructor(private period: PeriodsService) {
+  private test: any;
+  constructor(private period: PeriodsService, private http: HttpClient) {
     super();
     this.data = {
       week: this.getDataForWeekPeriod(),
       month: this.getDataForMonthPeriod(),
       year: this.getDataForYearPeriod(),
     };
+    // this.data = {
+    //   test: this.test,
+    // };
   }
 
   private getDataForWeekPeriod(): ProfitChart {
@@ -39,6 +44,11 @@ export class ProfitChartService extends ProfitChartData {
     };
   }
 
+  // private getData(): any {
+  //   this.http.get('./assets/data/dashboard-graph.json').subscribe(data => {
+  //     this.test = data;
+  //   });
+  // }
   private getDataForMonthPeriod(): ProfitChart {
     const nPoint = this.period.getMonths().length;
 
@@ -72,6 +82,11 @@ export class ProfitChartService extends ProfitChartData {
   }
 
   getProfitChartData(period: string): ProfitChart {
+    // const ch = 'test';
+    // this.http.get('./assets/data/dashboard-graph.json').subscribe(data => {
+    //   this.test = data;
+    //   return this.data[ch];
+    // });
     return this.data[period];
   }
 }

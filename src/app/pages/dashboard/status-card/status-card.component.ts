@@ -5,21 +5,24 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./status-card.component.scss'],
   template: `
   <nb-card size="xsmall" class="solar-card">
-      <nb-card-header>{{title}}</nb-card-header>
+      <nb-card-header>
+      <h4><b>{{title}}</b></h4>
+      <hr>
+      </nb-card-header>
       <nb-card-body>
         <div class="info">
-          <div class="value">{{type}}</div>
-          <div class="details">{{on}}</div>
+          <div class="value">{{count}}</div>
+          <div class="details">{{percentage}} %</div>
         </div>
       </nb-card-body>
-    </nb-card>    
+    </nb-card>
   `,
 })
 export class StatusCardComponent {
 
   @Input() title: string;
-  @Input() type: string;
-  @Input() on = true;
+  @Input() count: string;
+  @Input() percentage;
 }
 // <div echarts [options]="option" class="echart"></div>
 
