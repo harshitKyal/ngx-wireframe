@@ -172,6 +172,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
       .pipe(takeWhile(() => this.alive))
       .subscribe(ordersChartData => {
         this.ordersChartData = ordersChartData;
+        console.log('ordersChartData', this.ordersChartData);
       });
   }
   ngOnChanges(): void {
@@ -271,40 +272,40 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnChanges {
           },
           data: this.profitChartData.data[0],
         },
-        {
-          name: 'Payment',
-          type: 'bar',
-          barWidth: '20%',
-          itemStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: eTheme.secondLineGradFrom,
-              }, {
-                offset: 1,
-                color: eTheme.secondLineGradTo,
-              }]),
-            },
-          },
-          data: this.profitChartData.data[1],
-        },
-        {
-          name: 'All orders',
-          type: 'bar',
-          barWidth: '20%',
-          itemStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: eTheme.thirdLineGradFrom,
-              }, {
-                offset: 1,
-                color: eTheme.thirdLineGradTo,
-              }]),
-            },
-          },
-          data: this.profitChartData.data[2],
-        },
+        // {
+        //   name: 'Payment',
+        //   type: 'bar',
+        //   barWidth: '20%',
+        //   itemStyle: {
+        //     normal: {
+        //       color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+        //         offset: 0,
+        //         color: eTheme.secondLineGradFrom,
+        //       }, {
+        //         offset: 1,
+        //         color: eTheme.secondLineGradTo,
+        //       }]),
+        //     },
+        //   },
+        //   data: this.profitChartData.data[1],
+        // },
+        // {
+        //   name: 'All orders',
+        //   type: 'bar',
+        //   barWidth: '20%',
+        //   itemStyle: {
+        //     normal: {
+        //       color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+        //         offset: 0,
+        //         color: eTheme.thirdLineGradFrom,
+        //       }, {
+        //         offset: 1,
+        //         color: eTheme.thirdLineGradTo,
+        //       }]),
+        //     },
+        //   },
+        //   data: this.profitChartData.data[2],
+        // },
       ],
     };
   }

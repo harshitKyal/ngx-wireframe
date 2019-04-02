@@ -16,13 +16,13 @@ export class HeaderComponent implements OnInit {
 
   user: any;
 
-  userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
+  userMenu = [{ title: 'Profile' }, { title: 'Log Out' }];
 
   constructor(private sidebarService: NbSidebarService,
-              private menuService: NbMenuService,
-              private userService: UserData,
-              private analyticsService: AnalyticsService,
-              private layoutService: LayoutService) {
+    private menuService: NbMenuService,
+    private userService: UserData,
+    private analyticsService: AnalyticsService,
+    private layoutService: LayoutService) {
   }
 
   ngOnInit() {

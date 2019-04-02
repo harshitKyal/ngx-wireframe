@@ -60,6 +60,9 @@ import {
 import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
+import { AuthService } from './services/auth.service';
+import { ApiService } from './services/api.service';
+import { AppToastrService } from './services/app-toastr.service';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -124,7 +127,7 @@ const NB_THEME_PROVIDERS = [
     {
       name: 'corporate',
     },
-    [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME ],
+    [DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME],
   ).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,
@@ -135,6 +138,9 @@ const NB_THEME_PROVIDERS = [
   ...NbChatModule.forRoot({
     messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
   }).providers,
+  AuthService,
+  ApiService,
+  AppToastrService,
 ];
 
 @NgModule({
