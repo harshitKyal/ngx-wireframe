@@ -53,6 +53,11 @@
       @include nb-rtl(border-right, 1px solid nb-theme(separator));
       white-space: nowrap;
 
+      img {
+        height: 59px;
+        padding: 0.25rem;
+      }
+
       span {
         font-weight: nb-theme(font-weight-normal);
       }
@@ -133,9 +138,11 @@
     0% {
       box-shadow: 0 0 1px 0 rgba(nb-theme(color-fg-highlight), 0);
     }
+
     20% {
       box-shadow: 0 0 3px 10px rgba(nb-theme(color-fg-highlight), 0.4);
     }
+
     100% {
       box-shadow: 0 0 5px 20px rgba(nb-theme(color-fg-highlight), 0);
     }

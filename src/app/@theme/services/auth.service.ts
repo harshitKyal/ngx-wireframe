@@ -14,6 +14,7 @@ export class AuthService {
         if (result) {
           console.log('result login', result);
           localStorage.setItem('isLogged', 'true');
+          localStorage.setItem('currentUserToken', result.token);
           // localStorage.setItem('currentUser', JSON.stringify(result[0].data[0]));
           // localStorage.setItem('currentUserToken', JSON.stringify(result[0].data[1]));
         }
@@ -25,7 +26,7 @@ export class AuthService {
     debugger
     localStorage.removeItem('isLogged');
     // localStorage.removeItem('currentUser');
-    // localStorage.removeItem('currentUserToken')
+    localStorage.removeItem('currentUserToken');
     this.router.navigate(['/auth']);
   }
 

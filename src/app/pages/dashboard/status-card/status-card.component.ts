@@ -4,10 +4,9 @@ import { Component, Input } from '@angular/core';
   selector: 'ngx-status-card',
   styleUrls: ['./status-card.component.scss'],
   template: `
-  <nb-card size="xsmall" class="solar-card">
-      <nb-card-header>
-      <h4><b>{{title}}</b></h4>
-      <hr>
+  <nb-card status="success">
+      <nb-card-header class="text-white">
+      {{title}}
       </nb-card-header>
       <nb-card-body>
         <div class="info">

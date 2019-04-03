@@ -190,6 +190,14 @@
 
   $padding: 1rem;
 
+  nb-card {
+    height: 159px;
+  }
+
+  .text-white {
+    color: text-white() !important;
+  }
+  
   nb-card-body {
     overflow: hidden;
     padding: $padding;
@@ -219,6 +227,7 @@
     font-size: 1.25rem;
     font-weight: nb-theme(font-weight-bolder);
     line-height: 1;
+
     span {
       font-size: 1rem;
       font-weight: nb-theme(font-weight-light);
