@@ -28,7 +28,6 @@ export class AppComponent implements OnInit {
 
 
   onContecxtItemSelection(title) {
-    debugger
     if (title === 'Log Out') {
       this.authService.logout();
     }
