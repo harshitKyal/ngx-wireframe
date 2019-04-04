@@ -6,6 +6,9 @@ import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
+import { WebsitesModule } from './websites/websites.module';
+import { OverviewModule } from './overview/overview.module';
+import { GeoModule } from './geo/geo.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -17,6 +20,9 @@ const PAGES_COMPONENTS = [
     ThemeModule,
     DashboardModule,
     ECommerceModule,
+    WebsitesModule,
+    OverviewModule,
+    GeoModule,
     MiscellaneousModule,
   ],
   declarations: [

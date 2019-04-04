@@ -22,15 +22,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Overview',
-        link: '/pages/dashboard',
+        link: '/pages/overview',
       },
       {
         title: 'Websites',
-        link: '/pages/iot-dashboard',
+        link: '/pages/websites',
       },
       {
         title: 'Geo',
-        link: '/pages/dashboard',
+        link: '/pages/iot-dashboard',
       },
     ],
   },

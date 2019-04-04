@@ -6,16 +6,23 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { AuthGuard } from '../@theme/guard/auth.guard';
+import { OverviewComponent } from './overview/overview.component';
+import { WebsitesComponent } from './websites/websites.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [{
-    path: 'dashboard',
-    component: ECommerceComponent,
-  }, {
+    path: 'websites',
+    component: WebsitesComponent,
+  },
+  {
     path: 'iot-dashboard',
     component: DashboardComponent,
+  },
+  {
+    path: 'overview',
+    component: OverviewComponent,
   },
   // {
   //   path: 'ui-features',

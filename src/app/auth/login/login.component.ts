@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
         }
         this.authService.login(body).subscribe(data => {
             if (data) {
-                this.router.navigate(['/pages/iot-dashboard']);
+                this.router.navigate(['/pages/overview']);
             }
             this.userForm.reset();
         }, error => {

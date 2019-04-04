@@ -20,14 +20,37 @@ export class ApiService {
 
     public setOptions(body: any) {
         const options = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
+            headers: this.getHeaders(),
             body: body,
         };
         return options;
     }
 
+    public getParams(body: any): any {
+        let params = new HttpParams();
+
+        // Begin assigning parameters
+        params = params.append('segment', body.segment);
+        params = params.append('start_date', body.start_date);
+        params = params.append('end_date', body.end_date);
+        params = params.append('channel_type', body.channel_type);
+        return params;
+    }
+
+    public getBarChartParams(body: any): any {
+        let params = new HttpParams();
+
+        // Begin assigning parameters
+        params = params.append('segment', body.segment);
+        params = params.append('start_date', body.start_date);
+        params = params.append('end_date', body.end_date);
+        params = params.append('channel_type', body.channel_type);
+        params = params.append('size', body.size);
+        params = params.append('dimension', body.dimension);
+        params = params.append('metirc', body.metric);
+
+        return params;
+    }
     /**
          * @name extractData
          * @function extracts the data from the response
@@ -43,7 +66,12 @@ export class ApiService {
     public apiCaller(type: string, url: string, data?: any): any {
         this.uri = this.api + url;
         if (type === 'get') {
-            return this.get(this.uri);
+            if (data) {
+                return this.get(this.uri, data);
+            } else {
+                return this.get(this.uri);
+            }
+
         } else {
             return this.post(this.uri, data);
         }
@@ -52,8 +80,13 @@ export class ApiService {
     private post(url: string, data: any): any {
         return this.http.post(url, data, { headers: this.getHeaders() });
     }
-    private get(url: string): any {
-        return this.http.get(url, { headers: this.getHeaders() });
+    private get(url: string, body?: any): any {
+        if (body) {
+            return this.http.get(url, { params: body });
+
+        } else {
+            return this.http.get(url, { headers: this.getHeaders() });
+        }
     }
     private getHeaders(): HttpHeaders {
         const headers = new HttpHeaders();

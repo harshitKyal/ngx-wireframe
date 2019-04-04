@@ -1,0 +1,89 @@
+<div class="row">
+  <div class="col" *ngFor="let statusCard of statusCards">
+    <ngx-status-card [title]="statusCard.title" [count]="statusCard.count" [percentage]="statusCard.percentage">
+    </ngx-status-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+    <nb-card size="medium">
+      <nb-card-header>
+        {{titleLineUser}}
+      </nb-card-header>
+      <div class="chart-container">
+        <div echarts [options]="option" class="echart" (chartInit)="onLineChartInit($event)">
+        </div>
+      </div>
+    </nb-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+    <nb-card size="medium">
+      <nb-card-header>
+        {{titleLineLeads}}
+      </nb-card-header>
+      <div class="chart-container">
+        <div echarts [options]="option" class="echart" (chartInit)="onLineChartInit($event)">
+        </div>
+      </div>
+    </nb-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+    <nb-card size="medium">
+      <nb-card-header>
+        {{titleLineCustomers}}
+      </nb-card-header>
+      <div class="chart-container">
+        <div echarts [options]="option" class="echart" (chartInit)="onLineChartInit($event)">
+        </div>
+      </div>
+    </nb-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
+    <nb-card size="medium">
+      <nb-card-header>
+        {{titleGeography}}
+      </nb-card-header>
+      <div class="chart-container">
+        <div echarts [options]="options" class="echart" (chartInit)="onChartInit($event)"></div>
+      </div>
+    </nb-card>
+  </div>
+  <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
+    <nb-card size="medium">
+      <nb-card-header>
+        {{titleChannel}}
+      </nb-card-header>
+      <div class="chart-container">
+        <div echarts [options]="options" class="echart" (chartInit)="onChartInit($event)"></div>
+      </div>
+    </nb-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
+    <nb-card size="medium">
+      <nb-card-header>
+        {{titleSouce}}
+      </nb-card-header>
+      <div class="chart-container">
+        <div echarts [options]="options" class="echart" (chartInit)="onChartInit($event)"></div>
+      </div>
+    </nb-card>
+  </div>
+  <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
+    <nb-card size="medium">
+      <nb-card-header>
+        {{titleCampaign}}
+      </nb-card-header>
+      <div class="chart-container">
+        <div echarts [options]="options" class="echart" (chartInit)="onChartInit($event)"></div>
+      </div>
+    </nb-card>
+  </div>
+</div>
