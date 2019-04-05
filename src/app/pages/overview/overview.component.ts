@@ -17,15 +17,16 @@ import { AcquisitionService } from '../../@theme/services/acquisition.service';
 export class OverviewComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   private alive = true;
-  barChartData: BarChartData;
   geographyBarData: BarChartData;
   channelBarData: BarChartData;
   sourceBarData: BarChartData;
   campaignBarData: BarChartData;
 
   eTheme: any;
-  echartsIntance: any;
-  options: any = {};
+  echartGeographyInstance: any;
+  echartChannelInstance: any;
+  echartSourceInstance: any;
+  echartCampaignInstance: any;
 
   optionsGeography: any = {};
   optionsChannel: any = {};
@@ -66,6 +67,9 @@ export class OverviewComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.cardReqObj.channel_type = 'overview';
     // this.getGraphData();
     this.getGeographyBarData();
+    this.getChannelBarData();
+    this.getCampaignBarData();
+    this.getSourceBarData();
     this.getUsersCount();
     this.getLeadsCount();
     this.getCustomersCount();
@@ -86,7 +90,8 @@ export class OverviewComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   getGeographyBarData() {
-    this.barChartReqObj.metric = 'profile_count';
+    this.barChartReqObj.metric = 'new_users';
+    this.barChartReqObj.dimension = 'city';
     this.acquisitionServcie.getBarChartData(this.barChartReqObj)
       .pipe(takeWhile(() => this.alive))
       .subscribe(data => {
@@ -96,32 +101,35 @@ export class OverviewComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   getChannelBarData() {
-    this.barChartReqObj.metric = 'profile_count';
+    this.barChartReqObj.metric = 'new_users';
+    this.barChartReqObj.dimension = 'channel';
     this.acquisitionServcie.getBarChartData(this.barChartReqObj)
       .pipe(takeWhile(() => this.alive))
       .subscribe(data => {
-        this.barChartData = data.data;
-        this.optionsChannel = this.setOptions(this.eTheme, this.barChartData);
+        this.channelBarData = data.data;
+        this.optionsChannel = this.setOptions(this.eTheme, this.channelBarData);
       });
   }
 
   getSourceBarData() {
-    this.barChartReqObj.metric = 'profile_count';
+    this.barChartReqObj.metric = 'new_users';
+    this.barChartReqObj.dimension = 'source';
     this.acquisitionServcie.getBarChartData(this.barChartReqObj)
       .pipe(takeWhile(() => this.alive))
       .subscribe(data => {
-        this.barChartData = data.data;
-        this.optionsSources = this.setOptions(this.eTheme, this.barChartData);
+        this.sourceBarData = data.data;
+        this.optionsSources = this.setOptions(this.eTheme, this.sourceBarData);
       });
   }
 
   getCampaignBarData() {
-    this.barChartReqObj.metric = 'profile_count';
+    this.barChartReqObj.metric = 'new_users';
+    this.barChartReqObj.dimension = 'campaign';
     this.acquisitionServcie.getBarChartData(this.barChartReqObj)
       .pipe(takeWhile(() => this.alive))
       .subscribe(data => {
-        this.barChartData = data.data;
-        this.optionsCampaign = this.setOptions(this.eTheme, this.barChartData);
+        this.campaignBarData = data.data;
+        this.optionsCampaign = this.setOptions(this.eTheme, this.campaignBarData);
       });
   }
   // getGraphData() {
@@ -191,8 +199,17 @@ export class OverviewComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(): void {
-    if (this.echartsIntance) {
-      this.updateBarChart(this.geographyBarData, this.optionsGeography);
+    if (this.echartGeographyInstance) {
+      this.updateBarChart(this.geographyBarData, this.optionsGeography, this.echartGeographyInstance);
+    }
+    if (this.echartChannelInstance) {
+      this.updateBarChart(this.channelBarData, this.optionsChannel, this.echartChannelInstance);
+    }
+    if (this.echartSourceInstance) {
+      this.updateBarChart(this.sourceBarData, this.optionsSources, this.echartSourceInstance);
+    }
+    if (this.echartCampaignInstance) {
+      this.updateBarChart(this.campaignBarData, this.optionsCampaign, this.echartCampaignInstance);
     }
   }
 
@@ -203,6 +220,15 @@ export class OverviewComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.eTheme = config.variables.profit;
         if (this.geographyBarData) {
           this.optionsGeography = this.setOptions(this.eTheme, this.geographyBarData);
+        }
+        if (this.channelBarData) {
+          this.optionsChannel = this.setOptions(this.eTheme, this.channelBarData);
+        }
+        if (this.sourceBarData) {
+          this.optionsSources = this.setOptions(this.eTheme, this.sourceBarData);
+        }
+        if (this.campaignBarData) {
+          this.optionsCampaign = this.setOptions(this.eTheme, this.campaignBarData);
         }
       });
   }
@@ -284,11 +310,11 @@ export class OverviewComponent implements AfterViewInit, OnDestroy, OnChanges {
       ],
     };
   }
-  updateBarChart(barChartData: BarChartData, Options) {
+  updateBarChart(barChartData: BarChartData, Options, echartInstance) {
     const options = Options;
     const series = this.getNewSeries(options.series, barChartData.data);
 
-    this.echartsIntance.setOption({
+    echartInstance.setOption({
       series: series,
       xAxis: {
         data: barChartData.chartLabel,
@@ -312,13 +338,37 @@ export class OverviewComponent implements AfterViewInit, OnDestroy, OnChanges {
     });
   }
 
-  onChartInit(echarts) {
-    this.echartsIntance = echarts;
+  onGeographyChartInit(echarts) {
+    this.echartGeographyInstance = echarts;
+  }
+  onChannelChartInit(echarts) {
+    this.echartChannelInstance = echarts;
+  }
+  onCampaignChartInit(echarts) {
+    this.echartCampaignInstance = echarts;
+  }
+  onSourceChartInit(echarts) {
+    this.echartSourceInstance = echarts;
   }
   resizeChart() {
-    if (this.echartsIntance) {
+    if (this.echartGeographyInstance) {
       setTimeout(() => {
-        this.echartsIntance.resize();
+        this.echartGeographyInstance.resize();
+      }, 0);
+    }
+    if (this.echartCampaignInstance) {
+      setTimeout(() => {
+        this.echartCampaignInstance.resize();
+      }, 0);
+    }
+    if (this.echartChannelInstance) {
+      setTimeout(() => {
+        this.echartChannelInstance.resize();
+      }, 0);
+    }
+    if (this.echartSourceInstance) {
+      setTimeout(() => {
+        this.echartSourceInstance.resize();
       }, 0);
     }
   }

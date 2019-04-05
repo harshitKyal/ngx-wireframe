@@ -16,6 +16,5 @@ export class BarChartReq {
         this.end_date = '15789889976';
         this.segment = 'leads_not_customers';
         this.size = 5;
-        this.dimension = 'city';
     }
 }

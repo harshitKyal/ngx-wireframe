@@ -4,7 +4,7 @@ import { LayoutService } from '../../@core/utils';
 import { takeWhile } from 'rxjs/operators';
 import { DashboardSampleService } from '../../@core/mock/dashboard-sample.service';
 import { CardReqObj, CardResponseObj } from '../../@theme/model/acquisition-card';
-import { BarChartData } from '../../@theme/model/acquisition-chart';
+import { BarChartData, BarChartReq } from '../../@theme/model/acquisition-chart';
 import { AcquisitionService } from '../../@theme/services/acquisition.service';
 import { OrdersProfitChartData } from '../../@core/data/orders-profit-chart';
 import { OrdersChart } from '../../@core/data/orders-chart';
@@ -19,10 +19,23 @@ import { HttpClient } from '@angular/common/http';
 export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   private alive = true;
-  barChartData: BarChartData;
+  geographyBarData: BarChartData;
+  channelBarData: BarChartData;
+  sourceBarData: BarChartData;
+  campaignBarData: BarChartData;
+
   eTheme: any;
-  echartsIntance: any;
-  options: any = {};
+  echartGeographyInstance: any;
+  echartChannelInstance: any;
+  echartSourceInstance: any;
+  echartCampaignInstance: any;
+
+  optionsGeography: any = {};
+  optionsChannel: any = {};
+  optionsSources: any = {};
+  optionsCampaign: any = {};
+  barChartReqObj: BarChartReq;
+
 
   ordersChartData: OrdersChart;
   option: any = {};
@@ -55,7 +68,12 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
     private dashboardService: DashboardSampleService, private http: HttpClient) {
     this.cardReqObj = new CardReqObj();
     this.cardReqObj.channel_type = 'website';
-    this.getGraphData();
+    this.barChartReqObj = new BarChartReq();
+    this.barChartReqObj.channel_type = 'website';
+    this.getGeographyBarData();
+    this.getChannelBarData();
+    this.getCampaignBarData();
+    this.getSourceBarData();
     this.getUsersCount();
     this.getLeadsCount();
     this.getCustomersCount();
@@ -83,14 +101,50 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
       });
   }
 
-  getGraphData() {
-    this.dashboardService.getJSON()
+  getGeographyBarData() {
+    this.barChartReqObj.metric = 'new_users';
+    this.barChartReqObj.dimension = 'city';
+    this.acquisitionServcie.getBarChartData(this.barChartReqObj)
       .pipe(takeWhile(() => this.alive))
       .subscribe(data => {
-        this.barChartData = data;
-        this.setOptions(this.eTheme);
+        this.geographyBarData = data.data;
+        this.optionsGeography = this.setOptions(this.eTheme, this.geographyBarData);
       });
   }
+
+  getChannelBarData() {
+    this.barChartReqObj.metric = 'new_users';
+    this.barChartReqObj.dimension = 'channel';
+    this.acquisitionServcie.getBarChartData(this.barChartReqObj)
+      .pipe(takeWhile(() => this.alive))
+      .subscribe(data => {
+        this.channelBarData = data.data;
+        this.optionsChannel = this.setOptions(this.eTheme, this.channelBarData);
+      });
+  }
+
+  getSourceBarData() {
+    this.barChartReqObj.metric = 'new_users';
+    this.barChartReqObj.dimension = 'source';
+    this.acquisitionServcie.getBarChartData(this.barChartReqObj)
+      .pipe(takeWhile(() => this.alive))
+      .subscribe(data => {
+        this.sourceBarData = data.data;
+        this.optionsSources = this.setOptions(this.eTheme, this.sourceBarData);
+      });
+  }
+
+  getCampaignBarData() {
+    this.barChartReqObj.metric = 'new_users';
+    this.barChartReqObj.dimension = 'campaign';
+    this.acquisitionServcie.getBarChartData(this.barChartReqObj)
+      .pipe(takeWhile(() => this.alive))
+      .subscribe(data => {
+        this.campaignBarData = data.data;
+        this.optionsCampaign = this.setOptions(this.eTheme, this.campaignBarData);
+      });
+  }
+
   getUsersCount() {
     this.cardReqObj.segment = 'new_profiles';
     this.acquisitionServcie.getUsersCount(this.cardReqObj)
@@ -149,8 +203,17 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(): void {
-    if (this.echartsIntance) {
-      this.updateBarChart(this.barChartData);
+    if (this.echartGeographyInstance) {
+      this.updateBarChart(this.geographyBarData, this.optionsGeography, this.echartGeographyInstance);
+    }
+    if (this.echartChannelInstance) {
+      this.updateBarChart(this.channelBarData, this.optionsChannel, this.echartChannelInstance);
+    }
+    if (this.echartSourceInstance) {
+      this.updateBarChart(this.sourceBarData, this.optionsSources, this.echartSourceInstance);
+    }
+    if (this.echartCampaignInstance) {
+      this.updateBarChart(this.campaignBarData, this.optionsCampaign, this.echartCampaignInstance);
     }
     if (this.option) {
       this.updateOrdersChartOptions(this.ordersChartData);
@@ -162,8 +225,17 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
       .pipe(takeWhile(() => this.alive))
       .subscribe(config => {
         this.eTheme = config.variables.profit;
-        if (this.barChartData) {
-          this.setOptions(this.eTheme);
+        if (this.geographyBarData) {
+          this.optionsGeography = this.setOptions(this.eTheme, this.geographyBarData);
+        }
+        if (this.channelBarData) {
+          this.optionsChannel = this.setOptions(this.eTheme, this.channelBarData);
+        }
+        if (this.sourceBarData) {
+          this.optionsSources = this.setOptions(this.eTheme, this.sourceBarData);
+        }
+        if (this.campaignBarData) {
+          this.optionsCampaign = this.setOptions(this.eTheme, this.campaignBarData);
         }
         const oTheme: any = config.variables.orders;
         this.setOption(oTheme);
@@ -251,8 +323,8 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
       ],
     };
   }
-  setOptions(eTheme) {
-    this.options = {
+  setOptions(eTheme, barChartData: BarChartData) {
+    return {
       backgroundColor: eTheme.bg,
       tooltip: {
         trigger: 'axis',
@@ -272,7 +344,7 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
       xAxis: [
         {
           type: 'category',
-          data: this.barChartData.chartLabel,
+          data: barChartData.chartLabel,
           axisTick: {
             alignWithLabel: true,
           },
@@ -323,7 +395,7 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
               }]),
             },
           },
-          data: this.barChartData.data[0],
+          data: barChartData.data[0],
         },
       ],
     };
@@ -340,14 +412,14 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
       series,
     };
   }
-  updateBarChart(barChartData: BarChartData) {
-    const options = this.options;
+  updateBarChart(barChartData: BarChartData, Options, echartInstance) {
+    const options = Options;
     const series = this.getNewSeries(options.series, barChartData.data);
 
-    this.echartsIntance.setOption({
+    echartInstance.setOption({
       series: series,
       xAxis: {
-        data: this.barChartData.chartLabel,
+        data: barChartData.chartLabel,
       },
     });
   }
@@ -371,14 +443,37 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
   onLineChartInit(echarts) {
     this.eLineChartInstance = echarts;
   }
-
-  onChartInit(echarts) {
-    this.echartsIntance = echarts;
+  onGeographyChartInit(echarts) {
+    this.echartGeographyInstance = echarts;
+  }
+  onChannelChartInit(echarts) {
+    this.echartChannelInstance = echarts;
+  }
+  onCampaignChartInit(echarts) {
+    this.echartCampaignInstance = echarts;
+  }
+  onSourceChartInit(echarts) {
+    this.echartSourceInstance = echarts;
   }
   resizeChart() {
-    if (this.echartsIntance) {
+    if (this.echartGeographyInstance) {
       setTimeout(() => {
-        this.echartsIntance.resize();
+        this.echartGeographyInstance.resize();
+      }, 0);
+    }
+    if (this.echartCampaignInstance) {
+      setTimeout(() => {
+        this.echartCampaignInstance.resize();
+      }, 0);
+    }
+    if (this.echartChannelInstance) {
+      setTimeout(() => {
+        this.echartChannelInstance.resize();
+      }, 0);
+    }
+    if (this.echartSourceInstance) {
+      setTimeout(() => {
+        this.echartSourceInstance.resize();
       }, 0);
     }
     if (this.eLineChartInstance) {

@@ -13,7 +13,7 @@
         {{titleGeography}}
       </nb-card-header>
       <div class="chart-container">
-        <div echarts [options]="optionsGeography" class="echart" (chartInit)="onChartInit($event)"></div>
+        <div echarts [options]="optionsGeography" class="echart" (chartInit)="onGeographyChartInit($event)"></div>
       </div>
     </nb-card>
   </div>
@@ -23,7 +23,7 @@
         {{titleChannel}}
       </nb-card-header>
       <div class="chart-container">
-        <div echarts [options]="optionsGeography" class="echart" (chartInit)="onChartInit($event)"></div>
+        <div echarts [options]="optionsChannel" class="echart" (chartInit)="onChannelChartInit($event)"></div>
       </div>
     </nb-card>
   </div>
@@ -35,7 +35,7 @@
         {{titleSouce}}
       </nb-card-header>
       <div class="chart-container">
-        <div echarts [options]="optionsGeography" class="echart" (chartInit)="onChartInit($event)"></div>
+        <div echarts [options]="optionsSources" class="echart" (chartInit)="onSourceChartInit($event)"></div>
       </div>
     </nb-card>
   </div>
@@ -45,7 +45,7 @@
         {{titleCampaign}}
       </nb-card-header>
       <div class="chart-container">
-        <div echarts [options]="optionsGeography" class="echart" (chartInit)="onChartInit($event)"></div>
+        <div echarts [options]="optionsCampaign" class="echart" (chartInit)="onCampaignChartInit($event)"></div>
       </div>
     </nb-card>
   </div>
