@@ -4,7 +4,7 @@ import { LayoutService } from '../../@core/utils';
 import { takeWhile } from 'rxjs/operators';
 import { DashboardSampleService } from '../../@core/mock/dashboard-sample.service';
 import { CardReqObj, CardResponseObj } from '../../@theme/model/acquisition-card';
-import { BarChartData, BarChartReq } from '../../@theme/model/acquisition-chart';
+import { BarChartData, BarChartReq, LineChartReq, LineChartData } from '../../@theme/model/acquisition-chart';
 import { AcquisitionService } from '../../@theme/services/acquisition.service';
 import { OrdersProfitChartData } from '../../@core/data/orders-profit-chart';
 import { OrdersChart } from '../../@core/data/orders-chart';
@@ -37,9 +37,13 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
   barChartReqObj: BarChartReq;
 
 
+  lineChartReqObj: LineChartReq;
+
+  lineChartUserData: LineChartData;
+
+  optionsLineUser: any = {};
   ordersChartData: OrdersChart;
-  option: any = {};
-  eLineChartInstance: any;
+  eLineChartUserInstance: any;
 
   titleGeography = 'Top 5 Geographies- City';
   titleChannel = 'Top 5 channels';
@@ -98,6 +102,7 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
       .pipe(takeWhile(() => this.alive))
       .subscribe(ordersChartData => {
         this.ordersChartData = ordersChartData;
+        console.log('ordee', this.ordersChartData);
       });
   }
 
@@ -215,7 +220,7 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (this.echartCampaignInstance) {
       this.updateBarChart(this.campaignBarData, this.optionsCampaign, this.echartCampaignInstance);
     }
-    if (this.option) {
+    if (this.optionsLineUser) {
       this.updateOrdersChartOptions(this.ordersChartData);
     }
   }
@@ -238,12 +243,12 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
           this.optionsCampaign = this.setOptions(this.eTheme, this.campaignBarData);
         }
         const oTheme: any = config.variables.orders;
-        this.setOption(oTheme);
-        this.updateOrdersChartOptions(this.ordersChartData);
+          this.setOption(oTheme);
+          this.updateOrdersChartOptions(this.ordersChartData);
       });
   }
   setOption(eTheme) {
-    this.option = {
+    this.optionsLineUser =  {
       grid: {
         left: 40,
         top: 20,
@@ -401,12 +406,12 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
     };
   }
 
-  updateOrdersChartOptions(ordersChartData: OrdersChart) {
-    const options = this.option;
-    const series = this.getNewSeries(options.series, ordersChartData.linesData);
-    const xAxis = this.getNewXAxis(options.xAxis, ordersChartData.chartLabel);
+  updateOrdersChartOptions(lineChartData: LineChartData) {
+    const options = this.optionsLineUser;
+    const series = this.getNewSeries(options.series, lineChartData.linesData);
+    const xAxis = this.getNewXAxis(options.xAxis, lineChartData.chartLabel);
 
-    this.option = {
+    this.optionsLineUser = {
       ...options,
       xAxis,
       series,
@@ -441,7 +446,7 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   onLineChartInit(echarts) {
-    this.eLineChartInstance = echarts;
+    this.eLineChartUserInstance = echarts;
   }
   onGeographyChartInit(echarts) {
     this.echartGeographyInstance = echarts;
@@ -476,11 +481,9 @@ export class WebsitesComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.echartSourceInstance.resize();
       }, 0);
     }
-    if (this.eLineChartInstance) {
-      // Fix recalculation chart size
-      // TODO: investigate more deeply
+    if (this.eLineChartUserInstance) {
       setTimeout(() => {
-        this.eLineChartInstance.resize();
+        this.eLineChartUserInstance.resize();
       }, 0);
     }
   }
