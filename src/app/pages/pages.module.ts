@@ -4,7 +4,7 @@ import { PagesComponent } from './pages.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
-import { WebsitesModule } from './websites/websites.module';
+import { PartyModule } from './party/party.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -14,8 +14,8 @@ const PAGES_COMPONENTS = [
   imports: [
     PagesRoutingModule,
     ThemeModule,
-    WebsitesModule,
     MiscellaneousModule,
+    PartyModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,

@@ -16,6 +16,7 @@ import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { JwtInterceptor } from './@theme/helpers/jwt.interceptors';
 import { AuthGuard } from './@theme/guard/auth.guard';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,7 +25,7 @@ import { AuthGuard } from './@theme/guard/auth.guard';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-
+    ToastrModule.forRoot(),
     NgbModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),

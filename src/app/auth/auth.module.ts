@@ -14,6 +14,7 @@ import {
 } from '@nebular/theme';
 import { LoginComponent } from './login/login.component';
 import { ThemeModule } from '../@theme/theme.module';
+import { AuthComponent } from './auth.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { ThemeModule } from '../@theme/theme.module';
   ],
   declarations: [
     LoginComponent,
+    AuthComponent,
   ],
 })
 export class NgxAuthModule {

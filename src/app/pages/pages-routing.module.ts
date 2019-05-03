@@ -4,28 +4,28 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { AuthGuard } from '../@theme/guard/auth.guard';
-import { WebsitesComponent } from './websites/websites.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
-  children: [{
-    path: 'websites',
-    component: WebsitesComponent,
-  },
+  children: [
   {
     path: 'miscellaneous',
     loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
   },
   {
+    path: 'party',
+    loadChildren: './party/party.module#PartyModule',
+  },
+  {
     path: '',
-    redirectTo: 'websites',
+    redirectTo: 'party',
     pathMatch: 'full',
   }, {
     path: '**',
     component: NotFoundComponent,
   }],
-  canActivate: [AuthGuard],
+  // canActivate: [AuthGuard],
 }];
 
 @NgModule({

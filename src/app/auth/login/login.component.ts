@@ -1,56 +1,42 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { NgForm } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { LoginModal } from '../../@theme/model/login-class';
 import { AuthService } from '../../@theme/services/auth.service';
-import { AppToastrService } from '../../@theme/services/app-toastr.service';
-// import { NB_AUTH_OPTIONS, NbAuthSocialLink } from '../../auth.options';
-// import { getDeepFromObject } from '../../helpers';
 
-// import { NbAuthService } from '../../services/auth.service';
-// import { NbAuthResult } from '../../services/auth-result';
 
 @Component({
     selector: 'nb-login',
     templateUrl: './login.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
-    public userForm: FormGroup;
-
-    constructor(
-        protected cd: ChangeDetectorRef,
-        protected router: Router,
-        private formBuilder: FormBuilder,
-        private authService: AuthService,
-        public appToastrService: AppToastrService) {
-    }
-    ngOnInit(): void {
-        this.userForm = this.formBuilder.group({
-            email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(6)]],
-        });
+    @ViewChild('f') loginForm: NgForm;
+    loginReq: LoginModal;
+    constructor(private router: Router, private authService: AuthService, private toasterService: ToastrService,
+        private route: ActivatedRoute) {
+        this.loginReq = new LoginModal();
     }
 
-    get user() { return this.userForm.controls; }
+    // On submit button click
+    onSubmit() {
 
-    login(): void {
-        const body = {
-            email: this.userForm.controls['email'].value,
-            password: this.userForm.controls['password'].value,
-        }
-        this.authService.login(body).subscribe(data => {
-            if (data) {
-                this.router.navigate(['/pages/overview']);
-            }
-            this.userForm.reset();
-        }, error => {
-            // this.router.navigate(['./auth']);
-        });
+        this.authService.signinUser(this.loginReq.UserName, this.loginReq.Password).subscribe(
+            data => {
+                console.log((data))
+                if (!data[0].error) {
+                    this.router.navigate(['/pages/party']);
+                    this.toasterService.success('User Logged In Succesfully!');
+                } else {
+                    this.router.navigate(['/auth']);
+                    this.toasterService.error(data[0].message);
+                }
+                this.loginForm.reset();
+            },
+            error => {
+                // this._toasterService.error('User login failed!!');
+            });
     }
 }

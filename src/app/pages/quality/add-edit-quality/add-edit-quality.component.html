@@ -1,0 +1,123 @@
+<div class="row text-left">
+  <div class="col-sm-12">
+    <div class="content-header" translate>{{topHeader}}</div>
+  </div>
+</div>
+
+<!-- Custom Form Validaton Starts -->
+<div class="row text-left">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-block">
+          <form (ngSubmit)="onCustomFormSubmit(vform)" #vform="ngForm">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Quality Id</label>
+                  <input type="text" class="form-control" [(ngModel)]="qualityModal.quality_id" name="qualityId"
+                    #QualityId="ngModel" required />
+                  <div *ngIf="QualityId.invalid && (QualityId.dirty || QualityId.touched)" class="errors">
+                    <div *ngIf="QualityId.errors && QualityId.errors.required">
+                      Quality Id is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Quality Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="qualityModal.quality_name" name="qualityname"
+                      #qualityName="ngModel" required />
+                    <div *ngIf="qualityName.invalid && (qualityName.dirty || qualityName.touched)" class="errors">
+                      <div *ngIf="qualityName.errors && qualityName.errors.required">
+                        Quality Name is required.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Quality Type</label>
+                  <!-- pattern -->
+                  <select class="form-control" [(ngModel)]="qualityModal.quality_type" name="qualitytype"
+                    #qualityType="ngModel" required (change)="onTypeChange($event.target.value)">
+                    <option disabled value="">Select Qulaity Type
+                    </option>
+                    <option *ngFor="let quality of qualityTypeList" [value]="quality.quality_type_name">{{quality.quality_type_name}}</option>
+                  </select>
+                  <div *ngIf="qualityType.invalid && (qualityType.dirty || qualityType.touched)" class="errors">
+                    <div *ngIf="qualityType.errors && qualityType.errors.required">
+                      Quality Type is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Quality Sub-Type</label>
+                    <!-- pattern -->
+                    <select class="form-control" [(ngModel)]="qualityModal.quality_sub_type" name="qualitysubtype"
+                      #qualitySubType="ngModel" >
+                      <option disabled value="">Select Quality Sub Type
+                      </option>
+                      <option *ngFor="let quality of qualitySubTypeList" [value]="quality.quality_sub_type">{{quality.quality_sub_type}}</option>
+                    </select>
+                    <div *ngIf="qualitySubType.invalid && (qualitySubType.dirty || qualitySubType.touched)" class="errors">
+                      <div *ngIf="qualitySubType.errors && qualitySubType.errors.required">
+                        Quality Sub Type is required.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Party Name</label>
+                  <select class="form-control" [(ngModel)]="qualityModal.party_name" name="partyname"
+                    #partyName="ngModel" required>
+                    <option disabled value="">Select Party Name</option>
+                    <option *ngFor="let p of partyNameList" [value]="p.ID">{{p.Name}}</option>
+                  </select>
+                  <div *ngIf="partyName.invalid && (partyName.dirty || partyName.touched)" class="errors">
+                    <div *ngIf="partyName.errors && partyName.errors.required">
+                      Party Name is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Wt / 100 mtrs</label>
+                    <input type="text" class="form-control" [(ngModel)]="qualityModal.wt_per100m" name="weight" />
+                  </div>
+                </div>
+              </div>
+  
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Remark</label>
+                  <textarea type="text" class="form-control" [(ngModel)]="qualityModal.remark"
+                    name="remark"> </textarea>
+                </div>
+              </div>
+            </div>
+            <div class="box-footer">
+              <button class="btn btn-raised btn-primary" translate>{{subBtnName}}</button> &nbsp;
+              <button type="reset" routerLink='/quality/view-quality' class="btn btn-default"
+                id="Cancel">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Custom Form Validaton Ends -->

@@ -1,0 +1,225 @@
+<div class="row text-left">
+  <div class="col-sm-12">
+    <div class="content-header">{{topHeader}}</div>
+  </div>
+</div>
+
+<!-- Custom Form Validaton Starts -->
+<div class="row text-left">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-block">
+          <form (ngSubmit)="onCustomFormSubmit(vform)" #vform="ngForm">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" class="form-control" [(ngModel)]="userModal.first_name" name="firstName"
+                    #firstName="ngModel" (keypress)="alphabetsOnly($event)" required />
+                  <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="errors">
+                    <div *ngIf="firstName.errors && firstName.errors.required">
+                      First Name is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" class="form-control" [(ngModel)]="userModal.last_name" name="lastName"
+                    #lastName="ngModel" (keypress)="alphabetsOnly($event)" required />
+                  <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="errors">
+                    <div *ngIf="lastName.errors && lastName.errors.required">
+                      Last Name is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>User Name</label>
+                  <input type="text" class="form-control" [(ngModel)]="userModal.user_name" name="userName"
+                    #userName="ngModel" required />
+                  <div *ngIf="userName.invalid  && (userName.dirty || userName.touched)" class="errors">
+                    <div *ngIf="userName.errors && userName.errors.required">
+                      User Name is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" class="form-control" [(ngModel)]="userModal.email_id" name="email" #email="ngModel"
+                    required email />
+                  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="errors">
+                    <div *ngIf="email.errors && email.errors.required">
+                      Email is required.
+                    </div>
+                    <div *ngIf="email.errors && !email.errors.required">
+                      Valid Email is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Mobile No.</label>
+                  <input type="text" class="form-control" [(ngModel)]="userModal.mobile_no" name="Telephoneno"
+                    #telephoneNo="ngModel" (keypress)="numberOnly($event)" required digits />
+                  <div *ngIf="telephoneNo.invalid && (telephoneNo.dirty || telephoneNo.touched)" class="errors">
+                    <div *ngIf="telephoneNo.errors && telephoneNo.errors.required">
+                      Mobile No. is required.
+                    </div>
+                    <div *ngIf="telephoneNo.errors && !telephoneNo.errors.required">
+                      Valid Mobile No. is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Password</label>
+                  <!-- pattern -->
+                  <input type="password" class="form-control" [(ngModel)]="userModal.password" name="password"
+                    #password="ngModel" required />
+                  <div *ngIf="password.invalid && (password.dirty || password.touched)" class="errors">
+                    <div *ngIf="password.errors && password.errors.required">
+                      Password is required.
+                    </div>
+                    <div *ngIf="password.errors && !password.errors.required">
+                      Valid Password is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Company</label>
+                  <!-- pattern -->
+                  <select class="form-control" [(ngModel)]="userModal.company_id" name="company" #company="ngModel"
+                    >
+                    <!-- required -->
+                    <option disabled value="">Select Company
+                    </option>
+                    <option *ngFor="let c of companyList" [value]="c.CompanyId">{{c.CompanyName}}</option>
+                  </select>
+                  <!-- <div *ngIf="company.invalid && (company.dirty || company.touched)" class="errors">
+                    <div *ngIf="company.errors && company.errors.required">
+                      Company is required.
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Department</label>
+                  <input type="text" class="form-control" [(ngModel)]="userModal.department" name="department"
+                    #dept="ngModel" required />
+                  <div *ngIf="dept.invalid  && (dept.dirty || dept.touched)" class="errors">
+                    <div *ngIf="dept.errors && dept.errors.required">
+                      Department is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Designation</label>
+                  <input type="text" class="form-control" [(ngModel)]="userModal.designation" name="designation"
+                    #desigNation="ngModel" required />
+                  <div *ngIf="desigNation.invalid  && (desigNation.dirty || desigNation.touched)" class="errors">
+                    <div *ngIf="desigNation.errors && desigNation.errors.required">
+                      Designation is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="content-header">User Permissions</div>
+                <br>
+              </div>
+              <br>
+              <ngx-treeview class="col-md-12" [config]="config" [items]="items" (filterChange)="onFilterChange($event)"
+                (selectedChange)="onPermissionChange($event)">
+              </ngx-treeview>
+            </div>
+            <br>
+            <!-- <div class="row" *ngIf="isAllowEditPermission">
+                <div class="col">
+                  <div class="card-header">
+                    <h4 class="card-title">{{'User.User_Permissions' | translate}}</h4>
+                  </div>
+                  <div class="card-body col-md-4">
+                    <div class="card-block">
+                      <table class="table table-bordered table-responsive-md text-center">
+                        <thead>
+                          <tr>
+                            <th>{{'User.Permission' | translate}}</th>
+                            <th>{{'Button.Action' | translate}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{{'User.Create_User' | translate}}</td>
+                            <td>
+                              <div class="custom-control custom-checkbox m-0">
+                                <input type="checkbox" class="custom-control-input" id="chkIsAllowToCreateUser" name="createuser" [(ngModel)]="this.userModal.IsAllowToCreateUser">
+                                <label class="custom-control-label" for="chkIsAllowToCreateUser"></label>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>{{'User.Create_Company' | translate}}</td>
+                            <td>
+                              <div class="custom-control custom-checkbox m-0">
+                                <input type="checkbox" class="custom-control-input" id="chkIsAllowToCreateCompany" name="createcompany" [(ngModel)]="this.userModal.IsAllowToCreateCompany">
+                                <label class="custom-control-label" for="chkIsAllowToCreateCompany"></label>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>{{'User.Create_Ticket' | translate}}</td>
+                            <td>
+                              <div class="custom-control custom-checkbox m-0">
+                                <input type="checkbox" class="custom-control-input" id="chkIsAllowToCreateTicket" name="createticket" [(ngModel)]="this.userModal.IsAllowToCreateTicket">
+                                <label class="custom-control-label" for="chkIsAllowToCreateTicket"></label>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>{{'User.Assign_Ticket' | translate}}</td>
+                            <td>
+                              <div class="custom-control custom-checkbox m-0">
+                                <input type="checkbox" class="custom-control-input" id="chkIsAllowToAssignTicket"  name="assignticket" [(ngModel)]="this.userModal.IsAllowToAssignTicket">
+                                <label class="custom-control-label" for="chkIsAllowToAssignTicket"></label>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+  
+              </div> -->
+            <div class="box-footer">
+              <button class="btn btn-raised btn-primary" [disabled]="vform.invalid" translate>{{subBtnName}}</button> &nbsp;
+              <button type="reset" routerLink='/user/view-user' class="btn btn-default" id="Cancel">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Custom Form Validaton Ends -->

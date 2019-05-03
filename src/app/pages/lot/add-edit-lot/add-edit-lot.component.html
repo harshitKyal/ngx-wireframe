@@ -1,0 +1,198 @@
+<div class="row text-left">
+  <div class="col-sm-12">
+    <div class="content-header" translate>{{topHeader}}</div>
+  </div>
+</div>
+
+<!-- Custom Form Validaton Starts -->
+<div class="row text-left">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-block">
+          <!-- (ngSubmit)="onCustomFormSubmit(vform)" -->
+          <form #vform="ngForm">
+            <div class="row">
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Lot No.</label>
+                  <input type="text" class="form-control" [(ngModel)]="lotModal.lot_id" name="lotId" #LotId="ngModel"
+                    required />
+                  <div *ngIf="LotId.invalid && (LotId.dirty || LotId.touched)" class="errors">
+                    <div *ngIf="LotId.errors && LotId.errors.required">
+                      Lot No is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Quality Id</label>
+                  <!-- pattern -->
+                  <select class="form-control" [(ngModel)]="lotModal.quality_entry_id" name="quality_id"
+                    #quality="ngModel" (change)="onQualitySelect($event.target.value)" required>
+                    <option disabled value="">Select Quality Id
+                    </option>
+                    <option *ngFor="let quality of qualityList" [value]="quality.entry_id">{{quality.quality_id}}
+                    </option>
+                  </select>
+                  <div *ngIf="quality.invalid && (quality.dirty || quality.touched)" class="errors">
+                    <div *ngIf="quality.errors && quality.errors.required">
+                      Quality Id is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Quality Name</label>
+                  <input type="text" class="form-control" [(ngModel)]="lotModal.quality_name" name="quallityname"
+                    #qualityName="ngModel" required />
+                  <div *ngIf="qualityName.invalid && (qualityName.dirty || qualityName.touched)" class="errors">
+                    <div *ngIf="qualityName.errors && qualityName.errors.required">
+                      Quality Name is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Quality Type</label>
+                  <input type="text" class="form-control" [(ngModel)]="lotModal.quality_type" name="qualitytype"
+                    #qualityType="ngModel" required />
+                  <div *ngIf="qualityType.invalid && (qualityType.dirty || qualityType.touched)" class="errors">
+                    <div *ngIf="qualityType.errors && qualityType.errors.required">
+                      Quality Type is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row col-md-12 table table-responsive" *ngIf="lotDataArray.length">
+              <ag-grid-angular style="width: 55%; height:300px" class="ag-theme-balham" [rowData]="rowData"
+                [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'>
+              </ag-grid-angular>
+            </div>
+            <div class="row">
+              <form #sform="ngForm">
+                <div class="row col-md-12">
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label>GR</label>
+                      <input type="text" class="form-control" placeholder="Select Gr" name="Gr" autocomplete="off"
+                        [(ngModel)]="lotDataObj.gr" (click)="HideShow()">
+                      <div *ngIf="flagDiv" class="dropdown">
+                        <a href="javascript:void(0)" (click)="HideShow()" class="float-right">[X]</a>
+                        <table class="table table-bordered pointer table-responsive">
+                          <thead>
+                            <tr>
+                              <th>Gr</th>
+                              <th>Batch No</th>
+                              <th>Wt</th>
+                              <th>mtr</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let gr of grList; let i = index" (click)="selectGr(gr)" class="pointer">
+                              <td style="display:none;">{{gr.gr}}</td>
+                              <td>{{gr.gr}}</td>
+                              <td>{{gr.batch_no}}</td>
+                              <td>{{gr.wt}}</td>
+                              <td>{{gr.mtr}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label>Batch No.</label>
+                      <input type="text" class="form-control" [(ngModel)]="lotDataObj.batch_no" name="batch"
+                        #Batch="ngModel" required />
+                      <div *ngIf="Batch.invalid && (Batch.dirty || Batch.touched)" class="errors">
+                        <div *ngIf="Batch.errors && Batch.errors.required">
+                          Batch No. is required.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label>Mtr</label>
+                      <input type="text" class="form-control" [(ngModel)]="lotDataObj.mtr" name="Mtr"
+                        (keypress)="numberOnly($event)" digits />
+                      <!-- <div *ngIf="GR.invalid && (GR.dirty || GR.touched)" class="errors">
+                      <div *ngIf="GR.errors && GR.errors.required">
+                        Gr is required.
+                      </div>
+                    </div> -->
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label>Weight</label>
+                      <input type="text" class="form-control" [(ngModel)]="lotDataObj.wt" name="Wt" #weight="ngModel"
+                        (keypress)="numberOnly($event)" digits required />
+                      <div *ngIf="weight.invalid && (weight.dirty || weight.touched)" class="errors">
+                        <div *ngIf="weight.errors && weight.errors.required">
+                          Weight is required.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row col-md-12">
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label>No. of Taka</label>
+                      <input type="text" class="form-control" [(ngModel)]="lotDataObj.no_of_cones_taka" name="noOfTaka"
+                        #taka="ngModel" (keypress)="numberOnly($event)" digits required />
+                      <div *ngIf="taka.invalid && (taka.dirty || taka.touched)" class="errors">
+                        <div *ngIf="taka.errors && taka.errors.required">
+                          No. of Cones/ Taka is required.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label>Unit</label>
+                      <select class="form-control" [(ngModel)]="lotDataObj.unit" name="unit" #Unit="ngModel"
+                        (change)="onUnitSelect($event.target.value)">
+                        <option disabled value="">Select Unit
+                        </option>
+                        <option *ngFor="let item of unit" [value]="item.id">{{item.value}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6" *ngIf="showDetailFlag">
+                    <div class="form-group">
+                      <label>Detail of Taka</label>
+                      <tag-input name="detail" [(ngModel)]="items" [allowDupes]="true" [theme]="bootstrap">
+                      </tag-input>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <button type="reset" [disabled]="sform.invalid" style="margin-top: 32px;"
+                      class="btn btn-raised btn-primary" (click)="onAddRecord()">Add
+                      Record</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div class="box-footer">
+              <button [disabled]="vform.invalid" class="btn btn-raised btn-primary"
+                (click)="onCustomFormSubmit(vform)">{{subBtnName}}</button>
+              &nbsp;
+              <button type="reset" routerLink='/lot/view-lot-list' class="btn btn-default" id="Cancel">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Custom Form Validaton Ends -->

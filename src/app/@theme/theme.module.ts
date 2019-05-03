@@ -63,6 +63,9 @@ import { CORPORATE_THEME } from './styles/theme.corporate';
 import { AuthService } from './services/auth.service';
 import { ApiService } from './services/api.service';
 import { AppToastrService } from './services/app-toastr.service';
+import { RouterModule } from '@angular/router';
+import { PapaParseModule } from 'ngx-papaparse';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -100,6 +103,9 @@ const NB_MODULES = [
   NbChatModule,
   NbTooltipModule,
   NbCalendarKitModule,
+  RouterModule,
+  NgbModule,
+  PapaParseModule
 ];
 
 const COMPONENTS = [
@@ -108,9 +114,11 @@ const COMPONENTS = [
   SearchInputComponent,
   TinyMCEComponent,
   SampleLayoutComponent,
+  ConfirmDialogComponent
 ];
 
 const ENTRY_COMPONENTS = [
+  ConfirmDialogComponent
 ];
 
 const PIPES = [
