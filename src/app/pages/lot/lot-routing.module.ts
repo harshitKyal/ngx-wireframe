@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AddEditLotComponent } from './add-edit-lot/add-edit-lot.component';
 import { LotComponent } from './lot.component';
 import { RouterModule, Routes } from '@angular/router';
+import { ViewLotComponent } from './view-lot/view-lot.component';
 
 const routes: Routes = [
   {
@@ -10,7 +11,7 @@ const routes: Routes = [
     children: [
       {
         path: 'view-lot-list',
-        component: LotComponent
+        component: ViewLotComponent
       },
       {
         path: 'view-lot/:id',

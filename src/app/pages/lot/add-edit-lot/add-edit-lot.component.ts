@@ -220,7 +220,7 @@ export class AddEditLotComponent implements OnInit {
         if (!data[0].error) {
           this.toasterService.success(data[0].message);
           form.resetForm();
-          this.router.navigate(['./lot/view-lot-list']);
+          this.router.navigate(['/pages/lot/view-lot-list']);
         } else {
           this.toasterService.error(data[0].message);
         }
@@ -234,7 +234,7 @@ export class AddEditLotComponent implements OnInit {
         if (!data.error) {
           this.toasterService.success(data.message);
           form.resetForm();
-          this.router.navigate(['./lot/view-lot-list']);
+          this.router.navigate(['/pages/lot/view-lot-list']);
         } else {
           this.toasterService.error(data.message);
         }
@@ -246,8 +246,8 @@ export class AddEditLotComponent implements OnInit {
 }
 @Component({
   template: `
-  <i class="ft-edit-2 info font-medium-1 mr-2" (click)="editRecord()"></i>
-  <i class="ft-x danger font-medium-1 mr-2" (click)="onDeleteRecord()"></i>`,
+  <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editRecord()"></i>
+  <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteRecord()"></i>`,
   styleUrls: ['./add-edit-lot.component.scss']
 })
 

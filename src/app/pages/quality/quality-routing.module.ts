@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { QualityComponent } from './quality.component';
 import { AddEditQualityComponent } from './add-edit-quality/add-edit-quality.component';
+import { ViewQualityComponent } from './view-quality/view-quality.component';
 
 const routes: Routes = [
   {
@@ -10,10 +11,7 @@ const routes: Routes = [
     children: [
       {
         path: 'view-quality',
-        component: QualityComponent,
-        // data: {
-        //   title: 'Dashboard 1'
-        // }
+        component: ViewQualityComponent,
       },
       {
         path: 'add-quality',
@@ -22,6 +20,11 @@ const routes: Routes = [
       {
         path: 'edit-quality/:id',
         component: AddEditQualityComponent,
+      },
+      {
+        path: '',
+        redirectTo: 'view-quality',
+        pathMatch: 'full',
       },
     ]
   }

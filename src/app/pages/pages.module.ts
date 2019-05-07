@@ -5,6 +5,10 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PartyModule } from './party/party.module';
+import { QualityModule } from './quality/quality.module';
+import { BillInModule } from './bill-in/bill-in.module';
+import { UserModule } from './user/user.module';
+import { LotModule } from './lot/lot.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -15,7 +19,11 @@ const PAGES_COMPONENTS = [
     PagesRoutingModule,
     ThemeModule,
     MiscellaneousModule,
-    PartyModule
+    PartyModule,
+    QualityModule,
+    BillInModule,
+    UserModule,
+    LotModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,

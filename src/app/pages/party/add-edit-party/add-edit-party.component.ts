@@ -46,6 +46,14 @@ export class AddEditPartyComponent implements OnInit {
     }
   }
 
+  numberOnly(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+  
   onCustomFormSubmit(form: NgForm) {
     //for update
     if (this.id) {
@@ -53,7 +61,7 @@ export class AddEditPartyComponent implements OnInit {
         if (!data[0].error) {
           this.toasterService.success(data[0].message);
           form.resetForm();
-          this.router.navigate(['/party/view-party']);
+          this.router.navigate(['/pages/party/view-party']);
         } else {
           this.toasterService.error(data[0].message);
         }
@@ -68,7 +76,7 @@ export class AddEditPartyComponent implements OnInit {
         if (!data.error) {
           this.toasterService.success(data[0].message);
           form.resetForm();
-          this.router.navigate(['/party/view-party']);
+          this.router.navigate(['/pages/party/view-party']);
         } else {
           this.toasterService.error(data[0].message);
         }

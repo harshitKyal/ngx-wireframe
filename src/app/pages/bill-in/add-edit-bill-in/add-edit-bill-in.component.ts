@@ -32,6 +32,7 @@ export class AddEditBillInComponent implements OnInit {
   qualityList: Quality[] = [];
 
   columnDefs = [
+    { headerName: 'Actions', field: 'index' },
     { headerName: 'Gr', field: 'gr' },
     { headerName: 'Quality Id', field: 'quality_entry_id' },
     { headerName: 'Quality Name', field: 'quality_name' },
@@ -40,7 +41,6 @@ export class AddEditBillInComponent implements OnInit {
     { headerName: 'Wt', field: 'wt' },
     { headerName: 'No. of Cones/Taka', field: 'no_of_cones' },
     { headerName: 'No. of Boxes', field: 'no_of_boxes' },
-    { headerName: 'Actions', field: 'index' },
 
   ];
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
@@ -156,7 +156,7 @@ export class AddEditBillInComponent implements OnInit {
     }
     this.rowData = [...this.billRecord];
     this.record = new BillRecord();
-    // form.resetForm();
+    form.resetForm();
   }
 
   onEditRecord(data) {
@@ -182,7 +182,7 @@ export class AddEditBillInComponent implements OnInit {
         if (!data[0].error) {
           this.toasterService.success(data[0].message);
           form.resetForm();
-          this.router.navigate(['./bill-in/view-bill-list']);
+          this.router.navigate(['/pages/bill/view-bill-list']);
         } else {
           this.toasterService.error(data[0].message);
         }
@@ -197,7 +197,7 @@ export class AddEditBillInComponent implements OnInit {
         if (!data.error) {
           this.toasterService.success(data.message);
           form.resetForm();
-          this.router.navigate(['./bill-in/view-bill-list']);
+          this.router.navigate(['/pages/bill/view-bill-list']);
         } else {
           this.toasterService.error(data.message);
         }
@@ -209,8 +209,8 @@ export class AddEditBillInComponent implements OnInit {
 }
 @Component({
   template: `
-  <i class="ft-edit-2 info font-medium-1 mr-2" (click)="editRecord()"></i>
-  <i class="ft-x danger font-medium-1 mr-2" (click)="onDeleteRecord()"></i>`,
+  <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editRecord()"></i>
+  <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteRecord()"></i>`,
   styleUrls: ['./add-edit-bill-in.component.scss']
 })
 

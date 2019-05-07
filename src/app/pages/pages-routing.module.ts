@@ -9,22 +9,38 @@ const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
-  {
-    path: 'miscellaneous',
-    loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
-  },
-  {
-    path: 'party',
-    loadChildren: './party/party.module#PartyModule',
-  },
-  {
-    path: '',
-    redirectTo: 'party',
-    pathMatch: 'full',
-  }, {
-    path: '**',
-    component: NotFoundComponent,
-  }],
+    {
+      path: 'miscellaneous',
+      loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
+    },
+    {
+      path: 'party',
+      loadChildren: './party/party.module#PartyModule',
+    },
+    {
+      path: 'quality',
+      loadChildren: './quality/quality.module#QualityModule',
+    },
+    {
+      path: 'user',
+      loadChildren: './user/user.module#UserModule',
+    },
+    {
+      path: 'bill',
+      loadChildren: './bill-in/bill-in.module#BillInModule',
+    },
+    {
+      path: 'lot',
+      loadChildren: './lot/lot.module#LotModule',
+    },
+    {
+      path: '',
+      redirectTo: 'party',
+      pathMatch: 'full',
+    }, {
+      path: '**',
+      component: NotFoundComponent,
+    }],
   // canActivate: [AuthGuard],
 }];
 

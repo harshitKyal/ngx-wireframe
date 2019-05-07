@@ -1,148 +1,152 @@
-<div class="row text-left">
-  <div class="col-sm-12">
-    <div class="content-header" translate>{{topHeader}}</div>
-  </div>
-</div>
-
-<!-- Custom Form Validaton Starts -->
-<div class="row text-left">
-  <div class="col-sm-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="card-block">
-          <form (ngSubmit)="onCustomFormSubmit(vform)" #vform="ngForm">
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Party Name</label>
-                  <input type="text" class="form-control" [(ngModel)]="partyModal.party_name" name="partyname"
-                    #partyName="ngModel" required />
-                  <div *ngIf="partyName.invalid && (partyName.dirty || partyName.touched)" class="errors">
-                    <div *ngIf="partyName.errors && partyName.errors.required">
-                      Party Name is required.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Address 1</label>
-                  <textarea type="text" class="form-control" [(ngModel)]="partyModal.party_address1" name="party_address"
-                    #partyAddress="ngModel" required></textarea>
-                  <div *ngIf="partyAddress.invalid && (partyAddress.dirty || partyAddress.touched)" class="errors">
-                    <div *ngIf="partyAddress.errors && partyAddress.errors.required">
-                      Address is required.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Address 2</label>
-                  <textarea type="text" class="form-control" [(ngModel)]="partyModal.party_address2" name="partyaddress2"></textarea>
-                </div>
+<nb-card>
+  <nb-card-header>{{topHeader}}
+  </nb-card-header>
+  <nb-card-body>
+    <form (ngSubmit)="onCustomFormSubmit(vform)" #vform="ngForm">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Party Name</label>
+            <input type="text" class="form-control" [(ngModel)]="partyModal.party_name" name="partyname"
+              #partyName="ngModel" required />
+            <div *ngIf="partyName.invalid && (partyName.dirty || partyName.touched)" class="errors">
+              <div *ngIf="partyName.errors && partyName.errors.required">
+                Party Name is required.
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>Contact No.</label>
-                  <!-- pattern -->
-                  <input class="form-control" [(ngModel)]="partyModal.contact_no" name="contact" #num="ngModel"
-                    required />
-                  <div *ngIf="num.invalid && (num.dirty || num.touched)" class="errors">
-                    <div *ngIf="num.errors && num.errors.required">
-                      Contact Number is required.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>City</label>
-                  <!-- pattern -->
-                  <input class="form-control" [(ngModel)]="partyModal.city" name="citY" #City="ngModel" required />
-                  <div *ngIf="City.invalid && (City.dirty || City.touched)" class="errors">
-                    <div *ngIf="City.errors && City.errors.required">
-                      City is required.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>State</label>
-                  <!-- pattern -->
-                  <input class="form-control" [(ngModel)]="partyModal.state" name="states" #State="ngModel" required />
-                  <div *ngIf="State.invalid && (State.dirty || State.touched)" class="errors">
-                    <div *ngIf="State.errors && State.errors.required">
-                      State is required.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>Pincode</label>
-                  <!-- pattern -->
-                  <input class="form-control" [(ngModel)]="partyModal.pincode" name="pin" #Pin="ngModel" required />
-                  <div *ngIf="Pin.invalid && (Pin.dirty || Pin.touched)" class="errors">
-                    <div *ngIf="Pin.errors && Pin.errors.required">
-                      Pincode is required.
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>GSTIN</label>
-                  <input type="text" class="form-control" [(ngModel)]="partyModal.GSTIN" name="gst" #GST="ngModel"
-                    required />
-                  <div *ngIf="GST.invalid && (GST.dirty || GST.touched)" class="errors">
-                    <div *ngIf="GST.errors && GST.errors.required">
-                      GSTIN is required.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>Mail Id</label>
-                  <input type="email" class="form-control" [(ngModel)]="partyModal.mail_id" name="mail" #Mail="ngModel"
-                    required />
-                  <div *ngIf="Mail.invalid && (Mail.dirty || Mail.touched)" class="errors">
-                    <div *ngIf="Mail.errors && Mail.errors.required">
-                      Mail Id is required.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>Creditors</label>
-                  <input type="text" class="form-control" [(ngModel)]="partyModal.creditor" name="credit" />
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>Debtors</label>
-                  <input type="text" class="form-control" [(ngModel)]="partyModal.debtor" name="debt" />
-                </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Address 1</label>
+            <textarea type="text" class="form-control" [(ngModel)]="partyModal.party_address1" name="party_address"
+              #partyAddress="ngModel" required></textarea>
+            <div *ngIf="partyAddress.invalid && (partyAddress.dirty || partyAddress.touched)" class="errors">
+              <div *ngIf="partyAddress.errors && partyAddress.errors.required">
+                Address is required.
               </div>
             </div>
-
-            <div class="box-footer">
-              <button class="btn btn-raised btn-primary" translate>{{subBtnName}}</button> &nbsp;
-              <button type="reset" routerLink='/party/view-party' class="btn btn-default" id="Cancel">Cancel</button>
-            </div>
-          </form>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Address 2</label>
+            <textarea type="text" class="form-control" [(ngModel)]="partyModal.party_address2"
+              name="partyaddress2"></textarea>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-<!-- Custom Form Validaton Ends -->
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Contact No.</label>
+            <!-- pattern -->
+            <input class="form-control" (keypress)="numberOnly($event)" [(ngModel)]="partyModal.contact_no"
+              name="contact" #num="ngModel" required digits />
+            <div *ngIf="num.invalid && (num.dirty || num.touched)" class="errors">
+              <div *ngIf="num.errors && num.errors.required">
+                Contact Number is required.
+              </div>
+              <div *ngIf="num.errors && !num.errors.required">
+                Valid Contact Number is required.
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>City</label>
+            <!-- pattern -->
+            <input class="form-control" [(ngModel)]="partyModal.city" name="citY" #City="ngModel" required />
+            <div *ngIf="City.invalid && (City.dirty || City.touched)" class="errors">
+              <div *ngIf="City.errors && City.errors.required">
+                City is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>State</label>
+            <!-- pattern -->
+            <input class="form-control" [(ngModel)]="partyModal.state" name="states" #State="ngModel" required />
+            <div *ngIf="State.invalid && (State.dirty || State.touched)" class="errors">
+              <div *ngIf="State.errors && State.errors.required">
+                State is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Pincode</label>
+            <!-- pattern -->
+            <input class="form-control" [(ngModel)]="partyModal.pincode" name="pin" #Pin="ngModel" required />
+            <div *ngIf="Pin.invalid && (Pin.dirty || Pin.touched)" class="errors">
+              <div *ngIf="Pin.errors && Pin.errors.required">
+                Pincode is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>GSTIN</label>
+            <input type="text" class="form-control" [(ngModel)]="partyModal.GSTIN" name="gst" #GST="ngModel" required />
+            <div *ngIf="GST.invalid && (GST.dirty || GST.touched)" class="errors">
+              <div *ngIf="GST.errors && GST.errors.required">
+                GSTIN is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Mail Id</label>
+            <input type="email" class="form-control" [(ngModel)]="partyModal.mail_id" name="mail" #Mail="ngModel"
+              required />
+            <div *ngIf="Mail.invalid && (Mail.dirty || Mail.touched)" class="errors">
+              <div *ngIf="Mail.errors && Mail.errors.required">
+                Mail Id is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Creditors</label>
+            <input type="text" class="form-control" (keypress)="numberOnly($event)" digits
+              [(ngModel)]="partyModal.creditor" name="credit" #credits="ngModel" />
+            <div *ngIf="credits.invalid && (credits.dirty || credits.touched)" class="errors">
+              <div *ngIf="credits.errors && !credits.errors.required">
+                Valid Creditors is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Debtors</label>
+            <input type="text" class="form-control" (keypress)="numberOnly($event)" digits
+              [(ngModel)]="partyModal.debtor" name="debt" #debts="ngModel" />
+            <div *ngIf="debts.invalid && (debts.dirty || debts.touched)" class="errors">
+              <div *ngIf="debts.errors && !debts.errors.required">
+                Valid Debtors. is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box-footer">
+        <button nbButton translate>{{subBtnName}}</button> &nbsp;
+        <button nbButton type="reset" routerLink='/pages/party/view-party' id="Cancel">Cancel</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

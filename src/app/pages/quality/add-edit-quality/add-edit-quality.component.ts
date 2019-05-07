@@ -105,7 +105,7 @@ export class AddEditQualityComponent implements OnInit {
         if (!data[0].error) {
           this.toasterService.success("Updated Successfully");
           form.resetForm();
-          this.router.navigate(['/quality/view-quality']);
+          this.router.navigate(['/pages/quality/view-quality']);
         } else {
           this.toasterService.error(data[0].message);
         }
@@ -120,7 +120,7 @@ export class AddEditQualityComponent implements OnInit {
         if (!data[0].error) {
           this.toasterService.success(data[0].message);
           form.resetForm();
-          this.router.navigate(['/quality/view-quality']);
+          this.router.navigate(['/pages/quality/view-quality']);
         } else {
           this.toasterService.error(data[0].message);
         }

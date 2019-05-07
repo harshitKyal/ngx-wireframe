@@ -17,9 +17,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { JwtInterceptor } from './@theme/helpers/jwt.interceptors';
 import { AuthGuard } from './@theme/guard/auth.guard';
 import { ToastrModule } from 'ngx-toastr';
+import { PrintLayoutComponent } from './@theme/components/print-layout/print-layout.component';
+import { InvoiceComponent } from './@theme/components/invoice/invoice.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    PrintLayoutComponent,
+    InvoiceComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

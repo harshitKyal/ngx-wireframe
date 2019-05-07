@@ -28,14 +28,13 @@ export class ViewPartyComponent implements OnInit {
   gridColumnApi;
   addPartyPermission = 1;
   columnDefs = [
+    { headerName: 'Actions', field: 'entry_id', width: 100 },
     { headerName: 'Party Name', field: 'party_name', sortable: true, filter: 'agTextColumnFilter' },
-    { headerName: 'Party Address1', field: 'party_address1', sortable: true, filter: 'agDateColumnFilter' },
+    { headerName: 'Party Address1', field: 'party_address1', sortable: true, filter: true },
     { headerName: 'Contact', field: 'contact_no', sortable: true, filter: true },
     { headerName: 'City', field: 'city', sortable: true, filter: true },
     { headerName: 'State', field: 'state', sortable: true, filter: true },
     // { headerName: 'GSTIN', field: 'GSTIN', sortable: true, filter: true },
-    { headerName: 'Actions', field: 'party_id', width: 100 },
-
   ];
   columnExportDefs = [
     'party_name', 'party_address1', 'contact_no', 'city'];
@@ -56,6 +55,7 @@ export class ViewPartyComponent implements OnInit {
 
     this.partyService.getPartyList().subscribe(data => {
       if (!data[0].error) {
+        console.log('data', data[0].data);
         this.partyList = data[0].data;
         this.rowData = data[0].data;
       } else {
@@ -65,7 +65,7 @@ export class ViewPartyComponent implements OnInit {
   }
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
-      if (column.field === 'party_id') {
+      if (column.field === 'entry_id') {
         column.cellRendererFramework = CustomRendererPartyComponent;
         column.cellRendererParams = {
           inRouterLink: '/pages/party/edit-party/',
@@ -145,6 +145,7 @@ export class CustomRendererPartyComponent implements AgRendererComponent {
   }
 
   editParty() {
+    alert(this.params.value);
     if (this.editPartyPermission) {
       this.router.navigate([this.params.inRouterLink + this.params.value]);
     } else {

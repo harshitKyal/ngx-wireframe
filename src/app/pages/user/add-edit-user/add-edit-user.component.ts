@@ -135,7 +135,7 @@ export class AddEditUserComponent implements OnInit {
         if (!data.error) {
           this.toasterService.success(data.message);
           form.resetForm();
-          this.router.navigate(['./user/view-user']);
+          this.router.navigate(['/pages/user/view-user']);
         } else {
           this.toasterService.error('User Not Updated Successfully!');
         }
@@ -150,7 +150,7 @@ export class AddEditUserComponent implements OnInit {
         data = data[0]
         this.toasterService.success(data.message);
         form.resetForm();
-        this.router.navigate(['./user/view-user']);
+        this.router.navigate(['/pages/user/view-user']);
         // } else {
         //   this.toasterService.error('User Not Added Successfully!');
         // }

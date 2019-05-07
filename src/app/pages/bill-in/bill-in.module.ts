@@ -7,8 +7,10 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { BillInComponent, CustomRendererBillInComponent } from './bill-in.component';
+import { BillInComponent } from './bill-in.component';
 import { BillInRoutingModule } from './bill-in-routing.module';
+import { ViewBillInComponent, CustomRendererBillInComponent } from './view-bill-in/view-bill-in.component';
+import { ThemeModule } from '../../@theme/theme.module';
 
 @NgModule({
   imports: [
@@ -19,9 +21,10 @@ import { BillInRoutingModule } from './bill-in-routing.module';
     Ng2SmartTableModule,
     NgxDatatableModule,
     NgSelectModule,
-    BillInRoutingModule
+    BillInRoutingModule,
+    ThemeModule
   ],
-  declarations: [AddEditBillInComponent, BillInComponent, CustomRendererBillInComponent, CustomRendererStockRecordComponent],
+  declarations: [AddEditBillInComponent, BillInComponent, CustomRendererBillInComponent, CustomRendererStockRecordComponent, ViewBillInComponent],
   entryComponents: [CustomRendererBillInComponent, CustomRendererStockRecordComponent]
 })
 export class BillInModule { }
