@@ -156,7 +156,6 @@ export class MyLinkRendererComponent implements AgRendererComponent {
   }
   editQuality() {
     if (this.editQualityPermission) {
-      alert(this.params.inRouterLink);
       this.router.navigate([this.params.inRouterLink + this.params.value]);
     } else {
       const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to edit quality. If you want to edit quality ask admin for permission.');

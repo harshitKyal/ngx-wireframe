@@ -174,7 +174,7 @@ export class AddEditLotComponent implements OnInit {
       this.lotDataObj.lot_quality_detail = [];
       this.items.forEach((ele, index) => {
         let obj = new LotWeightMtrDetail();
-        obj.quality = ele.value;
+        obj.quantity = ele.value;
         this.lotDataObj.lot_quality_detail.push(obj);
       });
     }
@@ -191,16 +191,16 @@ export class AddEditLotComponent implements OnInit {
     this.lotDetailObj = [];
     this.rowData = [...this.lotDataArray];
     this.lotDataObj = new LotData();
-    // form.resetForm();
+    form.resetForm();
   }
 
   onEditRecord(data) {
     let i = this.lotDataArray.findIndex(v => v.index == data);
     this.items = [];
-    this.lotDataArray[i].lot_quality_detail.forEach(ele => {
-      this.items.push(ele.quality);
-    })
-    this.lotDetailObj = this.lotDataArray[i].lot_quality_detail;
+    // this.lotDataArray[i].lot_quality_detail.forEach(ele => {
+    //   this.items.push(ele.quality);
+    // })
+    // this.lotDetailObj = this.lotDataArray[i].lot_quality_detail;
     this.lotDataObj = this.lotDataArray[i];
   }
 

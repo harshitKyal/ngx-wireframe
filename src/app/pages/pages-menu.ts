@@ -6,10 +6,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'nb-layout-default',
     children: [
       {
-        title: 'Add Party',
-        link: '/pages/party/add-party',
-      },
-      {
         title: 'View Party',
         link: '/pages/party/view-party',
       },
@@ -19,10 +15,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Quality',
     icon: 'nb-layout-default',
     children: [
-      {
-        title: 'Add Quality',
-        link: '/pages/quality/add-quality',
-      },
       {
         title: 'View Quality',
         link: '/pages/quality/view-quality',
@@ -34,10 +26,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'nb-layout-default',
     children: [
       {
-        title: 'Add User',
-        link: '/pages/user/add-user',
-      },
-      {
         title: 'View User',
         link: '/pages/user/view-user',
       },
@@ -48,10 +36,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'nb-layout-default',
     children: [
       {
-        title: 'Add Bill',
-        link: '/pages/bill/add-bill',
-      },
-      {
         title: 'View Bill',
         link: '/pages/bill/view-bill-list',
       },
@@ -61,10 +45,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Lot',
     icon: 'nb-layout-default',
     children: [
-      {
-        title: 'Add Lot',
-        link: '/pages/lot/add-lot',
-      },
       {
         title: 'View Lot',
         link: '/pages/lot/view-lot-list',
