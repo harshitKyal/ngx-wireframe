@@ -1,3 +1,84 @@
-<p>
-  add-edit-supplier works!
-</p>
+<nb-card>
+  <nb-card-header>{{topHeader}}
+  </nb-card-header>
+  <nb-card-body>
+    <form (ngSubmit)="onCustomFormSubmit(vform)" #vform="ngForm">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Supplier Name</label>
+            <input type="text" class="form-control" [(ngModel)]="supplierModal.supplier_name" name="supplierName"
+              #SupplierName="ngModel" required />
+            <div *ngIf="SupplierName.invalid && (SupplierName.dirty || SupplierName.touched)" class="errors">
+              <div *ngIf="SupplierName.errors && SupplierName.errors.required">
+                Supplier Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Discount %</label>
+            <input type="text" class="form-control" [(ngModel)]="supplierModal.discount_percentage"
+              name="discountPercentage" (keypress)="numberOnly($event)" #discount="ngModel" required />
+            <div *ngIf="discount.invalid && (discount.dirty || discount.touched)" class="errors">
+              <div *ngIf="discount.errors && discount.errors.required">
+                Discount % is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>GST %</label>
+            <!-- pattern -->
+            <input type="text" class="form-control" [(ngModel)]="supplierModal.gst_percentage" name="gstPercentage"
+              #gst="ngModel" required (keypress)="numberOnly($event)" />
+            <div *ngIf="gst.invalid && (gst.dirty || gst.touched)" class="errors">
+              <div *ngIf="gst.errors && gst.errors.required">
+                GST % is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Payment Terms</label>
+            <input type="text" class="form-control" [(ngModel)]="supplierModal.payment_terms" name="paymentTerms"
+              #payment="ngModel" required />
+            <div *ngIf="payment.invalid && (payment.dirty || payment.touched)" class="errors">
+              <div *ngIf="payment.errors && payment.errors.required">
+                Payment Terms is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Remark</label>
+            <input type="text" class="form-control" [(ngModel)]="supplierModal.remark" name="remarks"
+              #Remark="ngModel" />
+            <!-- <div *ngIf="Remark.invalid && (Remark.dirty || Remark.touched)" class="errors">
+              <div *ngIf="Remark.errors && Remark.errors.required">
+                Remark is required.
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="box-footer">
+        <button nbButton translate>{{subBtnName}}</button> &nbsp;
+        <button nbButton type="reset" routerLink='/pages/supplier/view-supplier-list' id="Cancel">Cancel</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupplierComponent } from './supplier.component';
-import { ViewSupplierRateComponent } from './view-supplier-rate/view-supplier-rate.component';
-import { ViewSuppliersComponent } from './view-suppliers/view-suppliers.component';
+import { ViewSupplierRateComponent, SupplierRateRendererComponent } from './view-supplier-rate/view-supplier-rate.component';
+import { ViewSuppliersComponent, SupplierRendererComponent } from './view-suppliers/view-suppliers.component';
 import { AddEditSupplierComponent } from './add-edit-supplier/add-edit-supplier.component';
 import { AddEditSupplierRateComponent } from './add-edit-supplier-rate/add-edit-supplier-rate.component';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,19 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { SupplierRoutingModule } from './supplier-routing.module';
 
 @NgModule({
-  declarations: [SupplierComponent, ViewSupplierRateComponent, ViewSuppliersComponent, AddEditSupplierComponent, AddEditSupplierRateComponent],
+  declarations: [
+    SupplierComponent,
+    ViewSupplierRateComponent,
+    ViewSuppliersComponent,
+    AddEditSupplierComponent,
+    AddEditSupplierRateComponent,
+    SupplierRateRendererComponent,
+    SupplierRendererComponent
+  ],
+  entryComponents: [
+    SupplierRateRendererComponent,
+    SupplierRendererComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
