@@ -35,6 +35,10 @@ export class LotData {
 export class LotWeightMtrDetail {
     quantity: any;
     control_id_gr_detail: any;
+    value: any;
+    display: any;
+    lot_mast_control_id: any;
+    entry_id: any;
     constructor() {
         this.quantity = '';
     }

@@ -50,7 +50,7 @@ export class AddEditLotComponent implements OnInit {
 
   ];
   unit = [{ 'id': 'wt', 'value': 'Weight' }, { 'id': 'mtr', 'value': 'Metre' }];
-  items = [];
+  items: LotWeightMtrDetail[] = [];
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private qualityService: QualityService,
     private router: Router, private lotService: LotService) {
     this.lotModal = new LotMast();
@@ -165,29 +165,60 @@ export class AddEditLotComponent implements OnInit {
   onAddRecord(form: NgForm) {
     let flag = 0;
     let j = 1;
-    if (this.lotDataArray.length) {
+    if (!this.lotDataArray.length) {
       this.lotDataObj.index = j;
     } else {
-      this.lotDataObj.index = this.lotDataArray.length + 1;
-    }
-    if (this.items.length) {
-      this.lotDataObj.lot_quality_detail = [];
-      this.items.forEach((ele, index) => {
-        let obj = new LotWeightMtrDetail();
-        obj.quantity = ele.value;
-        this.lotDataObj.lot_quality_detail.push(obj);
+      this.lotDataArray.forEach(ele => {
+        if (ele.gr == this.lotDataObj.gr) {
+          if (this.items.length) {
+            this.items.forEach((ele, index) => {
+              if (ele.entry_id === undefined) {
+                let obj = new LotWeightMtrDetail();
+                obj = ele;
+                obj.quantity = ele.value;
+                this.lotDataObj.lot_quality_detail.push(obj);
+              }
+            });
+          } else {
+            this.lotDataObj.lot_quality_detail = [];
+          }
+          ele = this.lotDataObj
+          flag = 1;
+        }
       });
-    }
-    // this.lotDataObj.lot_quality_detail = this.lotDetailObj;
-    this.lotDataArray.forEach(ele => {
-      if (ele.gr == this.lotDataObj.gr) {
-        ele = this.lotDataObj
-        flag = 1;
+      if (!flag) {
+        this.lotDataObj.index = this.lotDataArray.length + 1;
+        if (this.items.length) {
+          this.lotDataObj.lot_quality_detail = [];
+          this.items.forEach((ele, index) => {
+            let obj = new LotWeightMtrDetail();
+            obj.quantity = ele.value;
+            this.lotDataObj.lot_quality_detail.push(obj);
+          });
+          this.lotDataArray.push(this.lotDataObj);
+        } else {
+          this.lotDataObj.lot_quality_detail = [];
+        }
       }
-    });
-    if (!flag) {
-      this.lotDataArray.push(this.lotDataObj);
     }
+    // if (this.items.length) {
+    //   this.lotDataObj.lot_quality_detail = [];
+    //   this.items.forEach((ele, index) => {
+    //     let obj = new LotWeightMtrDetail();
+    //     obj.quantity = ele.value;
+    //     this.lotDataObj.lot_quality_detail.push(obj);
+    //   });
+    // }
+    // this.lotDataObj.lot_quality_detail = this.lotDetailObj;
+    // this.lotDataArray.forEach(ele => {
+    //   if (ele.gr == this.lotDataObj.gr) {
+    //     ele = this.lotDataObj
+    //     flag = 1;
+    //   }
+    // });
+    // if (!flag) {
+    //   this.lotDataArray.push(this.lotDataObj);
+    // }
     this.lotDetailObj = [];
     this.rowData = [...this.lotDataArray];
     this.lotDataObj = new LotData();
@@ -197,10 +228,13 @@ export class AddEditLotComponent implements OnInit {
   onEditRecord(data) {
     let i = this.lotDataArray.findIndex(v => v.index == data);
     this.items = [];
-    // this.lotDataArray[i].lot_quality_detail.forEach(ele => {
-    //   this.items.push(ele.quality);
-    // })
-    // this.lotDetailObj = this.lotDataArray[i].lot_quality_detail;
+    this.lotDataArray[i].lot_quality_detail.forEach(ele => {
+      this.showDetailFlag = true;
+      ele.value = ele.quantity !== undefined ? ele.quantity : ele.value;
+      ele.display = ele.quantity !== undefined ? ele.quantity : ele.value;
+      this.items.push(ele);
+    })
+    this.lotDetailObj = this.lotDataArray[i].lot_quality_detail;
     this.lotDataObj = this.lotDataArray[i];
   }
 
