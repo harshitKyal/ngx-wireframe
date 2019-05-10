@@ -9,6 +9,9 @@ import { QualityModule } from './quality/quality.module';
 import { BillInModule } from './bill-in/bill-in.module';
 import { UserModule } from './user/user.module';
 import { LotModule } from './lot/lot.module';
+import { SupplierModule } from './supplier/supplier.module';
+import { ProgramModule } from './program/program.module';
+import { ShadeModule } from './shade/shade.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -23,7 +26,10 @@ const PAGES_COMPONENTS = [
     QualityModule,
     BillInModule,
     UserModule,
-    LotModule
+    LotModule,
+    SupplierModule,
+    ProgramModule,
+    ShadeModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,

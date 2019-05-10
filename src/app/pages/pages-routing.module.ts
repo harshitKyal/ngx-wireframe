@@ -34,6 +34,18 @@ const routes: Routes = [{
       loadChildren: './lot/lot.module#LotModule',
     },
     {
+      path: 'program',
+      loadChildren: './program/program.module#ProgramModule',
+    },
+    {
+      path: 'supplier',
+      loadChildren: './supplier/supplier.module#SupplierModule',
+    },
+    {
+      path: 'shade',
+      loadChildren: './shade/shade.module#ShadeModule',
+    },
+    {
       path: '',
       redirectTo: 'party',
       pathMatch: 'full',

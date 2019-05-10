@@ -51,6 +51,40 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Program',
+    icon: 'nb-layout-default',
+    children: [
+      {
+        title: 'View Program',
+        link: '/pages/program/view-program-list',
+      },
+    ],
+  },
+  {
+    title: 'Shade',
+    icon: 'nb-layout-default',
+    children: [
+      {
+        title: 'View Shade',
+        link: '/pages/shade/view-shade-list',
+      },
+    ],
+  },
+  {
+    title: 'Supplier',
+    icon: 'nb-layout-default',
+    children: [
+      {
+        title: 'View Suppliers',
+        link: '/pages/supplier/view-supplier-list',
+      },
+      {
+        title: 'View Supplier Rate',
+        link: '/pages/supplier/view-supplier-rate-list',
+      },
+    ],
+  },
   // {
   //   title: 'Quality',
   //   icon: 'nb-layout-default',
