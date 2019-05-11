@@ -8,6 +8,7 @@ import { ColDef } from 'ag-grid-community';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
+import { NbMenuService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-view-suppliers',
@@ -79,7 +80,8 @@ export class ViewSuppliersComponent implements OnInit {
 @Component({
   template: `
   <i class="ft-edit-2 font-medium-1 mr-2"  style="color:#4ca6ff" (click)="editSupplier()"></i>
-  <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteSupplier()"></i>`,
+  <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteSupplier()"></i>
+  <i class="ft-menu font-medium-1 mr-2" style="color:#4ca6ff" [nbContextMenu]="items" nbContextMenuTrigger="click"></i>`,
   styleUrls: ['./view-suppliers.component.scss']
 })
 
@@ -87,15 +89,36 @@ export class SupplierRendererComponent implements AgRendererComponent {
   params: any;
   editSupplierPermission = 0;
   deleteSupplierPermission = 0;
-
+  items = [
+    { title: 'Add Supplier Rate', value: '' },
+    { title: 'Edit Supplier Rate', value: '' },
+  ];
   constructor(private router: Router, private modalService: NgbModal, private supplierService: SupplierService,
-    private toasterService: ToastrService, private permissionService: PermissionService) {
+    private toasterService: ToastrService, private permissionService: PermissionService, private menuService: NbMenuService, ) {
+    this.menuService.onItemClick()
+      .subscribe((event) => {
+        this.onContecxtItemSelection(event.item);
+      });
   }
 
   agInit(params: any): void {
     this.params = params;
+    this.items[1].value = this.params.value
     this.editSupplierPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_quality);
     this.deleteSupplierPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_quality);
+  }
+  onContecxtItemSelection(item) {
+    if (item.title === 'Add Supplier Rate') {
+      this.onAddRate();
+    } else if (item.title === 'Edit Supplier Rate') {
+      this.onEditRate(item.value);
+    }
+  }
+  onAddRate() {
+    this.router.navigate(['/pages/supplier/add-supplier-rate']);
+  }
+  onEditRate(id) {
+    this.router.navigate(['/pages/supplier/edit-supplier-rate/' + id]);
   }
   refresh(): boolean {
     return false;

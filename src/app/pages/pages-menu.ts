@@ -79,10 +79,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'View Suppliers',
         link: '/pages/supplier/view-supplier-list',
       },
-      {
-        title: 'View Supplier Rate',
-        link: '/pages/supplier/view-supplier-rate-list',
-      },
+      // {
+      //   title: 'View Supplier Rate',
+      //   link: '/pages/supplier/view-supplier-rate-list',
+      // },
     ],
   },
   // {

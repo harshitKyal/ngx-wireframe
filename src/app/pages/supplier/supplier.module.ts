@@ -4,7 +4,7 @@ import { SupplierComponent } from './supplier.component';
 import { ViewSupplierRateComponent, SupplierRateRendererComponent } from './view-supplier-rate/view-supplier-rate.component';
 import { ViewSuppliersComponent, SupplierRendererComponent } from './view-suppliers/view-suppliers.component';
 import { AddEditSupplierComponent } from './add-edit-supplier/add-edit-supplier.component';
-import { AddEditSupplierRateComponent } from './add-edit-supplier-rate/add-edit-supplier-rate.component';
+import { AddEditSupplierRateComponent, CustomRendererSupplierRateComponent } from './add-edit-supplier-rate/add-edit-supplier-rate.component';
 import { FormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -22,11 +22,13 @@ import { SupplierRoutingModule } from './supplier-routing.module';
     AddEditSupplierComponent,
     AddEditSupplierRateComponent,
     SupplierRateRendererComponent,
-    SupplierRendererComponent
+    SupplierRendererComponent,
+    CustomRendererSupplierRateComponent
   ],
   entryComponents: [
     SupplierRateRendererComponent,
-    SupplierRendererComponent
+    SupplierRendererComponent,
+    CustomRendererSupplierRateComponent
   ],
   imports: [
     CommonModule,

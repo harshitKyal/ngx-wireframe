@@ -1,3 +1,94 @@
-<p>
-  add-edit-supplier-rate works!
-</p>
+<nb-card>
+  <nb-card-header>{{topHeader}}
+  </nb-card-header>
+  <nb-card-body>
+    <form (ngSubmit)="onCustomFormSubmit(vform)" #vform="ngForm">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Supplier Name</label>
+            <select type="text" class="form-control" [(ngModel)]="supplierModal.supplier_control_id" name="supplierName"
+              #SupplierName="ngModel" required (change)="onSupplierSelect($event.target.value)">
+              <option *ngFor="let supplier of supplierList" [value]="supplier.entry_id">{{supplier.supplier_name}}
+              </option>
+            </select>
+            <div *ngIf="SupplierName.invalid && (SupplierName.dirty || SupplierName.touched)" class="errors">
+              <div *ngIf="SupplierName.errors && SupplierName.errors.required">
+                Supplier Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row table table-responsive" *ngIf="supplierRateList.length">
+        <ag-grid-angular style="width: 100%; height:300px" class="ag-theme-balham" [rowData]="rowData"
+          [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='5'>
+        </ag-grid-angular>
+      </div>
+      <div class="row">
+        <form #sform="ngForm">
+          <div class="row col-md-12">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Item Name</label>
+                <input type="text" class="form-control" [(ngModel)]="supplierRateRecord.item_name" name="itemName"
+                  #ItemName="ngModel" required />
+                <div *ngIf="ItemName.invalid && (ItemName.dirty || ItemName.touched)" class="errors">
+                  <div *ngIf="ItemName.errors && ItemName.errors.required">
+                    Item Name is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Item Rate</label>
+                <input type="text" class="form-control" [(ngModel)]="supplierRateRecord.rate" name="itemRate"
+                  (keypress)="numberOnly($event)" #ItemRate="ngModel" required
+                  (change)="getRateCalculation($event.target.value)" />
+                <div *ngIf="ItemRate.invalid && (ItemRate.dirty || ItemRate.touched)" class="errors">
+                  <div *ngIf="ItemRate.errors && ItemRate.errors.required">
+                    Item Rate is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Discount Rate</label>
+                <input type="text" class="form-control" [(ngModel)]="supplierRateRecord.discount_rate"
+                  name="discountRate" #discount="ngModel" (keypress)="numberOnly($event)" required />
+                <div *ngIf="discount.invalid && (discount.dirty || discount.touched)" class="errors">
+                  <div *ngIf="discount.errors && discount.errors.required">
+                    Discount Rate is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>GST Rate</label>
+                <input type="text" class="form-control" [(ngModel)]="supplierRateRecord.gst_rate" name="gst"
+                  #GST="ngModel" (keypress)="numberOnly($event)" required />
+                <div *ngIf="GST.invalid && (GST.dirty || GST.touched)" class="errors">
+                  <div *ngIf="GST.errors && GST.errors.required">
+                    GST Rate is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <button [disabled]="sform.invalid" style="margin-top: 32px;" nbButton (click)="onAddItem(sform)">Add
+                Item</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="box-footer">
+        <button nbButton translate>{{subBtnName}}</button> &nbsp;
+        <button nbButton type="reset" routerLink='/pages/supplier/view-supplier-list' id="Cancel">Cancel</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

@@ -33,15 +33,15 @@ export class SupplierService {
   }
 
   addSupplierRate(supplier) {
-    return this.apiService.apiCaller('post', '/addSupplier', supplier);
+    return this.apiService.apiCaller('post', '/updateSupplierRateList', supplier);
   }
 
   getSupplierRateById(id) {
-    return this.apiService.apiCaller('get', '/getSupplier/' + id);
+    return this.apiService.apiCaller('get', '/getSupplierRateList/' + id);
   }
 
   updateSupplierRate(supplier) {
-    return this.apiService.apiCaller('post', '/updateSupplier', supplier);
+    return this.apiService.apiCaller('post', '/updateSupplierRateList', supplier);
   }
 
   deleteSupplierRateById(id) {
