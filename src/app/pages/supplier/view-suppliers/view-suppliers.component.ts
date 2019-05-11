@@ -90,8 +90,8 @@ export class SupplierRendererComponent implements AgRendererComponent {
   editSupplierPermission = 0;
   deleteSupplierPermission = 0;
   items = [
-    { title: 'Add Supplier Rate', value: '' },
-    { title: 'Edit Supplier Rate', value: '' },
+    // { title: 'Add Supplier Rate', value: '' },
+    { title: 'Add/Edit Supplier Rate', value: '' },
   ];
   constructor(private router: Router, private modalService: NgbModal, private supplierService: SupplierService,
     private toasterService: ToastrService, private permissionService: PermissionService, private menuService: NbMenuService, ) {
@@ -103,14 +103,15 @@ export class SupplierRendererComponent implements AgRendererComponent {
 
   agInit(params: any): void {
     this.params = params;
-    this.items[1].value = this.params.value
+    this.items[0].value = this.params.value
     this.editSupplierPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_quality);
     this.deleteSupplierPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_quality);
   }
   onContecxtItemSelection(item) {
-    if (item.title === 'Add Supplier Rate') {
-      this.onAddRate();
-    } else if (item.title === 'Edit Supplier Rate') {
+    // if (item.title === 'Add Supplier Rate') {
+    //   this.onAddRate();
+    // } else 
+    if (item.title === 'Add/Edit Supplier Rate') {
       this.onEditRate(item.value);
     }
   }

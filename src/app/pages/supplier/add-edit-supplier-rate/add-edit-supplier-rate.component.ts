@@ -82,7 +82,7 @@ export class AddEditSupplierRateComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id != null) {
       this.subBtnName = 'Update';
-      this.topHeader = 'Edit Supplier Rate';
+      this.topHeader = 'Add/Edit Supplier Rate';
       this.supplierService.getSupplierRateById(this.id).subscribe(
         data => {
           if (!data[0].error) {
@@ -100,10 +100,11 @@ export class AddEditSupplierRateComponent implements OnInit {
         }, error => {
           this.toasterService.error(error);
         });
-    } else {
-      this.subBtnName = 'Save';
-      this.topHeader = 'Add Supplier Rate';
-    }
+    } 
+    // else {
+    //   this.subBtnName = 'Save';
+    //   this.topHeader = 'Add Supplier Rate';
+    // }
   }
 
   getRateCalculation(value) {
