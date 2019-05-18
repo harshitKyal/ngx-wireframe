@@ -75,6 +75,9 @@ export class ViewSuppliersComponent implements OnInit {
         this.toasterService.error(data[0].message)
     });
   }
+  onAddRate() {
+    this.router.navigate(['/pages/supplier/add-supplier-rate']);
+  }
 }
 
 @Component({
@@ -114,9 +117,6 @@ export class SupplierRendererComponent implements AgRendererComponent {
     if (item.title === 'Add/Edit Supplier Rate') {
       this.onEditRate(item.value);
     }
-  }
-  onAddRate() {
-    this.router.navigate(['/pages/supplier/add-supplier-rate']);
   }
   onEditRate(id) {
     this.router.navigate(['/pages/supplier/edit-supplier-rate/' + id]);

@@ -41,9 +41,9 @@ export class AddEditSupplierRateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setColumns();
-    this.onPageLoad();
     this.getSupplierList();
+    this.onPageLoad();
+    this.setColumns();
   }
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
@@ -91,6 +91,8 @@ export class AddEditSupplierRateComponent implements OnInit {
             this.supplierRateList = data[0].data.supplier_rate_list;
             this.supplierRateList.forEach((ele, index) => {
               ele.index = index + 1;
+              ele.discount_rate = Math.floor(Number(ele.discount_rate) - Math.floor((this.selectedSupplier.discount_percentage * ele.discount_rate) / 100))
+              ele.gst_rate = Math.floor(Number(ele.gst_rate) + Math.floor((this.selectedSupplier.gst_percentage * ele.gst_rate) / 100))
             })
             this.rowData = [...this.supplierRateList]
             this.supplierModal.supplier_rate_list = this.supplierRateList;
@@ -100,18 +102,20 @@ export class AddEditSupplierRateComponent implements OnInit {
         }, error => {
           this.toasterService.error(error);
         });
-    } 
-    // else {
-    //   this.subBtnName = 'Save';
-    //   this.topHeader = 'Add Supplier Rate';
-    // }
+    }
+    else {
+      this.subBtnName = 'Save';
+      this.topHeader = 'Add Supplier Rate';
+    }
   }
 
   getRateCalculation(value) {
-    // if (this.selectedSupplier.entry_id != null || this.selectedSupplier.entry_id != undefined) {
-
-    // }
+    if (this.selectedSupplier.entry_id != null || this.selectedSupplier.entry_id != undefined) {
+      this.supplierRateRecord.discount_rate = Math.floor(Number(value) - Math.floor((this.selectedSupplier.discount_percentage * value) / 100))
+      this.supplierRateRecord.gst_rate = Math.floor(Number(value) + Math.floor((this.selectedSupplier.gst_percentage * value) / 100))
+    }
   }
+
   onAddItem(form: NgForm) {
     let flag = 0;
     let j = 1;
