@@ -6,11 +6,13 @@ import 'rxjs/Rx';
 import { ApiService } from '../services/api.service';
 import { User } from '../model/user-class';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   token: string;
   loggedOn: BehaviorSubject<any> = new BehaviorSubject(false);
-
+  currentUser: BehaviorSubject<any> = new BehaviorSubject(null);
   constructor(private router: Router, private api: ApiService) {
   }
 
@@ -24,8 +26,10 @@ export class AuthService {
           console.log('result login', result);
           // const res = JSON.parse(result);
           localStorage.setItem('isLogged', 'true');
-          localStorage.setItem('currentUser', JSON.stringify(result[0].data[0]));
-          localStorage.setItem('currentUserToken', JSON.stringify(result[0].data[1]));
+          this.currentUser.next({ 'user': result[0].data.user, 'user_permission': result[0].data.user_permission, 'token': result[0].data.token });
+          localStorage.setItem('currentUser', JSON.stringify(result[0].data.user));
+          localStorage.setItem('currentUserPermission', JSON.stringify(result[0].data.user_permission));
+          localStorage.setItem('currentUserToken', JSON.stringify(result[0].data.token));
         }
         return result;
       }).catch((error: any) => Observable.throw(error || 'Server error'));
@@ -38,6 +42,7 @@ export class AuthService {
     localStorage.removeItem('isLogged');
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentUserToken')
+    this.currentUser.next(null);
     this.router.navigate(['/auth']);
   }
 

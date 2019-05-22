@@ -67,6 +67,7 @@ import { RouterModule } from '@angular/router';
 import { PapaParseModule } from 'ngx-papaparse';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { PrintService } from './services/print.service';
+import { PermissionComponent } from './components/permission/permission.component';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -115,11 +116,13 @@ const COMPONENTS = [
   SearchInputComponent,
   TinyMCEComponent,
   SampleLayoutComponent,
-  ConfirmDialogComponent
+  ConfirmDialogComponent,
+  PermissionComponent
 ];
 
 const ENTRY_COMPONENTS = [
-  ConfirmDialogComponent
+  ConfirmDialogComponent,
+  PermissionComponent
 ];
 
 const PIPES = [

@@ -140,70 +140,50 @@
           User Permissions
         </nb-card-header>
         <nb-card-body>
-          <ngx-treeview class="col-md-12" [config]="config" [items]="items" (filterChange)="onFilterChange($event)"
+          <table class="table responsive">
+            <tr>
+              <th *ngFor="let data of tableHeading">{{data}}</th>
+            </tr>
+            <tr *ngFor="let row of userPermissionData">
+              <th>{{row.form_name}}</th>
+              <th>
+                <nb-checkbox name="view" [(ngModel)]="row.can_view"></nb-checkbox>
+              </th>
+              <th>
+                <nb-checkbox name="add" [(ngModel)]="row.can_add"></nb-checkbox>
+              </th>
+              <th>
+                <nb-checkbox name="edit" [(ngModel)]="row.can_edit"></nb-checkbox>
+              </th>
+              <th>
+                <nb-checkbox name="delete" [(ngModel)]="row.can_delete"></nb-checkbox>
+              </th>
+              <th>
+                <nb-checkbox name="view_group" [(ngModel)]="row.can_view_group"></nb-checkbox>
+              </th>
+              <th>
+                <nb-checkbox name="view_all" [(ngModel)]="row.can_view_all"></nb-checkbox>
+              </th>
+              <th>
+                <nb-checkbox name="edit_group" [(ngModel)]="row.can_edit_group"></nb-checkbox>
+              </th>
+              <th>
+                <nb-checkbox name="edit_all" [(ngModel)]="row.can_edit_all"></nb-checkbox>
+              </th>
+              <th>
+                <nb-checkbox name="delete_group" [(ngModel)]="row.can_delete_group"></nb-checkbox>
+              </th>
+              <th>
+                <nb-checkbox name="delete_all" [(ngModel)]="row.can_delete_all"></nb-checkbox>
+              </th>
+            </tr>
+          </table>
+          <!-- <ngx-treeview class="col-md-12" [config]="config" [items]="items" (filterChange)="onFilterChange($event)"
             (selectedChange)="onPermissionChange($event)">
-          </ngx-treeview>
+          </ngx-treeview> -->
         </nb-card-body>
       </nb-card>
       <br>
-      <!-- <div class="row" *ngIf="isAllowEditPermission">
-              <div class="col">
-                <div class="card-header">
-                  <h4 class="card-title">{{'User.User_Permissions' | translate}}</h4>
-                </div>
-                <div class="card-body col-md-4">
-                  <div class="card-block">
-                    <table class="table table-bordered table-responsive-md text-center">
-                      <thead>
-                        <tr>
-                          <th>{{'User.Permission' | translate}}</th>
-                          <th>{{'Button.Action' | translate}}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{{'User.Create_User' | translate}}</td>
-                          <td>
-                            <div class="custom-control custom-checkbox m-0">
-                              <input type="checkbox" class="custom-control-input" id="chkIsAllowToCreateUser" name="createuser" [(ngModel)]="this.userModal.IsAllowToCreateUser">
-                              <label class="custom-control-label" for="chkIsAllowToCreateUser"></label>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{{'User.Create_Company' | translate}}</td>
-                          <td>
-                            <div class="custom-control custom-checkbox m-0">
-                              <input type="checkbox" class="custom-control-input" id="chkIsAllowToCreateCompany" name="createcompany" [(ngModel)]="this.userModal.IsAllowToCreateCompany">
-                              <label class="custom-control-label" for="chkIsAllowToCreateCompany"></label>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{{'User.Create_Ticket' | translate}}</td>
-                          <td>
-                            <div class="custom-control custom-checkbox m-0">
-                              <input type="checkbox" class="custom-control-input" id="chkIsAllowToCreateTicket" name="createticket" [(ngModel)]="this.userModal.IsAllowToCreateTicket">
-                              <label class="custom-control-label" for="chkIsAllowToCreateTicket"></label>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{{'User.Assign_Ticket' | translate}}</td>
-                          <td>
-                            <div class="custom-control custom-checkbox m-0">
-                              <input type="checkbox" class="custom-control-input" id="chkIsAllowToAssignTicket"  name="assignticket" [(ngModel)]="this.userModal.IsAllowToAssignTicket">
-                              <label class="custom-control-label" for="chkIsAllowToAssignTicket"></label>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-            </div> -->
       <div class="box-footer">
         <button nbButton [disabled]="vform.invalid" translate>{{subBtnName}}</button>
         &nbsp;

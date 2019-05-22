@@ -14,27 +14,54 @@ export class User {
     created_date: any;
     modified_by: any;
     modefied_date: any;
-    have_quality:any = false;
-    can_view_quality:any = false;
-    can_add_quality:any = false;
-    can_edit_quality:any = false;
-    can_delete_quality:any = false;
-    have_user:any = false;
-    can_view_user:any = false;
-    can_add_user:any = false;
-    can_edit_user:any = false;
-    can_delete_user:any = false;
-    have_party:any = false;
-    can_view_party:any = false;
-    can_add_party:any = false;
-    can_edit_party:any = false;
-    can_delete_party:any = false;
-    have_stock:any = false;
-    can_view_stock:any = false;
-    can_add_stock:any = false;
-    can_edit_stock:any = false;
-    can_delete_stock:any = false;
+    userPermission: UserPermission[];
+    have_quality: any = false;
+    can_view_quality: any = false;
+    can_add_quality: any = false;
+    can_edit_quality: any = false;
+    can_delete_quality: any = false;
+    have_user: any = false;
+    can_view_user: any = false;
+    can_add_user: any = false;
+    can_edit_user: any = false;
+    can_delete_user: any = false;
+    have_party: any = false;
+    can_view_party: any = false;
+    can_add_party: any = false;
+    can_edit_party: any = false;
+    can_delete_party: any = false;
+    have_stock: any = false;
+    can_view_stock: any = false;
+    can_add_stock: any = false;
+    can_edit_stock: any = false;
+    can_delete_stock: any = false;
     constructor() {
         this.company_id = '';
+    }
+}
+
+export class UserPermission {
+    form_name: any;
+    can_view: any;
+    can_add: any;
+    can_edit: any;
+    can_delete: any;
+    can_view_group: any;
+    can_view_all: any;
+    can_edit_group: any;
+    can_edit_all: any;
+    can_delete_group: any;
+    can_delete_all: any;
+    constructor() {
+        this.can_add = false;
+        this.can_delete = false;
+        this.can_edit = false;
+        this.can_view = false;
+        this.can_delete_all = false;
+        this.can_delete_group = false;
+        this.can_edit_all = false;
+        this.can_edit_group = false;
+        this.can_view_all = false;
+        this.can_view_group = false;
     }
 }

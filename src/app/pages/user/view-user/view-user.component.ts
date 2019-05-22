@@ -10,6 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
 import { User } from "../../../@theme/model/user-class";
 import { UserService } from "../../../@theme/services/user.service";
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../@theme/services/auth.service';
 
 
 @Component({
@@ -20,7 +22,8 @@ import { UserService } from "../../../@theme/services/user.service";
 export class ViewUserComponent implements OnInit {
 
   userList: User[] = [];
-  currentUser;
+  currentUser$: Subscription;
+  currentUser: User;
   addUserPermission = 0;
   rowData;
   gridApi;
@@ -38,16 +41,31 @@ export class ViewUserComponent implements OnInit {
     'user_name', 'first_name', 'last_name', 'company_id'];
   filtersettings: any;
   currentUserId: any;
-
-  constructor(private userService: UserService, private router: Router,
+  userPermission = [];
+  constructor(private userService: UserService, private router: Router, private authService: AuthService,
     private permissionService: PermissionService, private papa: Papa) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.userPermission = ele.user_permission;
+      }
+    });
     this.setColumns();
   }
 
 
   ngOnInit() {
-    this.addUserPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_add_user);
-    this.currentUserId = JSON.parse(localStorage.currentUser).user_id
+    // this.userPermission = (JSON.parse(localStorage.getItem('currentUserPermission')));
+    if (this.userPermission.length) {
+      this.userPermission.forEach(ele => {
+        if (ele.form_name === 'User') {
+          // this.addUserPermission = ele.can_add;
+          this.addUserPermission = 1;
+        }
+      })
+    }
+    // this.currentUserId = JSON.parse(localStorage.currentUser).user_id
     this.getUserList();
   }
 
@@ -128,6 +146,7 @@ export class ViewUserComponent implements OnInit {
 
 export class CustomRendererUserComponent implements AgRendererComponent {
   params: any;
+  userPermission = [];
   editUserPermission = 0;
   deleteUserPermission = 0;
 
@@ -136,8 +155,15 @@ export class CustomRendererUserComponent implements AgRendererComponent {
   }
   agInit(params: any): void {
     this.params = params;
-    this.editUserPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_user);
-    this.deleteUserPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_user);
+    this.userPermission = (JSON.parse(localStorage.getItem('currentUserPermission')));
+    this.userPermission.forEach(ele => {
+      if (ele.form_name === 'User') {
+        // this.editUserPermission = ele.can_edit;
+        // this.deleteUserPermission = ele.can_delete;
+        this.editUserPermission = 1;
+        this.deleteUserPermission = 1;
+      }
+    })
   }
   refresh(): boolean {
     return false;
