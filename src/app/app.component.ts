@@ -24,6 +24,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem("currentUser")) {
+      var user = JSON.parse(localStorage.getItem("currentUser"));
+      var user_permission = JSON.parse(localStorage.getItem("currentUserPermission"));
+      var token = JSON.parse(localStorage.getItem("currentUserToken"));
+      this.authService.currentUser.next({ 'user': user, 'user_permission': user_permission, 'token': token });
+    }
     this.analytics.trackPageViews();
   }
 
