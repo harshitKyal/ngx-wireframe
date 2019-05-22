@@ -12,8 +12,12 @@ export class UserService {
 
   getUserList(currentUserId) {
     //console.log("calling get user list")
-    
+
     return this.apiService.apiCaller('get', '/GetAllUsers/' + currentUserId);
+  }
+  getUserNameIdList() {
+    return this.apiService.apiCaller('get', '/GetAllUsersNameId');
+
   }
   addUser(user: User) {
     return this.apiService.apiCaller('post', '/addUser', user);
@@ -81,7 +85,7 @@ export class UserService {
     //     }
     //   ]
     // });
-    return [qualityCategory, userCategory,partyCategory,stockCategory];
+    return [qualityCategory, userCategory, partyCategory, stockCategory];
   }
 
 }

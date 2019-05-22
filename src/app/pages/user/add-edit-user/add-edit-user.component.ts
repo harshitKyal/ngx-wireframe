@@ -22,6 +22,8 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     , 'have_stock', 'can_add_stock', 'can_edit_stock', 'can_view_stock', 'can_delete_stock'];
   tableHeading = ["Forms", "View", "Add", "Edit", "Delete", "View Group", "View All", "Edit Group", "Edit All", "Delete Group", "Delete All"];
   tableForms = ["Party", "Quality", "User", "Bill", "Lot", "Program", "Shade", "Supplier", "Supplier Rate"];
+  designation = ['Manager', 'Master', 'Accountant', 'Staff', 'Helper']
+
   @ViewChild('vform') validationForm: FormGroup;
   userModal: User;
   currentUser;
@@ -46,6 +48,9 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
   currentUserPermission = [];
   currentUserId: any;
   userPermissionData: UserPermission[] = [];
+  showUserNameListFlag = false;
+  usersList: User[] = [];
+  checkBoxValue = false;
   constructor(private userService: UserService, private toasterService: ToastrService,
     private route: ActivatedRoute, private router: Router, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -61,6 +66,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     this.userModal = new User();
     this.getItems();
     this.onPageLoad();
+    this.getUsers();
   }
   setUserPermissionForm() {
     this.userPermissionData = [];
@@ -80,6 +86,8 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
         data => {
           if (!data[0].error) {
             this.userModal = data[0].data.user[0];
+            this.showUserNameListFlag = true;
+            this.checkBoxValue = true;
             this.userPermissionData = [];
             this.userPermissionData = data[0].data.user_permission
 
@@ -94,7 +102,18 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
       this.topHeader = 'Add User';
     }
   }
-
+  onAssign(value) {
+    this.showUserNameListFlag = value.returnValue;
+    alert(this.showUserNameListFlag);
+  }
+  getUsers() {
+    this.usersList = [];
+    this.userService.getUserNameIdList().subscribe(data => {
+      if (!data[0].error) {
+        this.usersList = data[0].data;
+      }
+    });
+  }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }

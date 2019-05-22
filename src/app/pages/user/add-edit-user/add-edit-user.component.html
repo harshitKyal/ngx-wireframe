@@ -124,11 +124,36 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Designation</label>
-            <input type="text" class="form-control" [(ngModel)]="userModal.designation" name="designation"
-              #desigNation="ngModel" required />
+            <select class="form-control" [(ngModel)]="userModal.designation" name="designation" #desigNation="ngModel">
+              <!-- required -->
+              <option disabled value="">Select Designation
+              </option>
+              <option *ngFor="let d of designation" [value]="d">{{d}}</option>
+            </select>
             <div *ngIf="desigNation.invalid  && (desigNation.dirty || desigNation.touched)" class="errors">
               <div *ngIf="desigNation.errors && desigNation.errors.required">
                 Designation is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mt-4">
+          <nb-checkbox name="assign" [(ngModel)]="checkBoxValue" (change)="onAssign($event)">Assign Under group Head
+          </nb-checkbox>
+        </div>
+        <div class="col-md-4" *ngIf="showUserNameListFlag">
+          <div class="form-group">
+            <label>User Head List</label>
+            <select class="form-control" [(ngModel)]="userModal.user_head_id" name="username" #user_head="ngModel"
+              required>
+              <!-- required -->
+              <option disabled value="">Select User Head
+              </option>
+              <option *ngFor="let user of usersList" [value]="user.user_id">{{user.user_name}}</option>
+            </select>
+            <div *ngIf="user_head.invalid  && (user_head.dirty || user_head.touched)" class="errors">
+              <div *ngIf="user_head.errors && user_head.errors.required">
+                User Head is required.
               </div>
             </div>
           </div>
