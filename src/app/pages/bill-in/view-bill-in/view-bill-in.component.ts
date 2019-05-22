@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Bill } from '../../../@theme/model/bill-class';
 import { BillInService } from '../../../@theme/services/bill-in.service';
 import { Router } from '@angular/router';
@@ -10,17 +10,18 @@ import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import * as XLSX from 'xlsx';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../@theme/services/auth.service';
 
 @Component({
   selector: 'ngx-view-bill-in',
   templateUrl: './view-bill-in.component.html',
   styleUrls: ['./view-bill-in.component.scss']
 })
-export class ViewBillInComponent implements OnInit {
+export class ViewBillInComponent implements OnInit, OnDestroy {
 
 
   billList: Bill[] = [];
-  currentUser;
   rowData;
   gridApi;
   gridColumnApi;
@@ -41,18 +42,37 @@ export class ViewBillInComponent implements OnInit {
   columnExportDefs = [
     'stock_id', 'stock_in_type', 'party_name', 'bill_no', 'bill_date', 'chl_no', 'chl_date', 'batch',];
   currentUserId: any;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
 
   constructor(private billService: BillInService, private router: Router, private tosterService: ToastrService
-    , private permissionService: PermissionService, private papa: Papa) {
+    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
     this.setColumns();
   }
 
 
   ngOnInit() {
-    this.currentUserId = JSON.parse(localStorage.currentUser).user_id
+    if (this.currentUserPermission.length) {
+      this.currentUserPermission.forEach(ele => {
+        if (ele.form_name === 'Bill') {
+          // this.addUserPermission = ele.can_add;
+          this.addBillPermission = 1;
+        }
+      })
+    }
     this.getBillData();
   }
-
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
   getBillData() {
     this.billService.getAllBills().subscribe(data => {
       if (!data[0].error) {
@@ -119,18 +139,39 @@ export class ViewBillInComponent implements OnInit {
   styleUrls: ['./view-bill-in.component.scss']
 })
 
-export class CustomRendererBillInComponent implements AgRendererComponent {
+export class CustomRendererBillInComponent implements AgRendererComponent , OnDestroy{
   params: any;
   editBillPermission = 1;
   deleteBillPermission = 1;
+  currentUserId: any;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
 
   constructor(private router: Router, private _modalService: NgbModal, private billService: BillInService,
-    private toasterService: ToastrService, private permissionService: PermissionService) {
+    private toasterService: ToastrService, private permissionService: PermissionService, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
   }
   agInit(params: any): void {
     this.params = params;
+    this.currentUserPermission.forEach(ele => {
+      if (ele.form_name === 'Bill') {
+        // this.editBillPermission = ele.can_edit;
+        // this.deleteBillPermission = ele.can_delete;
+        this.editBillPermission = 1;
+        this.deleteBillPermission = 1;
+      }
+    })
     // this.editPartyPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_user);
     // this.deletePartyPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_user);
+  }
+  ngOnDestroy(){
+    this.currentUser$.unsubscribe();
   }
   refresh(): boolean {
     return false;

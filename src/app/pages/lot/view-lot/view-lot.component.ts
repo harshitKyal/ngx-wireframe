@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LotMast } from '../../../@theme/model/lot-class';
 import { LotService } from '../../../@theme/services/lot.service';
 import { Router } from '@angular/router';
@@ -10,13 +10,15 @@ import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import * as XLSX from 'xlsx';
+import { AuthService } from '../../../@theme/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-view-lot',
   templateUrl: './view-lot.component.html',
   styleUrls: ['./view-lot.component.scss']
 })
-export class ViewLotComponent implements OnInit {
+export class ViewLotComponent implements OnInit, OnDestroy {
 
   lotList: LotMast[] = [];
   currentUser;
@@ -34,18 +36,35 @@ export class ViewLotComponent implements OnInit {
   columnExportDefs = [
     'lot_id', 'quality_id', 'quality_name', 'quality_type'];
   currentUserId: any;
-
+  currentUser$: Subscription;
+  currentUserPermission = [];
   constructor(private lotService: LotService, private router: Router, private tosterService: ToastrService
-    , private permissionService: PermissionService, private papa: Papa) {
+    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
     this.setColumns();
   }
 
 
   ngOnInit() {
-    this.currentUserId = JSON.parse(localStorage.currentUser).user_id
+    if (this.currentUserPermission.length) {
+      this.currentUserPermission.forEach(ele => {
+        if (ele.form_name === 'Lot') {
+          // this.addLotPermission = ele.can_add;
+          this.addLotPermission = 1;
+        }
+      })
+    }
     this.getLotData();
   }
-
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
   getLotData() {
     this.lotService.getAllLots().subscribe(data => {
       if (!data[0].error) {
@@ -116,12 +135,30 @@ export class CustomRendererLotComponent implements AgRendererComponent {
   params: any;
   editLotPermission = 1;
   deleteLotPermission = 1;
+  currentUserId: any;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
 
   constructor(private router: Router, private _modalService: NgbModal, private lotService: LotService,
-    private toasterService: ToastrService, private permissionService: PermissionService) {
+    private toasterService: ToastrService, private permissionService: PermissionService, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
   }
   agInit(params: any): void {
     this.params = params;
+    this.currentUserPermission.forEach(ele => {
+      if (ele.form_name === 'Lot') {
+        // this.editLotPermission = ele.can_edit;
+        // this.editLotPermission = ele.can_delete;
+        this.editLotPermission = 1;
+        this.deleteLotPermission = 1;
+      }
+    })
     // this.editLotPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_lot);
     // this.deleteLotPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_lot);
   }

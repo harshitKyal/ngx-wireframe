@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Router } from '@angular/router';
@@ -11,6 +11,8 @@ import { Party } from '../../../@theme/model/party-class';
 import { PartyService } from '../../../@theme/services/party.service';
 import { PermissionService } from '../../../@theme/services/permission.service';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../../@theme/services/auth.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -19,7 +21,7 @@ import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialo
   styleUrls: ['./view-party.component.scss']
 })
 
-export class ViewPartyComponent implements OnInit {
+export class ViewPartyComponent implements OnInit, OnDestroy {
 
   partyList: Party[] = [];
   currentUser;
@@ -39,18 +41,35 @@ export class ViewPartyComponent implements OnInit {
   columnExportDefs = [
     'party_name', 'party_address1', 'contact_no', 'city'];
   currentUserId: any;
+  currentUser$: Subscription;
+  currentUserPermission = [];
 
   constructor(private partyService: PartyService, private router: Router, private tosterService: ToastrService
-    , private permissionService: PermissionService, private papa: Papa) {
+    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
     this.setColumns();
   }
 
 
   ngOnInit() {
-    // this.currentUserId = JSON.parse(localStorage.currentUser).user_id
-    this.getPartyData();
+    if (this.currentUserPermission.length) {
+      this.currentUserPermission.forEach(ele => {
+        if (ele.form_name === 'Party') {
+          // this.addUserPermission = ele.can_add;
+          this.addPartyPermission = 1;
+        }
+      })
+    } this.getPartyData();
   }
-
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
   getPartyData() {
 
     this.partyService.getPartyList().subscribe(data => {
@@ -130,15 +149,30 @@ export class ViewPartyComponent implements OnInit {
 export class CustomRendererPartyComponent implements AgRendererComponent {
   params: any;
   editPartyPermission = 1;
-  deletePartyPermission = 0;
+  deletePartyPermission = 1;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
 
   constructor(private router: Router, private _modalService: NgbModal, private partyService: PartyService,
-    private toasterService: ToastrService, private permissionService: PermissionService) {
+    private toasterService: ToastrService, private permissionService: PermissionService, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
   }
   agInit(params: any): void {
     this.params = params;
-    // this.editPartyPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_user);
-    // this.deletePartyPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_user);
+    this.currentUserPermission.forEach(ele => {
+      if (ele.form_name === 'Party') {
+        // this.editBillPermission = ele.can_edit;
+        // this.deleteBillPermission = ele.can_delete;
+        this.editPartyPermission = 1;
+        this.deletePartyPermission = 1;
+      }
+    })
   }
   refresh(): boolean {
     return false;

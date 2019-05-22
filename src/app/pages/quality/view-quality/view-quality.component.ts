@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Quality } from '../../../@theme/model/quality-class';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastrService } from 'ngx-toastr';
@@ -12,13 +12,15 @@ import { ColDef } from 'ag-grid-community';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../../@theme/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-view-quality',
   templateUrl: './view-quality.component.html',
   styleUrls: ['./view-quality.component.scss']
 })
-export class ViewQualityComponent implements OnInit {
+export class ViewQualityComponent implements OnInit, OnDestroy {
 
   columnDefs = [
     { headerName: 'Actions', field: 'entry_id', width: 100 },
@@ -77,17 +79,37 @@ export class ViewQualityComponent implements OnInit {
 
   qualityList: Quality[] = [];
   source: LocalDataSource;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
+  currentUserId: any;
 
   constructor(private toasterService: ToastrService, private _http: HttpClient, private permissionService: PermissionService,
-    private router: Router, private qualityService: QualityService, public printService: PrintService, private qzService: QzTrayService) {
+    private router: Router, private qualityService: QualityService, public printService: PrintService, private qzService: QzTrayService,
+    private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
     this.setColumns();
 
   }
   ngOnInit() {
-    this.addQualityPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_add_quality);
-    this.getQualityData();
+    if (this.currentUserPermission.length) {
+      this.currentUserPermission.forEach(ele => {
+        if (ele.form_name === 'Quality') {
+          // this.addUserPermission = ele.can_add;
+          this.addQualityPermission = 1;
+        }
+      })
+    } this.getQualityData();
   }
-
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'entry_id') {
@@ -141,15 +163,30 @@ export class MyLinkRendererComponent implements AgRendererComponent {
   params: any;
   editQualityPermission = 0;
   deleteQualityPermission = 0;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
 
   constructor(private router: Router, private modalService: NgbModal, private qualityService: QualityService,
-    private toasterService: ToastrService, private permissionService: PermissionService) {
+    private toasterService: ToastrService, private permissionService: PermissionService, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
   }
 
   agInit(params: any): void {
     this.params = params;
-    this.editQualityPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_quality);
-    this.deleteQualityPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_quality);
+    this.currentUserPermission.forEach(ele => {
+      if (ele.form_name === 'Quality') {
+        // this.editBillPermission = ele.can_edit;
+        // this.deleteBillPermission = ele.can_delete;
+        this.editQualityPermission = 1;
+        this.deleteQualityPermission = 1;
+      }
+    })
   }
   refresh(): boolean {
     return false;

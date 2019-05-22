@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { Router } from '@angular/router';
 import { PermissionService } from '../../../@theme/services/permission.service';
@@ -19,7 +19,7 @@ import { AuthService } from '../../../@theme/services/auth.service';
   templateUrl: './view-user.component.html',
   styleUrls: ['./view-user.component.scss']
 })
-export class ViewUserComponent implements OnInit {
+export class ViewUserComponent implements OnInit, OnDestroy {
 
   userList: User[] = [];
   currentUser$: Subscription;
@@ -69,6 +69,9 @@ export class ViewUserComponent implements OnInit {
     this.getUserList();
   }
 
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'user_id') {
@@ -149,13 +152,20 @@ export class CustomRendererUserComponent implements AgRendererComponent {
   userPermission = [];
   editUserPermission = 0;
   deleteUserPermission = 0;
+  currentUser$: Subscription;
+  currentUser: User;
 
   constructor(private router: Router, private _modalService: NgbModal, private userService: UserService,
-    private toasterService: ToastrService, private permissionService: PermissionService) {
+    private toasterService: ToastrService, private permissionService: PermissionService, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.userPermission = ele.user_permission;
+      }
+    });
   }
   agInit(params: any): void {
     this.params = params;
-    this.userPermission = (JSON.parse(localStorage.getItem('currentUserPermission')));
     this.userPermission.forEach(ele => {
       if (ele.form_name === 'User') {
         // this.editUserPermission = ele.can_edit;

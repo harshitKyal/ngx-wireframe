@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Supplier } from '../../../@theme/model/supplier-class';
 import { ToastrService } from 'ngx-toastr';
 import { PermissionService } from '../../../@theme/services/permission.service';
@@ -9,13 +9,15 @@ import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { NbMenuService } from '@nebular/theme';
+import { AuthService } from '../../../@theme/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-view-suppliers',
   templateUrl: './view-suppliers.component.html',
   styleUrls: ['./view-suppliers.component.scss']
 })
-export class ViewSuppliersComponent implements OnInit {
+export class ViewSuppliersComponent implements OnInit, OnDestroy {
 
   columnDefs = [
     { headerName: 'Actions', field: 'entry_id', width: 100 },
@@ -27,19 +29,42 @@ export class ViewSuppliersComponent implements OnInit {
   ];
   addSupplierPermission = 0;
   rowData: any;
-
+  addSupplierRatePermission = 0;
   supplierList: Supplier[] = [];
+  currentUserId: any;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
 
   constructor(private toasterService: ToastrService, private permissionService: PermissionService,
-    private router: Router, private supplierService: SupplierService) {
+    private router: Router, private supplierService: SupplierService, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
     this.setColumns();
 
   }
   ngOnInit() {
-    this.addSupplierPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_add_quality);
-    this.getSupplierData();
+    if (this.currentUserPermission.length) {
+      this.currentUserPermission.forEach(ele => {
+        if (ele.form_name === 'Supplier') {
+          // this.addUserPermission = ele.can_add;
+          this.addSupplierPermission = 1;
+        }
+        if (ele.form_name === 'Supplier Rate') {
+          this.addSupplierRatePermission = 1;
+        }
+      })
+    } this.getSupplierData();
   }
 
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'entry_id') {
@@ -76,7 +101,16 @@ export class ViewSuppliersComponent implements OnInit {
     });
   }
   onAddRate() {
-    this.router.navigate(['/pages/supplier/add-supplier-rate']);
+    if (this.addSupplierRatePermission) {
+      this.router.navigate(['/pages/supplier/add-supplier-rate']);
+    } else {
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to add supplier rate. If you want to add supplier rate ask admin for permission.');
+      if (res) {
+
+      } else {
+
+      }
+    }
   }
 }
 
@@ -90,14 +124,26 @@ export class ViewSuppliersComponent implements OnInit {
 
 export class SupplierRendererComponent implements AgRendererComponent {
   params: any;
+  currentUserId: any;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
   editSupplierPermission = 0;
   deleteSupplierPermission = 0;
+  editSupplierRatePermission = 0;
+  addSupplierRatePermission = 0;
   items = [
-    // { title: 'Add Supplier Rate', value: '' },
     { title: 'Add/Edit Supplier Rate', value: '' },
   ];
   constructor(private router: Router, private modalService: NgbModal, private supplierService: SupplierService,
-    private toasterService: ToastrService, private permissionService: PermissionService, private menuService: NbMenuService, ) {
+    private toasterService: ToastrService, private permissionService: PermissionService, private menuService: NbMenuService,
+    private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
     this.menuService.onItemClick()
       .subscribe((event) => {
         this.onContecxtItemSelection(event.item);
@@ -107,19 +153,33 @@ export class SupplierRendererComponent implements AgRendererComponent {
   agInit(params: any): void {
     this.params = params;
     this.items[0].value = this.params.value
-    this.editSupplierPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_quality);
-    this.deleteSupplierPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_quality);
+    this.currentUserPermission.forEach(ele => {
+      if (ele.form_name === 'Supplier') {
+        this.editSupplierPermission = 1;
+        this.deleteSupplierPermission = 1;
+      }
+      if (ele.form_name === 'Supplier Rate') {
+        this.editSupplierRatePermission = 1;
+        this.addSupplierRatePermission = 1;
+      }
+    })
   }
   onContecxtItemSelection(item) {
-    // if (item.title === 'Add Supplier Rate') {
-    //   this.onAddRate();
-    // } else 
     if (item.title === 'Add/Edit Supplier Rate') {
       this.onEditRate(item.value);
     }
   }
   onEditRate(id) {
-    this.router.navigate(['/pages/supplier/edit-supplier-rate/' + id]);
+    if (this.editSupplierRatePermission || this.addSupplierRatePermission) {
+      this.router.navigate(['/pages/supplier/edit-supplier-rate/' + id]);
+    } else {
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to edit supplier rate. If you want to edit supplier rate ask admin for permission.');
+      if (res) {
+
+      } else {
+
+      }
+    }
   }
   refresh(): boolean {
     return false;

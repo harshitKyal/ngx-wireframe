@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,13 +7,15 @@ import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { element } from '@angular/core/src/render3';
 import { User, UserPermission } from '../../../@theme/model/user-class';
 import { UserService } from '../../../@theme/services/user.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../@theme/services/auth.service';
 
 @Component({
   selector: 'app-add-edit-user',
   templateUrl: './add-edit-user.component.html',
   styleUrls: ['./add-edit-user.component.scss']
 })
-export class AddEditUserComponent implements OnInit {
+export class AddEditUserComponent implements OnInit, OnDestroy {
 
   permissionArray = ['have_quality', 'can_add_quality', 'can_view_quality', 'can_edit_quality', 'can_delete_quality',
     'have_user', 'can_add_user', 'can_view_user', 'can_edit_user', 'can_delete_user', 'have_party', 'can_add_party', 'can_edit_party', 'can_view_party', 'can_delete_party'
@@ -40,9 +42,19 @@ export class AddEditUserComponent implements OnInit {
   });
 
   disbaleFlag = true;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUserId: any;
   userPermissionData: UserPermission[] = [];
   constructor(private userService: UserService, private toasterService: ToastrService,
-    private route: ActivatedRoute, private router: Router) {
+    private route: ActivatedRoute, private router: Router, private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
   }
   ngOnInit() {
     this.setUserPermissionForm();
@@ -83,7 +95,9 @@ export class AddEditUserComponent implements OnInit {
     }
   }
 
-
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
 
   getItems() {
     this.items = this.userService.getUserPermissionJson();
