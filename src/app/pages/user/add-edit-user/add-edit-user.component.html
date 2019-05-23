@@ -169,37 +169,38 @@
             <tr>
               <th *ngFor="let data of tableHeading">{{data}}</th>
             </tr>
-            <tr *ngFor="let row of userPermissionData">
+            <tr *ngFor="let row of userPermissionData;let i = index">
               <th>{{row.form_name}}</th>
               <th>
-                <nb-checkbox name="view" [(ngModel)]="row.can_view"></nb-checkbox>
+                <nb-checkbox name="view{{i}}" [(ngModel)]="row.can_view">
+                </nb-checkbox>
               </th>
               <th>
-                <nb-checkbox name="add" [(ngModel)]="row.can_add"></nb-checkbox>
+                <nb-checkbox name="add{{i}}" [(ngModel)]="row.can_add"></nb-checkbox>
               </th>
               <th>
-                <nb-checkbox name="edit" [(ngModel)]="row.can_edit"></nb-checkbox>
+                <nb-checkbox name="edit{{i}}" [(ngModel)]="row.can_edit"></nb-checkbox>
               </th>
               <th>
-                <nb-checkbox name="delete" [(ngModel)]="row.can_delete"></nb-checkbox>
+                <nb-checkbox name="delete{{i}}" [(ngModel)]="row.can_delete"></nb-checkbox>
               </th>
               <th>
-                <nb-checkbox name="view_group" [(ngModel)]="row.can_view_group"></nb-checkbox>
+                <nb-checkbox name="view_group{{i}}" [(ngModel)]="row.can_view_group"></nb-checkbox>
               </th>
               <th>
-                <nb-checkbox name="view_all" [(ngModel)]="row.can_view_all"></nb-checkbox>
+                <nb-checkbox name="view_all{{i}}" [(ngModel)]="row.can_view_all"></nb-checkbox>
               </th>
               <th>
-                <nb-checkbox name="edit_group" [(ngModel)]="row.can_edit_group"></nb-checkbox>
+                <nb-checkbox name="edit_group{{i}}" [(ngModel)]="row.can_edit_group"></nb-checkbox>
               </th>
               <th>
-                <nb-checkbox name="edit_all" [(ngModel)]="row.can_edit_all"></nb-checkbox>
+                <nb-checkbox name="edit_all{{i}}" [(ngModel)]="row.can_edit_all"></nb-checkbox>
               </th>
               <th>
-                <nb-checkbox name="delete_group" [(ngModel)]="row.can_delete_group"></nb-checkbox>
+                <nb-checkbox name="delete_group{{i}}" [(ngModel)]="row.can_delete_group"></nb-checkbox>
               </th>
               <th>
-                <nb-checkbox name="delete_all" [(ngModel)]="row.can_delete_all"></nb-checkbox>
+                <nb-checkbox name="delete_all{{i}}" [(ngModel)]="row.can_delete_all"></nb-checkbox>
               </th>
             </tr>
           </table>
