@@ -9,7 +9,8 @@ export class Quality {
     remark: any;
     created_date: any;
     created_by: any;
-    modififed_by: any;
-    modified_date: any;
+    updated_by: any;
+    updated_date: any;
     quality_date: any;
+    user_head_id: any;
 }

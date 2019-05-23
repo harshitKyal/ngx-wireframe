@@ -9,12 +9,12 @@ export class QualityService {
 
   constructor(private apiService: ApiService) { }
 
-  getAllQualityData(){
-    return this.apiService.apiCaller('get', '/qualityData');
+  getAllQualityData(data?) {
+    return this.apiService.apiCaller('post', '/qualityData', data);
   }
 
   addQuality(quality) {
-    return this.apiService.apiCaller('post', '/addQuality',quality);
+    return this.apiService.apiCaller('post', '/addQuality', quality);
   }
 
   getQualityById(id) {

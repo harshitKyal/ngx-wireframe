@@ -7,9 +7,31 @@
             (click)="onPrintInvoice(true)">Export Invoice</button>
         <button style="float: right;" nbButton size="xsmall" status="info" (click)="onPrintInvoice(false)">Print
             Invoice</button>
-
     </nb-card-header>
     <nb-card-body>
+        <div class="row" *ngIf="viewGroupDataPermission && !viewAllDataPermission">
+            <nb-radio-group [(ngModel)]="radioSelected" (valueChange)="getQualityData($event)">
+                <nb-radio [value]="1">
+                    View Own
+                </nb-radio>
+                <nb-radio [value]="2">
+                    View Group
+                </nb-radio>
+            </nb-radio-group>
+        </div>
+        <div class="row" *ngIf="viewGroupDataPermission && viewAllDataPermission">
+            <nb-radio-group [(ngModel)]="radioSelected" (valueChange)="getQualityData($event)">
+                <nb-radio [value]="1">
+                    View Own
+                </nb-radio>
+                <nb-radio [value]="2">
+                    View Group
+                </nb-radio>
+                <nb-radio [value]="3">
+                    View All
+                </nb-radio>
+            </nb-radio-group>
+        </div>
         <ag-grid-angular style="width: 100%; height:500px" class="ag-theme-balham" [rowData]="rowData"
             [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='100'>
         </ag-grid-angular>

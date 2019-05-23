@@ -83,7 +83,10 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
   currentUserPermission = [];
   currentUser;
   currentUserId: any;
-
+  viewAllDataPermission: any = false;
+  viewOwnDataPermission: any = false;
+  viewGroupDataPermission = false;
+  radioSelected: any = 1;
   constructor(private toasterService: ToastrService, private _http: HttpClient, private permissionService: PermissionService,
     private router: Router, private qualityService: QualityService, public printService: PrintService, private qzService: QzTrayService,
     private authService: AuthService) {
@@ -102,9 +105,12 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
       this.currentUserPermission.forEach(ele => {
         if (ele.form_name === 'Quality') {
           // this.addUserPermission = ele.can_add;
+          this.viewAllDataPermission = ele.can_view_all;
+          this.viewGroupDataPermission = ele.can_view_group;
+          this.viewOwnDataPermission = ele.can_view;
           this.addQualityPermission = 1;
         }
-      })
+      });
     } this.getQualityData();
   }
   ngOnDestroy() {
@@ -140,8 +146,26 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
     this.printService
       .printDocument('invoice', invoiceIds, data);
   }
-  getQualityData(): any {
-    this.qualityService.getAllQualityData().subscribe(data => {
+  getQualityData(value?): any {
+    let body = {
+      created_by: null,
+      user_head_id: null
+    };
+    if (value) {
+      this.radioSelected = value;
+    }
+    if (this.viewOwnDataPermission && this.radioSelected == 1) {
+      body.created_by = this.currentUserId;
+    }
+    if (this.viewGroupDataPermission && this.radioSelected == 2) {
+      body.created_by = this.currentUserId;
+      body.user_head_id = this.currentUser.user_head_id;
+    }
+    if (this.viewAllDataPermission && this.radioSelected == 3) {
+      body.created_by = null;
+      body.user_head_id = null;
+    }
+    this.qualityService.getAllQualityData(body).subscribe(data => {
       if (!data[0].error) {
         this.rowData = data[0].data;
         this.qualityList = data[0].data;
