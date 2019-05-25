@@ -11,6 +11,7 @@ import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialo
 import { NbMenuService } from '@nebular/theme';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { Subscription } from 'rxjs';
+import { ViewReqObj } from '../../../@theme/model/user-class';
 
 @Component({
   selector: 'ngx-view-suppliers',
@@ -35,7 +36,11 @@ export class ViewSuppliersComponent implements OnInit, OnDestroy {
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
-
+  viewAllDataPermission: any = false;
+  viewOwnDataPermission: any = false;
+  viewGroupDataPermission = false;
+  radioSelected: any = 1;
+  supplierReqObj = new ViewReqObj();
   constructor(private toasterService: ToastrService, private permissionService: PermissionService,
     private router: Router, private supplierService: SupplierService, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -54,6 +59,9 @@ export class ViewSuppliersComponent implements OnInit, OnDestroy {
         if (ele.form_name === 'Supplier') {
           // this.addUserPermission = ele.can_add;
           this.addSupplierPermission = 1;
+          this.viewAllDataPermission = ele.can_view_all;
+          this.viewGroupDataPermission = ele.can_view_group;
+          this.viewOwnDataPermission = ele.can_view;
         }
         if (ele.form_name === 'Supplier Rate') {
           this.addSupplierRatePermission = 1;
@@ -91,8 +99,23 @@ export class ViewSuppliersComponent implements OnInit, OnDestroy {
     }
   }
 
-  getSupplierData(): any {
-    this.supplierService.getAllSupplierData().subscribe(data => {
+  getSupplierData(value?): any {
+    this.supplierReqObj = new ViewReqObj();
+    if (value) {
+      this.radioSelected = value;
+    }
+    if (this.viewOwnDataPermission && this.radioSelected == 1) {
+      this.supplierReqObj.created_by = this.currentUserId;
+    }
+    if (this.viewGroupDataPermission && this.radioSelected == 2) {
+      this.supplierReqObj.created_by = this.currentUserId;
+      this.supplierReqObj.user_head_id = this.currentUser.user_head_id;
+    }
+    if (this.viewAllDataPermission && this.radioSelected == 3) {
+      this.supplierReqObj.created_by = null;
+      this.supplierReqObj.user_head_id = null;
+    }
+    this.supplierService.getAllSupplierData(this.supplierReqObj).subscribe(data => {
       if (!data[0].error) {
         this.rowData = data[0].data;
         this.supplierList = data[0].data;

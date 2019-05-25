@@ -8,8 +8,8 @@ export class BillInService {
 
   constructor(private apiService: ApiService) { }
 
-  getAllBills(){
-    return this.apiService.apiCaller('get', '/stockList');
+  getAllBills(billReqObj){
+    return this.apiService.apiCaller('post', '/stockList',billReqObj);
   }
 
   addBill(bill) {

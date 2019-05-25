@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialo
 import * as XLSX from 'xlsx';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { Subscription } from 'rxjs';
+import { ViewReqObj } from '../../../@theme/model/user-class';
 
 @Component({
   selector: 'ngx-view-lot',
@@ -38,6 +39,12 @@ export class ViewLotComponent implements OnInit, OnDestroy {
   currentUserId: any;
   currentUser$: Subscription;
   currentUserPermission = [];
+  viewAllDataPermission: any = false;
+  viewOwnDataPermission: any = false;
+  viewGroupDataPermission = false;
+  radioSelected: any = 1;
+  lotReqObj = new ViewReqObj();
+
   constructor(private lotService: LotService, private router: Router, private tosterService: ToastrService
     , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -57,6 +64,9 @@ export class ViewLotComponent implements OnInit, OnDestroy {
         if (ele.form_name === 'Lot') {
           // this.addLotPermission = ele.can_add;
           this.addLotPermission = 1;
+          this.viewAllDataPermission = ele.can_view_all;
+          this.viewGroupDataPermission = ele.can_view_group;
+          this.viewOwnDataPermission = ele.can_view;
         }
       })
     }
@@ -65,8 +75,23 @@ export class ViewLotComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
-  getLotData() {
-    this.lotService.getAllLots().subscribe(data => {
+  getLotData(value?) {
+    this.lotReqObj = new ViewReqObj();
+    if (value) {
+      this.radioSelected = value;
+    }
+    if (this.viewOwnDataPermission && this.radioSelected == 1) {
+      this.lotReqObj.created_by = this.currentUserId;
+    }
+    if (this.viewGroupDataPermission && this.radioSelected == 2) {
+      this.lotReqObj.created_by = this.currentUserId;
+      this.lotReqObj.user_head_id = this.currentUser.user_head_id;
+    }
+    if (this.viewAllDataPermission && this.radioSelected == 3) {
+      this.lotReqObj.created_by = null;
+      this.lotReqObj.user_head_id = null;
+    }
+    this.lotService.getAllLots(this.lotReqObj).subscribe(data => {
       if (!data[0].error) {
         this.lotList = data[0].data;
         this.rowData = data[0].data;

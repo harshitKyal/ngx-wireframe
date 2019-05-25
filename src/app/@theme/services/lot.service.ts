@@ -8,8 +8,8 @@ export class LotService {
 
   constructor(private apiService: ApiService) { }
 
-  getAllLots() {
-    return this.apiService.apiCaller('get', '/lotList');
+  getAllLots(lotReqObj) {
+    return this.apiService.apiCaller('post', '/lotList', lotReqObj);
   }
 
   addLot(lot) {

@@ -10,7 +10,7 @@ export class UserService {
 
   constructor(private apiService: ApiService) { }
 
-  getUserList(currentUserId) {
+  getUserList(currentUserId, userReqObj) {
     //console.log("calling get user list")
 
     return this.apiService.apiCaller('get', '/GetAllUsers/' + currentUserId);

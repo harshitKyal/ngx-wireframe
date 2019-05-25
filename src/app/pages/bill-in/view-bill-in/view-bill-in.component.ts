@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialo
 import * as XLSX from 'xlsx';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
+import { ViewReqObj } from '../../../@theme/model/user-class';
 
 @Component({
   selector: 'ngx-view-bill-in',
@@ -45,7 +46,11 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
-
+  viewAllDataPermission: any = false;
+  viewOwnDataPermission: any = false;
+  viewGroupDataPermission = false;
+  radioSelected: any = 1;
+  billReqObj = new ViewReqObj();
   constructor(private billService: BillInService, private router: Router, private tosterService: ToastrService
     , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -65,6 +70,9 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
         if (ele.form_name === 'Bill') {
           // this.addUserPermission = ele.can_add;
           this.addBillPermission = 1;
+          this.viewAllDataPermission = ele.can_view_all;
+          this.viewGroupDataPermission = ele.can_view_group;
+          this.viewOwnDataPermission = ele.can_view;
         }
       })
     }
@@ -73,8 +81,23 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
-  getBillData() {
-    this.billService.getAllBills().subscribe(data => {
+  getBillData(value?) {
+    this.billReqObj = new ViewReqObj();
+    if (value) {
+      this.radioSelected = value;
+    }
+    if (this.viewOwnDataPermission && this.radioSelected == 1) {
+      this.billReqObj.created_by = this.currentUserId;
+    }
+    if (this.viewGroupDataPermission && this.radioSelected == 2) {
+      this.billReqObj.created_by = this.currentUserId;
+      this.billReqObj.user_head_id = this.currentUser.user_head_id;
+    }
+    if (this.viewAllDataPermission && this.radioSelected == 3) {
+      this.billReqObj.created_by = null;
+      this.billReqObj.user_head_id = null;
+    }
+    this.billService.getAllBills(this.billReqObj).subscribe(data => {
       if (!data[0].error) {
         this.billList = data[0].data;
         this.rowData = data[0].data;
@@ -139,7 +162,7 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
   styleUrls: ['./view-bill-in.component.scss']
 })
 
-export class CustomRendererBillInComponent implements AgRendererComponent , OnDestroy{
+export class CustomRendererBillInComponent implements AgRendererComponent, OnDestroy {
   params: any;
   editBillPermission = 1;
   deleteBillPermission = 1;
@@ -170,7 +193,7 @@ export class CustomRendererBillInComponent implements AgRendererComponent , OnDe
     // this.editPartyPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_user);
     // this.deletePartyPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_user);
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
   refresh(): boolean {

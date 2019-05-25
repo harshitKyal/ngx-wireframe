@@ -9,8 +9,8 @@ export class PartyService {
 
   constructor(private apiService: ApiService) { }
 
-  getPartyList() {
-    return this.apiService.apiCaller('get', '/partyData');
+  getPartyList(obj) {
+    return this.apiService.apiCaller('post', '/partyData', obj);
   }
   updateParty(party: Party) {
     return this.apiService.apiCaller('post', '/updateParty', party);

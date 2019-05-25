@@ -9,6 +9,7 @@ import { LotData, LotMast, LotWeightMtrDetail } from '../../../@theme/model/lot-
 import { Quality } from '../../../@theme/model/quality-class';
 import { LotService } from '../../../@theme/services/lot.service';
 import { QualityService } from '../../../@theme/services/quality.service';
+import { ViewReqObj } from '../../../@theme/model/user-class';
 declare var $;
 @Component({
   selector: 'app-add-edit-lot',
@@ -35,6 +36,7 @@ export class AddEditLotComponent implements OnInit {
   rowData: any;
   grList = [];
   lotDataArray: LotData[] = [];
+  qualityViewReqObj = new ViewReqObj();
 
   qualityList: Quality[] = [];
   lotDetailObj: LotWeightMtrDetail[] = [];
@@ -114,7 +116,7 @@ export class AddEditLotComponent implements OnInit {
   }
 
   getQuality() {
-    this.qualityService.getAllQualityData().subscribe(data => {
+    this.qualityService.getAllQualityData(this.qualityViewReqObj).subscribe(data => {
       if (!data[0].error) {
         this.qualityList = data[0].data;
       }
