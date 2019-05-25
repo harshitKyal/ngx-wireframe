@@ -94,6 +94,7 @@ export class ViewUserComponent implements OnInit, OnDestroy {
 
   getUserList(value?) {
     this.userList = [];
+    this.rowData = [];
     this.userReqObj = new ViewReqObj();
     if (value) {
       this.radioSelected = value;
@@ -196,10 +197,18 @@ export class CustomRendererUserComponent implements AgRendererComponent {
     this.params = params;
     this.userPermission.forEach(ele => {
       if (ele.form_name === 'User') {
-        // this.editUserPermission = ele.can_edit;
-        // this.deleteUserPermission = ele.can_delete;
-        this.editUserPermission = 1;
-        this.deleteUserPermission = 1;
+        if (this.params.action.radioSelected == 1) {
+          if (this.params.action.radioSelected == 1) {
+            this.editUserPermission = ele.can_edit;
+            this.deleteUserPermission = ele.can_delete;
+          } else if (this.params.action.radioSelected == 2) {
+            this.editUserPermission = ele.can_edit_group;
+            this.deleteUserPermission = ele.can_delete_group;
+          } else if (this.params.action.radioSelected == 3) {
+            this.editUserPermission = ele.can_edit_all;
+            this.deleteUserPermission = ele.can_delete_all;
+          }
+        }
       }
     })
   }

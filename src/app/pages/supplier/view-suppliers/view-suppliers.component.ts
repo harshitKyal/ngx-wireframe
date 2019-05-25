@@ -178,8 +178,16 @@ export class SupplierRendererComponent implements AgRendererComponent {
     this.items[0].value = this.params.value
     this.currentUserPermission.forEach(ele => {
       if (ele.form_name === 'Supplier') {
-        this.editSupplierPermission = 1;
-        this.deleteSupplierPermission = 1;
+        if (this.params.action.radioSelected == 1) {
+          this.editSupplierPermission = ele.can_edit;
+          this.deleteSupplierPermission = ele.can_delete;
+        } else if (this.params.action.radioSelected == 2) {
+          this.editSupplierPermission = ele.can_edit_group;
+          this.deleteSupplierPermission = ele.can_delete_group;
+        } else if (this.params.action.radioSelected == 3) {
+          this.editSupplierPermission = ele.can_edit_all;
+          this.deleteSupplierPermission = ele.can_delete_all;
+        }
       }
       if (ele.form_name === 'Supplier Rate') {
         this.editSupplierRatePermission = 1;

@@ -184,10 +184,16 @@ export class CustomRendererBillInComponent implements AgRendererComponent, OnDes
     this.params = params;
     this.currentUserPermission.forEach(ele => {
       if (ele.form_name === 'Bill') {
-        // this.editBillPermission = ele.can_edit;
-        // this.deleteBillPermission = ele.can_delete;
-        this.editBillPermission = 1;
-        this.deleteBillPermission = 1;
+        if (this.params.action.radioSelected == 1) {
+          this.editBillPermission = ele.can_edit;
+          this.deleteBillPermission = ele.can_delete;
+        } else if (this.params.action.radioSelected == 2) {
+          this.editBillPermission = ele.can_edit_group;
+          this.deleteBillPermission = ele.can_delete_group;
+        } else if (this.params.action.radioSelected == 3) {
+          this.editBillPermission = ele.can_edit_all;
+          this.deleteBillPermission = ele.can_delete_all;
+        }
       }
     })
     // this.editPartyPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_user);

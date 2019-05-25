@@ -176,10 +176,6 @@ export class CustomRendererPartyComponent implements AgRendererComponent {
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
-  viewAllDataPermission: any = false;
-  viewOwnDataPermission: any = false;
-  viewGroupDataPermission = false;
-  radioSelected: any = 1;
 
   constructor(private router: Router, private _modalService: NgbModal, private partyService: PartyService,
     private toasterService: ToastrService, private permissionService: PermissionService, private authService: AuthService) {
@@ -194,13 +190,16 @@ export class CustomRendererPartyComponent implements AgRendererComponent {
     this.params = params;
     this.currentUserPermission.forEach(ele => {
       if (ele.form_name === 'Party') {
-        // this.editBillPermission = ele.can_edit;
-        // this.deleteBillPermission = ele.can_delete;
-        this.editPartyPermission = 1;
-        this.deletePartyPermission = 1;
-        this.viewAllDataPermission = ele.can_view_all;
-        this.viewGroupDataPermission = ele.can_view_group;
-        this.viewOwnDataPermission = ele.can_view;
+        if (this.params.action.radioSelected == 1) {
+          this.editPartyPermission = ele.can_edit;
+          this.deletePartyPermission = ele.can_delete;
+        } else if (this.params.action.radioSelected == 2) {
+          this.editPartyPermission = ele.can_edit_group;
+          this.deletePartyPermission = ele.can_delete_group;
+        } else if (this.params.action.radioSelected == 3) {
+          this.editPartyPermission = ele.can_edit_all;
+          this.deletePartyPermission = ele.can_delete_all;
+        }
       }
     })
   }

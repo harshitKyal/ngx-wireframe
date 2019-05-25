@@ -205,10 +205,16 @@ export class MyLinkRendererComponent implements AgRendererComponent {
     this.params = params;
     this.currentUserPermission.forEach(ele => {
       if (ele.form_name === 'Quality') {
-        // this.editBillPermission = ele.can_edit;
-        // this.deleteBillPermission = ele.can_delete;
-        this.editQualityPermission = 1;
-        this.deleteQualityPermission = 1;
+        if (this.params.action.radioSelected == 1) {
+          this.editQualityPermission = ele.can_edit;
+          this.deleteQualityPermission = ele.can_delete;
+        } else if (this.params.action.radioSelected == 2) {
+          this.editQualityPermission = ele.can_edit_group;
+          this.deleteQualityPermission = ele.can_delete_group;
+        } else if (this.params.action.radioSelected == 3) {
+          this.editQualityPermission = ele.can_edit_all;
+          this.deleteQualityPermission = ele.can_delete_all;
+        }
       }
     })
   }

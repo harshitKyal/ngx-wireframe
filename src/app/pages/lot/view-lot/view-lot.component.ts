@@ -178,10 +178,16 @@ export class CustomRendererLotComponent implements AgRendererComponent {
     this.params = params;
     this.currentUserPermission.forEach(ele => {
       if (ele.form_name === 'Lot') {
-        // this.editLotPermission = ele.can_edit;
-        // this.editLotPermission = ele.can_delete;
-        this.editLotPermission = 1;
-        this.deleteLotPermission = 1;
+        if (this.params.action.radioSelected == 1) {
+          this.editLotPermission = ele.can_edit;
+          this.deleteLotPermission = ele.can_delete;
+        } else if (this.params.action.radioSelected == 2) {
+          this.editLotPermission = ele.can_edit_group;
+          this.deleteLotPermission = ele.can_delete_group;
+        } else if (this.params.action.radioSelected == 3) {
+          this.editLotPermission = ele.can_edit_all;
+          this.deleteLotPermission = ele.can_delete_all;
+        }
       }
     })
     // this.editLotPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_lot);
