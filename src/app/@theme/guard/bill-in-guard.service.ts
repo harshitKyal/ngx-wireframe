@@ -1,28 +1,65 @@
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, ActivatedRoute, Route, CanLoad } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { User } from '../model/user-class';
+import { User, UserPermission } from '../model/user-class';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../services/auth.service';
+import { PermissionService } from '../services/permission.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BillInGuardService  implements CanLoad, CanActivate{
+export class BillInGuardService implements CanLoad, CanActivate {
 
-  constructor() { }
+  currentUser: User;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  userPermission: UserPermission;
 
-  canLoad(route: Route) {debugger
+  constructor(private router: Router, private activateroute: ActivatedRoute,
+    private authService: AuthService, private permissionService:PermissionService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(data => {
+      if (data != null) {
+        this.currentUser = data;
+        this.currentUserPermission = data.user_permission;
+        if (this.currentUserPermission.length) {
+          this.currentUserPermission.forEach(ele => {
+            if (ele.form_name === 'Bill') {
+              this.userPermission = new UserPermission();
+              this.userPermission = ele;
+            }
+          });
+        }
+      }
+    })
+  }
+
+  canLoad(route: Route) {
     const isLoggedIn = localStorage.getItem('isLogged');
     const user: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (isLoggedIn && user && parseInt(user.have_stock)) {
+    if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
     } else {
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Bill. If you want to View Bill ask admin for permission.');
+      if (res) {
+
+      } else {
+
+      }
       return false;
     }
   }
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {debugger
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const isLoggedIn = localStorage.getItem('isLogged');
     const user: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (isLoggedIn && user && parseInt(user.have_stock)) {
+    if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
+    } else {
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Bill. If you want to View Bill ask admin for permission.');
+      if (res) {
+
+      } else {
+
+      }
     }
   }
 }

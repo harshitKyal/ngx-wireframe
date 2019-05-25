@@ -109,7 +109,12 @@ export class ViewUserComponent implements OnInit, OnDestroy {
       this.userReqObj.created_by = null;
       this.userReqObj.user_head_id = null;
     }
-    this.userService.getUserList(this.currentUserId,this.userReqObj).subscribe(data => {
+    const body = {
+      created_by: this.userReqObj.created_by,
+      user_head_id: this.userReqObj.user_head_id,
+      currentUserId: this.currentUserId
+    }
+    this.userService.getUserList(body).subscribe(data => {
       if (!data[0].error) {
         this.userList = data[0].data;
         this.rowData = data[0].data;

@@ -10,14 +10,11 @@ export class UserService {
 
   constructor(private apiService: ApiService) { }
 
-  getUserList(currentUserId, userReqObj) {
-    //console.log("calling get user list")
-
-    return this.apiService.apiCaller('get', '/GetAllUsers/' + currentUserId);
+  getUserList(obj) {
+    return this.apiService.apiCaller('post', '/GetAllUsers', obj);
   }
   getUserNameIdList() {
     return this.apiService.apiCaller('get', '/GetAllUsersNameId');
-
   }
   addUser(user: User) {
     return this.apiService.apiCaller('post', '/addUser', user);

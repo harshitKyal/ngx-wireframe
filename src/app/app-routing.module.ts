@@ -1,11 +1,11 @@
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { AuthGuard } from './@theme/guard/auth.guard';
 import { PrintLayoutComponent } from './@theme/components/print-layout/print-layout.component';
 import { InvoiceComponent } from './@theme/components/invoice/invoice.component';
+import { AuthGuard } from './@theme/guard/auth-guard.service';
 
 const routes: Routes = [
-  { path: 'pages', loadChildren: 'app/pages/pages.module#PagesModule' },
+  { path: 'pages', loadChildren: 'app/pages/pages.module#PagesModule', canActivate: [AuthGuard] },
   {
     path: 'auth',
     loadChildren: 'app/auth/auth.module#NgxAuthModule',
