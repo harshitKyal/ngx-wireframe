@@ -85,9 +85,12 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
       this.userService.getUserById(this.id).subscribe(
         data => {
           if (!data[0].error) {
+            // console.log("in update user")
+            // console.log(data[0].data)
             this.userModal = data[0].data.user[0];
-            this.showUserNameListFlag = true;
-            this.checkBoxValue = true;
+
+            this.showUserNameListFlag = data[0].data.user[0].group_head_check_box;
+            //this.userModal.group_head_check_box = true;
             this.userPermissionData = [];
             this.userPermissionData = data[0].data.user_permission
 
@@ -104,7 +107,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
   }
   onAssign(value) {
     this.showUserNameListFlag = value.returnValue;
-    alert(this.showUserNameListFlag);
+    // alert(this.showUserNameListFlag);
   }
   getUsers() {
     this.usersList = [];

@@ -15,6 +15,7 @@ export class User {
     modified_by: any;
     modefied_date: any;
     user_head_id: any;
+    group_head_check_box : any;
     userPermission: UserPermission[];
     have_quality: any = false;
     can_view_quality: any = false;
