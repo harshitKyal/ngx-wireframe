@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { LoginModal } from '../../@theme/model/login-class';
 import { AuthService } from '../../@theme/services/auth.service';
+import { MENU_ITEMS } from '../../pages/pages-menu';
 
 
 @Component({
@@ -13,6 +14,8 @@ import { AuthService } from '../../@theme/services/auth.service';
 })
 export class LoginComponent {
 
+    userPermission = [];
+    itemList = MENU_ITEMS;
     @ViewChild('f') loginForm: NgForm;
     loginReq: LoginModal;
     constructor(private router: Router, private authService: AuthService, private toasterService: ToastrService,
@@ -27,8 +30,28 @@ export class LoginComponent {
             data => {
                 console.log((data))
                 if (!data[0].error) {
-                    this.router.navigate(['/pages/party']);
-                    this.toasterService.success('User Logged In Succesfully!');
+                    this.userPermission = [];
+                    this.userPermission = data[0].data.user_permission;
+                    if (this.userPermission.length) {
+                        var flag = 0;
+                        this.userPermission.forEach(ele => {
+                            if (!flag) {
+                                if (ele.can_view) {
+                                    this.itemList.forEach(subele => {
+                                        if (!flag) {
+                                            if (subele.title === ele.form_name) {
+                                                this.router.navigate([subele.children[0].link]);
+                                                flag = 1;
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                        this.toasterService.success('User Logged In Succesfully!');
+                    } else {
+                        this.router.navigate(['/auth']);
+                    }
                 } else {
                     this.router.navigate(['/auth']);
                     this.toasterService.error(data[0].message);

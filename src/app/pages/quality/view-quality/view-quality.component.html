@@ -9,8 +9,8 @@
             Invoice</button>
     </nb-card-header>
     <nb-card-body>
-        <div class="row" *ngIf="viewGroupDataPermission && !viewAllDataPermission">
-            <nb-radio-group [(ngModel)]="radioSelected" (valueChange)="getQualityData($event)">
+        <div *ngIf="viewGroupDataPermission && !viewAllDataPermission">
+            <nb-radio-group class="row ml-2 mb-2" [(ngModel)]="radioSelected" (valueChange)="getQualityData($event)">
                 <nb-radio [value]="1">
                     View Own
                 </nb-radio>
@@ -19,15 +19,15 @@
                 </nb-radio>
             </nb-radio-group>
         </div>
-        <div class="row" *ngIf="viewGroupDataPermission && viewAllDataPermission">
-            <nb-radio-group [(ngModel)]="radioSelected" (valueChange)="getQualityData($event)">
-                <nb-radio [value]="1">
+        <div *ngIf="viewGroupDataPermission && viewAllDataPermission">
+            <nb-radio-group class="row ml-2 mb-2" [(ngModel)]="radioSelected" (valueChange)="getQualityData($event)">
+                <nb-radio class="radio-inline" [value]="1">
                     View Own
                 </nb-radio>
-                <nb-radio [value]="2">
+                <nb-radio class="radio-inline" [value]="2">
                     View Group
                 </nb-radio>
-                <nb-radio [value]="3">
+                <nb-radio class="radio-inline" [value]="3">
                     View All
                 </nb-radio>
             </nb-radio-group>

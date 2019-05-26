@@ -4,6 +4,12 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { AuthGuard } from '../@theme/guard/auth.guard';
+import { BillInGuardService } from '../@theme/guard/bill-in-guard.service';
+import { UserGuardService } from '../@theme/guard/user-guard.service';
+import { PartyGuardService } from '../@theme/guard/party-guard.service';
+import { QualityGuardService } from '../@theme/guard/quality-guard.service';
+import { LotGuardService } from '../@theme/guard/lot-guard.service';
+import { SupplierGuardService } from '../@theme/guard/supplier-guard.service';
 
 const routes: Routes = [{
   path: '',
@@ -16,22 +22,32 @@ const routes: Routes = [{
     {
       path: 'party',
       loadChildren: './party/party.module#PartyModule',
+      canActivate: [PartyGuardService],
+      canLoad: [PartyGuardService]
     },
     {
       path: 'quality',
       loadChildren: './quality/quality.module#QualityModule',
+      canActivate: [QualityGuardService],
+      canLoad: [QualityGuardService]
     },
     {
       path: 'user',
       loadChildren: './user/user.module#UserModule',
+      canActivate: [UserGuardService],
+      canLoad: [UserGuardService]
     },
     {
       path: 'bill',
       loadChildren: './bill-in/bill-in.module#BillInModule',
+      canActivate: [BillInGuardService],
+      canLoad: [BillInGuardService],
     },
     {
       path: 'lot',
       loadChildren: './lot/lot.module#LotModule',
+      canActivate: [LotGuardService],
+      canLoad: [LotGuardService],
     },
     {
       path: 'program',
@@ -40,6 +56,8 @@ const routes: Routes = [{
     {
       path: 'supplier',
       loadChildren: './supplier/supplier.module#SupplierModule',
+      canActivate: [SupplierGuardService],
+      canLoad: [SupplierGuardService],
     },
     {
       path: 'shade',

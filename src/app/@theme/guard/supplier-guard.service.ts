@@ -1,20 +1,21 @@
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, ActivatedRoute, Route, CanLoad } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { User, UserPermission } from '../model/user-class';
+import { User } from '../../@core/data/users';
 import { Subscription } from 'rxjs';
+import { UserPermission } from '../model/user-class';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { Route } from '@angular/compiler/src/core';
 import { PermissionService } from '../services/permission.service';
+
 @Injectable({
   providedIn: 'root'
 })
-export class UserGuardService implements CanLoad, CanActivate {
-
+export class SupplierGuardService {
   currentUser: User;
   currentUser$: Subscription;
   currentUserPermission = [];
   userPermission: UserPermission;
-
-  constructor(private router: Router, private activateroute: ActivatedRoute, private permissionService: PermissionService,
+  constructor(private router: Router, private activateroute: ActivatedRoute,private permissionService:PermissionService,
     private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(data => {
       if (data != null) {
@@ -22,22 +23,20 @@ export class UserGuardService implements CanLoad, CanActivate {
         this.currentUserPermission = data.user_permission;
         if (this.currentUserPermission.length) {
           this.currentUserPermission.forEach(ele => {
-            if (ele.form_name === 'User') {
+            if (ele.form_name === 'Supplier') {
               this.userPermission = new UserPermission();
               this.userPermission = ele;
             }
           });
         }
       }
-    })
+    });
   }
   canLoad(route: Route) {
-    const isLoggedIn = localStorage.getItem('isLogged');
-    const user: User = JSON.parse(localStorage.getItem('currentUser'));
     if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View User. If you want to View User ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Supplier. If you want to View Supplier ask admin for permission.');
       if (res) {
 
       } else {
@@ -47,12 +46,10 @@ export class UserGuardService implements CanLoad, CanActivate {
     }
   }
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const isLoggedIn = localStorage.getItem('isLogged');
-    const user: User = JSON.parse(localStorage.getItem('currentUser'));
     if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View User. If you want to View User ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Supplier. If you want to View Supplier ask admin for permission.');
       if (res) {
 
       } else {

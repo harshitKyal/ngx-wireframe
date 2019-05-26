@@ -9,8 +9,8 @@ export class SupplierService {
 
   constructor(private apiService: ApiService) { }
 
-  getAllSupplierData() {
-    return this.apiService.apiCaller('get', '/supplierList');
+  getAllSupplierData(obj) {
+    return this.apiService.apiCaller('post', '/supplierList', obj);
   }
 
   addSupplier(supplier) {

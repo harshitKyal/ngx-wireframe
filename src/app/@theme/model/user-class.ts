@@ -69,3 +69,8 @@ export class UserPermission {
         this.can_view_group = false;
     }
 }
+
+export class ViewReqObj {
+    created_by = null;
+    user_head_id = null;
+}

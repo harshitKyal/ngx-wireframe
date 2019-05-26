@@ -6,6 +6,29 @@
     <button style="float: right;" nbButton size="xsmall" status="info" (click)="onExport()">Export</button>
   </nb-card-header>
   <nb-card-body>
+    <div  *ngIf="viewGroupDataPermission && !viewAllDataPermission">
+      <nb-radio-group class="row ml-2 mb-2" [(ngModel)]="radioSelected" (valueChange)="getBillData($event)">
+        <nb-radio [value]="1">
+          View Own
+        </nb-radio>
+        <nb-radio [value]="2">
+          View Group
+        </nb-radio>
+      </nb-radio-group>
+    </div>
+    <div *ngIf="viewGroupDataPermission && viewAllDataPermission">
+      <nb-radio-group class="row ml-2 mb-2" [(ngModel)]="radioSelected" (valueChange)="getBillData($event)">
+        <nb-radio class="radio-inline" [value]="1">
+          View Own
+        </nb-radio>
+        <nb-radio class="radio-inline" [value]="2">
+          View Group
+        </nb-radio>
+        <nb-radio class="radio-inline" [value]="3">
+          View All
+        </nb-radio>
+      </nb-radio-group>
+    </div>
     <ag-grid-angular style="width: 100%; height:500px" class="ag-theme-balham" [rowData]="rowData"
       [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='100' (gridReady)="onGridReady($event)">
     </ag-grid-angular>

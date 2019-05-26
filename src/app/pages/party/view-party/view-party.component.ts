@@ -13,6 +13,7 @@ import { PermissionService } from '../../../@theme/services/permission.service';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { Subscription } from 'rxjs';
+import { ViewReqObj } from '../../../@theme/model/user-class';
 
 
 @Component({
@@ -43,6 +44,11 @@ export class ViewPartyComponent implements OnInit, OnDestroy {
   currentUserId: any;
   currentUser$: Subscription;
   currentUserPermission = [];
+  viewAllDataPermission: any = false;
+  viewOwnDataPermission: any = false;
+  viewGroupDataPermission = false;
+  radioSelected: any = 1;
+  partyReqObj = new ViewReqObj();
 
   constructor(private partyService: PartyService, private router: Router, private tosterService: ToastrService
     , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
@@ -63,6 +69,9 @@ export class ViewPartyComponent implements OnInit, OnDestroy {
         if (ele.form_name === 'Party') {
           // this.addUserPermission = ele.can_add;
           this.addPartyPermission = 1;
+          this.viewAllDataPermission = ele.can_view_all;
+          this.viewGroupDataPermission = ele.can_view_group;
+          this.viewOwnDataPermission = ele.can_view;
         }
       })
     } this.getPartyData();
@@ -70,9 +79,23 @@ export class ViewPartyComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
-  getPartyData() {
-
-    this.partyService.getPartyList().subscribe(data => {
+  getPartyData(value?) {
+    this.partyReqObj = new ViewReqObj();
+    if (value) {
+      this.radioSelected = value;
+    }
+    if (this.viewOwnDataPermission && this.radioSelected == 1) {
+      this.partyReqObj.created_by = this.currentUserId;
+    }
+    if (this.viewGroupDataPermission && this.radioSelected == 2) {
+      this.partyReqObj.created_by = this.currentUserId;
+      this.partyReqObj.user_head_id = this.currentUser.user_head_id;
+    }
+    if (this.viewAllDataPermission && this.radioSelected == 3) {
+      this.partyReqObj.created_by = null;
+      this.partyReqObj.user_head_id = null;
+    }
+    this.partyService.getPartyList(this.partyReqObj).subscribe(data => {
       if (!data[0].error) {
         console.log('data', data[0].data);
         this.partyList = data[0].data;
@@ -167,10 +190,16 @@ export class CustomRendererPartyComponent implements AgRendererComponent {
     this.params = params;
     this.currentUserPermission.forEach(ele => {
       if (ele.form_name === 'Party') {
-        // this.editBillPermission = ele.can_edit;
-        // this.deleteBillPermission = ele.can_delete;
-        this.editPartyPermission = 1;
-        this.deletePartyPermission = 1;
+        if (this.params.action.radioSelected == 1) {
+          this.editPartyPermission = ele.can_edit;
+          this.deletePartyPermission = ele.can_delete;
+        } else if (this.params.action.radioSelected == 2) {
+          this.editPartyPermission = ele.can_edit_group;
+          this.deletePartyPermission = ele.can_delete_group;
+        } else if (this.params.action.radioSelected == 3) {
+          this.editPartyPermission = ele.can_edit_all;
+          this.deletePartyPermission = ele.can_delete_all;
+        }
       }
     })
   }

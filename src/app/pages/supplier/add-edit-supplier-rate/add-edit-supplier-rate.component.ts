@@ -9,6 +9,7 @@ import { CustomRendererStockRecordComponent } from '../../bill-in/add-edit-bill-
 import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
+import { ViewReqObj } from '../../../@theme/model/user-class';
 
 @Component({
   selector: 'ngx-add-edit-supplier-rate',
@@ -33,6 +34,8 @@ export class AddEditSupplierRateComponent implements OnInit {
     { headerName: 'GST Rate', field: 'gst_rate' },
   ];
   rowData: any;
+  supplierReqObj = new ViewReqObj();
+
   constructor(private toasterService: ToastrService, private route: ActivatedRoute,
     private router: Router, private supplierService: SupplierService) {
     this.supplierRateRecord = new SupplierRateRecord();
@@ -59,7 +62,8 @@ export class AddEditSupplierRateComponent implements OnInit {
     this.selectedSupplier = this.supplierList[this.supplierList.findIndex(v => v.entry_id == value)];
   }
   getSupplierList() {
-    this.supplierService.getAllSupplierData().subscribe(
+    this.supplierReqObj = new ViewReqObj();
+    this.supplierService.getAllSupplierData(this.supplierReqObj).subscribe(
       data => {
         if (!data[0].error) {
           this.supplierList = data[0].data;

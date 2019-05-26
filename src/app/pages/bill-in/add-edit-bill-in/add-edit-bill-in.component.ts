@@ -12,6 +12,7 @@ import { BillInService } from '../../../@theme/services/bill-in.service';
 import { PartyService } from '../../../@theme/services/party.service';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
+import { ViewReqObj } from '../../../@theme/model/user-class';
 
 @Component({
   selector: 'app-add-edit-bill-in',
@@ -30,7 +31,7 @@ export class AddEditBillInComponent implements OnInit {
   billRecord: BillRecord[] = [];
   record: BillRecord;
   qualityList: Quality[] = [];
-
+  qualityViewReqObj = new ViewReqObj();
   columnDefs = [
     { headerName: 'Actions', field: 'index' },
     { headerName: 'Gr', field: 'gr' },
@@ -43,6 +44,7 @@ export class AddEditBillInComponent implements OnInit {
     { headerName: 'No. of Boxes', field: 'no_of_boxes' },
 
   ];
+  partyReqObj = new ViewReqObj();
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
     private router: Router, private billService: BillInService, private qualityService: QualityService) {
     this.billModal = new Bill();
@@ -69,7 +71,7 @@ export class AddEditBillInComponent implements OnInit {
   }
 
   getQuality() {
-    this.qualityService.getAllQualityData().subscribe(data => {
+    this.qualityService.getAllQualityData(this.qualityViewReqObj).subscribe(data => {
       if (!data[0].error) {
         this.qualityList = data[0].data;
       }
@@ -82,7 +84,9 @@ export class AddEditBillInComponent implements OnInit {
     this.record.quality_type = this.qualityList[i].quality_type;
   }
   getPartyList() {
-    this.partyService.getPartyList().subscribe(
+    this.partyReqObj = new ViewReqObj();
+
+    this.partyService.getPartyList(this.partyReqObj).subscribe(
       data => {
         if (!data[0].error) {
           this.partyList = data[0].data;

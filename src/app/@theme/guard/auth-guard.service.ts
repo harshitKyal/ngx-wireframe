@@ -1,17 +1,33 @@
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, ActivatedRoute } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
+import { User } from '../model/user-class';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
-@Injectable()
-export class AuthGuard implements CanActivate {
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthGuard implements CanActivate, OnDestroy {
+  currentUser: User;
+  currentUser$: Subscription;
 
-  constructor(private router: Router, private activateroute: ActivatedRoute) { }
+  constructor(private router: Router, private activateroute: ActivatedRoute,
+    private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(data => {
+      if (data != null) {
+        this.currentUser = data;
+      }
+    })
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const isLoggedIn = localStorage.getItem('isLogged');
-    if (isLoggedIn) {
+    if (this.currentUser !== undefined) {
       return true;
     }
-    this.router.navigate(['/pages/login']);
-    //  return true;
+    this.router.navigate(['/auth']);
+    return false;
+  }
+  ngOnDestroy() {
+
   }
 }

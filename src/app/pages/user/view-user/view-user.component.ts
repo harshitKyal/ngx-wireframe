@@ -8,7 +8,7 @@ import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
-import { User } from "../../../@theme/model/user-class";
+import { User, ViewReqObj } from "../../../@theme/model/user-class";
 import { UserService } from "../../../@theme/services/user.service";
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
@@ -42,6 +42,11 @@ export class ViewUserComponent implements OnInit, OnDestroy {
   filtersettings: any;
   currentUserId: any;
   userPermission = [];
+  viewAllDataPermission: any = false;
+  viewOwnDataPermission: any = false;
+  viewGroupDataPermission = false;
+  radioSelected: any = 1;
+  userReqObj = new ViewReqObj();
   constructor(private userService: UserService, private router: Router, private authService: AuthService,
     private permissionService: PermissionService, private papa: Papa) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -62,6 +67,9 @@ export class ViewUserComponent implements OnInit, OnDestroy {
         if (ele.form_name === 'User') {
           // this.addUserPermission = ele.can_add;
           this.addUserPermission = 1;
+          this.viewAllDataPermission = ele.can_view_all;
+          this.viewGroupDataPermission = ele.can_view_group;
+          this.viewOwnDataPermission = ele.can_view;
         }
       })
     }
@@ -84,9 +92,30 @@ export class ViewUserComponent implements OnInit, OnDestroy {
     });
   }
 
-  getUserList() {
+  getUserList(value?) {
     this.userList = [];
-    this.userService.getUserList(this.currentUserId).subscribe(data => {
+    this.rowData = [];
+    this.userReqObj = new ViewReqObj();
+    if (value) {
+      this.radioSelected = value;
+    }
+    if (this.viewOwnDataPermission && this.radioSelected == 1) {
+      this.userReqObj.created_by = this.currentUserId;
+    }
+    if (this.viewGroupDataPermission && this.radioSelected == 2) {
+      this.userReqObj.created_by = this.currentUserId;
+      this.userReqObj.user_head_id = this.currentUser.user_head_id;
+    }
+    if (this.viewAllDataPermission && this.radioSelected == 3) {
+      this.userReqObj.created_by = null;
+      this.userReqObj.user_head_id = null;
+    }
+    const body = {
+      created_by: this.userReqObj.created_by,
+      user_head_id: this.userReqObj.user_head_id,
+      currentUserId: this.currentUserId
+    }
+    this.userService.getUserList(body).subscribe(data => {
       if (!data[0].error) {
         this.userList = data[0].data;
         this.rowData = data[0].data;
@@ -168,10 +197,18 @@ export class CustomRendererUserComponent implements AgRendererComponent {
     this.params = params;
     this.userPermission.forEach(ele => {
       if (ele.form_name === 'User') {
-        // this.editUserPermission = ele.can_edit;
-        // this.deleteUserPermission = ele.can_delete;
-        this.editUserPermission = 1;
-        this.deleteUserPermission = 1;
+        if (this.params.action.radioSelected == 1) {
+          if (this.params.action.radioSelected == 1) {
+            this.editUserPermission = ele.can_edit;
+            this.deleteUserPermission = ele.can_delete;
+          } else if (this.params.action.radioSelected == 2) {
+            this.editUserPermission = ele.can_edit_group;
+            this.deleteUserPermission = ele.can_delete_group;
+          } else if (this.params.action.radioSelected == 3) {
+            this.editUserPermission = ele.can_edit_all;
+            this.deleteUserPermission = ele.can_delete_all;
+          }
+        }
       }
     })
   }
