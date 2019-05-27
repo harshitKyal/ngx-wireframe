@@ -12,6 +12,7 @@ import { User, ViewReqObj } from "../../../@theme/model/user-class";
 import { UserService } from "../../../@theme/services/user.service";
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
+import { ConsoleReporter } from 'jasmine';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class ViewUserComponent implements OnInit, OnDestroy {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.userPermission = ele.user_permission;
+     
       }
     });
     this.setColumns();

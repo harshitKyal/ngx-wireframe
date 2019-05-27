@@ -137,7 +137,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mt-4">
+        <div *ngIf="isAdmin" class="col-md-4 mt-4">
           <nb-checkbox name="group_head_check_box" [(ngModel)]="userModal.group_head_check_box" (change)="onAssign($event)">Assign Under group Head
           </nb-checkbox>
         </div>
@@ -187,19 +187,19 @@
               <th>
                 <nb-checkbox name="view_group{{i}}" [(ngModel)]="row.can_view_group"></nb-checkbox>
               </th>
-              <th>
+              <th *ngIf="isAdmin">
                 <nb-checkbox name="view_all{{i}}" [(ngModel)]="row.can_view_all"></nb-checkbox>
               </th>
               <th>
                 <nb-checkbox name="edit_group{{i}}" [(ngModel)]="row.can_edit_group"></nb-checkbox>
               </th>
-              <th>
+              <th *ngIf="isAdmin">
                 <nb-checkbox name="edit_all{{i}}" [(ngModel)]="row.can_edit_all"></nb-checkbox>
               </th>
               <th>
                 <nb-checkbox name="delete_group{{i}}" [(ngModel)]="row.can_delete_group"></nb-checkbox>
               </th>
-              <th>
+              <th *ngIf="isAdmin">
                 <nb-checkbox name="delete_all{{i}}" [(ngModel)]="row.can_delete_all"></nb-checkbox>
               </th>
             </tr>

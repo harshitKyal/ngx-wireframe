@@ -16,19 +16,25 @@ import { AuthService } from '../../../@theme/services/auth.service';
   styleUrls: ['./add-edit-user.component.scss']
 })
 export class AddEditUserComponent implements OnInit, OnDestroy {
-
+  
   permissionArray = ['have_quality', 'can_add_quality', 'can_view_quality', 'can_edit_quality', 'can_delete_quality',
     'have_user', 'can_add_user', 'can_view_user', 'can_edit_user', 'can_delete_user', 'have_party', 'can_add_party', 'can_edit_party', 'can_view_party', 'can_delete_party'
     , 'have_stock', 'can_add_stock', 'can_edit_stock', 'can_view_stock', 'can_delete_stock'];
-  tableHeading = ["Forms", "View", "Add", "Edit", "Delete", "View Group", "View All", "Edit Group", "Edit All", "Delete Group", "Delete All"];
-  tableForms = ["Party", "Quality", "User", "Bill", "Lot", "Program", "Shade", "Supplier", "Supplier Rate"];
+   
+    tableForms = ["Party", "Quality", "User", "Bill", "Lot", "Program", "Shade", "Supplier", "Supplier Rate"];
   designation = ['Manager', 'Master', 'Accountant', 'Staff', 'Helper']
 
+ 
+  // if ((JSON.parse(localStorage.getItem('currentUser')).user_name)) {
+    
+  // }
   @ViewChild('vform') validationForm: FormGroup;
   userModal: User;
   currentUser;
+  isAdmin :boolean = false ;
   companyList = [];
   userRoleList = [];
+  tableHeading=[];
   subBtnName = 'Save';
   topHeader = '';
   source: LocalDataSource;
@@ -55,9 +61,20 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute, private router: Router, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
+        
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserPermission = ele.user_permission;
+        if (ele.user.user_name === "admin") {
+          this.tableHeading = ["Forms", "View", "Add", "Edit", "Delete", "View Group", "View All", "Edit Group", "Edit All", "Delete Group", "Delete All"];
+  
+          this.isAdmin = true;
+
+      }else
+      this.tableHeading = ["Forms", "View", "Add", "Edit", "Delete", "View Group", "Edit Group", "Delete Group"];
+  
+      // console.log("admin value" ,this.isAdmin,ele.user)
+      // console.log(ele)
       }
     });
   }
@@ -129,6 +146,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
   onCustomFormSubmit(form: NgForm) {
     this.userModal.userPermission = this.userPermissionData;
     if (this.id) {
+      this.userModal.updated_by = this.currentUserId;
       this.userService.updateUser(this.userModal).subscribe(data => {
         data = data[0]
         if (!data.error) {
@@ -144,6 +162,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     } else {
       //for add
       //console.log('uu', this.userModal)
+      this.userModal.created_by = this.currentUserId;
       this.userService.addUser(this.userModal).subscribe(data => {
         if (!data[0].error) {
           this.toasterService.success(data[0].message);

@@ -15,6 +15,7 @@ export class User {
     modified_by: any;
     modefied_date: any;
     user_head_id: any;
+    updated_by:any;
     group_head_check_box : any;
     userPermission: UserPermission[];
     have_quality: any = false;
@@ -37,6 +38,7 @@ export class User {
     can_add_stock: any = false;
     can_edit_stock: any = false;
     can_delete_stock: any = false;
+    
     constructor() {
         this.company_id = '';
         this.designation = '';
