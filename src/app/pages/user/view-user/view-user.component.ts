@@ -12,7 +12,6 @@ import { User, ViewReqObj } from "../../../@theme/model/user-class";
 import { UserService } from "../../../@theme/services/user.service";
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
-import { ConsoleReporter } from 'jasmine';
 
 
 @Component({
@@ -55,7 +54,7 @@ export class ViewUserComponent implements OnInit, OnDestroy {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.userPermission = ele.user_permission;
-     
+
       }
     });
     this.setColumns();
@@ -200,16 +199,14 @@ export class CustomRendererUserComponent implements AgRendererComponent {
     this.userPermission.forEach(ele => {
       if (ele.form_name === 'User') {
         if (this.params.action.radioSelected == 1) {
-          if (this.params.action.radioSelected == 1) {
-            this.editUserPermission = ele.can_edit;
-            this.deleteUserPermission = ele.can_delete;
-          } else if (this.params.action.radioSelected == 2) {
-            this.editUserPermission = ele.can_edit_group;
-            this.deleteUserPermission = ele.can_delete_group;
-          } else if (this.params.action.radioSelected == 3) {
-            this.editUserPermission = ele.can_edit_all;
-            this.deleteUserPermission = ele.can_delete_all;
-          }
+          this.editUserPermission = ele.can_edit;
+          this.deleteUserPermission = ele.can_delete;
+        } else if (this.params.action.radioSelected == 2) {
+          this.editUserPermission = ele.can_edit_group;
+          this.deleteUserPermission = ele.can_delete_group;
+        } else if (this.params.action.radioSelected == 3) {
+          this.editUserPermission = ele.can_edit_all;
+          this.deleteUserPermission = ele.can_delete_all;
         }
       }
     })

@@ -16,25 +16,25 @@ import { AuthService } from '../../../@theme/services/auth.service';
   styleUrls: ['./add-edit-user.component.scss']
 })
 export class AddEditUserComponent implements OnInit, OnDestroy {
-  
+
   permissionArray = ['have_quality', 'can_add_quality', 'can_view_quality', 'can_edit_quality', 'can_delete_quality',
     'have_user', 'can_add_user', 'can_view_user', 'can_edit_user', 'can_delete_user', 'have_party', 'can_add_party', 'can_edit_party', 'can_view_party', 'can_delete_party'
     , 'have_stock', 'can_add_stock', 'can_edit_stock', 'can_view_stock', 'can_delete_stock'];
-   
-    tableForms = ["Party", "Quality", "User", "Bill", "Lot", "Program", "Shade", "Supplier", "Supplier Rate"];
+
+  tableForms = ["Party", "Quality", "User", "Bill", "Lot", "Program", "Shade", "Supplier", "Supplier Rate"];
   designation = ['Manager', 'Master', 'Accountant', 'Staff', 'Helper']
 
- 
+
   // if ((JSON.parse(localStorage.getItem('currentUser')).user_name)) {
-    
+
   // }
   @ViewChild('vform') validationForm: FormGroup;
   userModal: User;
   currentUser;
-  isAdmin :boolean = false ;
+  isAdmin: boolean = false;
   companyList = [];
   userRoleList = [];
-  tableHeading=[];
+  tableHeading = ["Forms", "View", "Add", "Edit", "Delete", "View Group", "Edit Group", "Delete Group"];
   subBtnName = 'Save';
   topHeader = '';
   source: LocalDataSource;
@@ -61,20 +61,15 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute, private router: Router, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
-        
+
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserPermission = ele.user_permission;
         if (ele.user.user_name === "admin") {
+          this.tableHeading = [];
           this.tableHeading = ["Forms", "View", "Add", "Edit", "Delete", "View Group", "View All", "Edit Group", "Edit All", "Delete Group", "Delete All"];
-  
           this.isAdmin = true;
-
-      }else
-      this.tableHeading = ["Forms", "View", "Add", "Edit", "Delete", "View Group", "Edit Group", "Delete Group"];
-  
-      // console.log("admin value" ,this.isAdmin,ele.user)
-      // console.log(ele)
+        }
       }
     });
   }

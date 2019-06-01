@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
-import { AuthGuard } from '../@theme/guard/auth.guard';
 import { BillInGuardService } from '../@theme/guard/bill-in-guard.service';
 import { UserGuardService } from '../@theme/guard/user-guard.service';
 import { PartyGuardService } from '../@theme/guard/party-guard.service';
 import { QualityGuardService } from '../@theme/guard/quality-guard.service';
 import { LotGuardService } from '../@theme/guard/lot-guard.service';
 import { SupplierGuardService } from '../@theme/guard/supplier-guard.service';
+import { AuthGuard } from '../@theme/guard/auth-guard.service';
 
 const routes: Routes = [{
   path: '',
@@ -64,14 +64,10 @@ const routes: Routes = [{
       loadChildren: './shade/shade.module#ShadeModule',
     },
     {
-      path: '',
-      redirectTo: 'party',
-      pathMatch: 'full',
-    }, {
       path: '**',
       component: NotFoundComponent,
     }],
-  // canActivate: [AuthGuard],
+  canActivate: [AuthGuard],
 }];
 
 @NgModule({

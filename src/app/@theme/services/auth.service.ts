@@ -55,7 +55,7 @@ export class AuthService {
 
   }
   onLogin(data: LoginModal): Observable<any> {
-    alert(data.UserName)
+    // alert(data.UserName)
     return this.api.apiCaller('post', '/SignIn', data);
   }
 }

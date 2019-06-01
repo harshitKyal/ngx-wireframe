@@ -10,6 +10,8 @@ import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { ViewReqObj } from '../../../@theme/model/user-class';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../@theme/services/auth.service';
 
 @Component({
   selector: 'ngx-add-edit-supplier-rate',
@@ -35,9 +37,17 @@ export class AddEditSupplierRateComponent implements OnInit {
   ];
   rowData: any;
   supplierReqObj = new ViewReqObj();
-
-  constructor(private toasterService: ToastrService, private route: ActivatedRoute,
+  currentUserId: any;
+  currentUser$: Subscription;
+  currentUser;
+  constructor(private toasterService: ToastrService, private route: ActivatedRoute, private authService: AuthService,
     private router: Router, private supplierService: SupplierService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+      }
+    });
     this.supplierRateRecord = new SupplierRateRecord();
     this.supplierModal = new SupplierRate();
     this.selectedSupplier = new Supplier();
@@ -95,8 +105,8 @@ export class AddEditSupplierRateComponent implements OnInit {
             this.supplierRateList = data[0].data.supplier_rate_list;
             this.supplierRateList.forEach((ele, index) => {
               ele.index = index + 1;
-              ele.discount_rate = Math.floor(Number(ele.discount_rate) - Math.floor((this.selectedSupplier.discount_percentage * ele.discount_rate) / 100))
-              ele.gst_rate = Math.floor(Number(ele.gst_rate) + Math.floor((this.selectedSupplier.gst_percentage * ele.gst_rate) / 100))
+              ele.discount_rate = Math.floor(Number(ele.rate) - Math.floor((this.selectedSupplier.discount_percentage * ele.rate) / 100))
+              ele.gst_rate = Math.floor(Number(ele.discount_rate) + Math.floor((this.selectedSupplier.gst_percentage * ele.discount_rate) / 100))
             })
             this.rowData = [...this.supplierRateList]
             this.supplierModal.supplier_rate_list = this.supplierRateList;
@@ -116,7 +126,7 @@ export class AddEditSupplierRateComponent implements OnInit {
   getRateCalculation(value) {
     if (this.selectedSupplier.entry_id != null || this.selectedSupplier.entry_id != undefined) {
       this.supplierRateRecord.discount_rate = Math.floor(Number(value) - Math.floor((this.selectedSupplier.discount_percentage * value) / 100))
-      this.supplierRateRecord.gst_rate = Math.floor(Number(value) + Math.floor((this.selectedSupplier.gst_percentage * value) / 100))
+      this.supplierRateRecord.gst_rate = Math.floor(Number(this.supplierRateRecord.discount_rate) + Math.floor((this.selectedSupplier.gst_percentage * this.supplierRateRecord.discount_rate) / 100))
     }
   }
 
@@ -155,6 +165,13 @@ export class AddEditSupplierRateComponent implements OnInit {
   onCustomFormSubmit(form: NgForm) {
     this.supplierModal.supplier_rate_list = this.supplierRateList;
     if (this.id) {
+      this.supplierModal.supplier_rate_list.forEach(ele => {
+        if (ele.entry_id) {
+          ele.updated_by = this.currentUserId;
+        } else {
+          ele.created_by = this.currentUserId;
+        }
+      })
       this.supplierService.updateSupplierRate(this.supplierModal).subscribe(data => {
         if (!data[0].error) {
           this.toasterService.success("Updated Successfully");
@@ -167,6 +184,9 @@ export class AddEditSupplierRateComponent implements OnInit {
         this.toasterService.error('Server Error');
       });
     } else {
+      this.supplierModal.supplier_rate_list.forEach(ele => {
+        ele.created_by = this.currentUserId;
+      })
       this.supplierService.addSupplierRate(this.supplierModal).subscribe(data => {
         // data = data[0]
         if (!data[0].error) {

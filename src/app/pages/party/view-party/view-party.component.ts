@@ -208,7 +208,7 @@ export class CustomRendererPartyComponent implements AgRendererComponent {
   }
 
   editParty() {
-    alert(this.params.value);
+    // alert(this.params.value);
     if (this.editPartyPermission) {
       this.router.navigate([this.params.inRouterLink + this.params.value]);
     } else {
