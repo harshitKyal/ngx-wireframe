@@ -50,6 +50,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
   });
 
   disbaleFlag = true;
+  userHeadId : any;
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUserId: any;
@@ -61,9 +62,11 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute, private router: Router, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
-
+        // console.log("in eleeeeeeee",ele)
+        this.userHeadId = ele.user.user_head_id;
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
+        this.currentUser
         this.currentUserPermission = ele.user_permission;
         if (ele.user.user_name === "admin") {
           this.tableHeading = [];
@@ -119,7 +122,8 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
   }
   onAssign(value) {
     this.showUserNameListFlag = value.returnValue;
-    // alert(this.showUserNameListFlag);
+    alert(this.showUserNameListFlag);
+    alert(value.returnValue)
   }
   getUsers() {
     this.usersList = [];
@@ -139,6 +143,19 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
 
 
   onCustomFormSubmit(form: NgForm) {
+
+    //if isadmin and goup check box is falsse then users head id should be null 
+    // if is admin and under name is selected then selected user name's id should be there
+    //if not admin then head id should be current user's user id
+    if (this.isAdmin && !this.userModal.group_head_check_box)   {
+      console.log("in admin plus not thick")
+      this.userModal.user_head_id=null      
+    }
+    else if (!this.isAdmin)
+      this.userModal.user_head_id =this.currentUserId
+
+    // console.log("before user submit")
+    // console.log(this.userHeadId)
     this.userModal.userPermission = this.userPermissionData;
     if (this.id) {
       this.userModal.updated_by = this.currentUserId;

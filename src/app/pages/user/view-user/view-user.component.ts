@@ -12,6 +12,8 @@ import { User, ViewReqObj } from "../../../@theme/model/user-class";
 import { UserService } from "../../../@theme/services/user.service";
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
+import { AnimationQueryMetadata } from '@angular/animations';
+import { FixedSizeVirtualScrollStrategy } from '@angular/cdk/scrolling';
 
 
 @Component({
@@ -41,7 +43,11 @@ export class ViewUserComponent implements OnInit, OnDestroy {
     'user_name', 'first_name', 'last_name', 'company_id'];
   filtersettings: any;
   currentUserId: any;
+  currentUserGroupUserIds : any;
   userPermission = [];
+  viewGroup : boolean = false ;
+  viewOwn :boolean = false ;
+  viewAll : boolean = false ;
   viewAllDataPermission: any = false;
   viewOwnDataPermission: any = false;
   viewGroupDataPermission = false;
@@ -51,15 +57,16 @@ export class ViewUserComponent implements OnInit, OnDestroy {
     private permissionService: PermissionService, private papa: Papa) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
+        console.log("element")
+        console.log(ele)
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.userPermission = ele.user_permission;
-
+        this.currentUserGroupUserIds = ele.group_user_ids
       }
     });
     this.setColumns();
   }
-
 
   ngOnInit() {
     // this.userPermission = (JSON.parse(localStorage.getItem('currentUserPermission')));
@@ -96,25 +103,42 @@ export class ViewUserComponent implements OnInit, OnDestroy {
   getUserList(value?) {
     this.userList = [];
     this.rowData = [];
+    this.viewAll = false ;
+    this.viewGroup= false ;
+    this.viewOwn = false ;
     this.userReqObj = new ViewReqObj();
     if (value) {
       this.radioSelected = value;
     }
     if (this.viewOwnDataPermission && this.radioSelected == 1) {
       this.userReqObj.created_by = this.currentUserId;
+      this.viewOwn = true ;
+       
     }
     if (this.viewGroupDataPermission && this.radioSelected == 2) {
       this.userReqObj.created_by = this.currentUserId;
       this.userReqObj.user_head_id = this.currentUser.user_head_id;
+      this.userReqObj.group_user_ids = this.currentUserGroupUserIds;
+      this.viewGroup = true ;
     }
     if (this.viewAllDataPermission && this.radioSelected == 3) {
       this.userReqObj.created_by = null;
       this.userReqObj.user_head_id = null;
+      this.viewAll = true ;
     }
+    console.log("user pobpdsdsfdsfdsfdsfds")
+    console.log(this.userReqObj)
+    
     const body = {
+
       created_by: this.userReqObj.created_by,
       user_head_id: this.userReqObj.user_head_id,
-      currentUserId: this.currentUserId
+      current_user_Id: this.currentUserId,
+      current_user_group_user_ids : this.userReqObj.group_user_ids,
+      view_own : this.viewOwn,
+      view_all : this.viewAll,
+      view_group:this.viewGroup
+      
     }
     this.userService.getUserList(body).subscribe(data => {
       if (!data[0].error) {

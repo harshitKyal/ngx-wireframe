@@ -151,7 +151,7 @@ export class ViewLotComponent implements OnInit, OnDestroy {
 @Component({
   template: `
   <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editLot()"></i>
-  <i class="ft-info font-medium-1 mr-2" style="color:#4ca6ff" (click)="viewLot()"></i>
+  <i class="ft-info font-medium-1 mr-2" style="color:#4ca6ff"></i>
   <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteLot()"></i>`,
   styleUrls: ['./view-lot.component.scss']
 })

@@ -5,7 +5,7 @@ export class User {
     designation: any;
     department: any;
     email_id: any;
-    use_name: any;
+    user_name: any;
     first_name: any;
     last_name: any;
     password: any;
@@ -75,4 +75,5 @@ export class UserPermission {
 export class ViewReqObj {
     created_by = null;
     user_head_id = null;
+    group_user_ids = null;
 }
