@@ -1,3 +1,223 @@
-<p>
-  add-edit-shade works!
-</p>
+<nb-card>
+  <nb-card-header>{{topHeader}}
+  </nb-card-header>
+  <nb-card-body>
+    <form #vform="ngForm">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Party Shade No.</label>
+            <input type="text" class="form-control" [(ngModel)]="shadeModal.party_shade_no" name="partyShadeNo"
+              #ShadeNo="ngModel" required />
+            <div *ngIf="ShadeNo.invalid && (ShadeNo.dirty || ShadeNo.touched)" class="errors">
+              <div *ngIf="ShadeNo.errors && ShadeNo.errors.required">
+                Party Shade No. is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Process Name</label>
+            <input type="text" class="form-control" [(ngModel)]="shadeModal.processname" name="processName"
+              #ProcessName="ngModel" required />
+            <div *ngIf="ProcessName.invalid && (ProcessName.dirty || ProcessName.touched)" class="errors">
+              <div *ngIf="ProcessName.errors && ProcessName.errors.required">
+                Process Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Quality Id</label>
+            <input type="text" class="form-control" placeholder="Select Quality Id" name="ID" autocomplete="off"
+              [(ngModel)]="shadeModal.quality_id" (click)="HideShow()">
+            <div *ngIf="flagDiv" class="dropdown">
+              <a href="javascript:void(0)" (click)="HideShow()" class="float-right">[X]</a>
+              <table class="table table-bordered pointer table-responsive">
+                <thead>
+                  <tr>
+                    <th>Quality Id</th>
+                    <th>Quality Name</th>
+                    <th>Quality Type</th>
+                    <th>Party Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let quality of qualityList; let i = index" (click)="selectQualityId(quality)"
+                    class="pointer">
+                    <td style="display:none;">{{quality.entry_id}}</td>
+                    <td>{{quality.entry_id}}</td>
+                    <td>{{quality.quality_name}}</td>
+                    <td>{{quality.quality_type}}</td>
+                    <td>{{quality.party_name}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Quality Name</label>
+            <input type="text" class="form-control" disabled [(ngModel)]="shadeModal.quality_name" name="qualityName"
+              #qualityname="ngModel" required />
+            <div *ngIf="qualityname.invalid && (qualityname.dirty || qualityname.touched)" class="errors">
+              <div *ngIf="qualityname.errors && qualityname.errors.required">
+                Quality Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Quality Type</label>
+            <input type="text" class="form-control" disabled [(ngModel)]="shadeModal.quality_type" name="qualityType"
+              #qualitytype="ngModel" required />
+            <div *ngIf="qualitytype.invalid && (qualitytype.dirty || qualitytype.touched)" class="errors">
+              <div *ngIf="qualitytype.errors && qualitytype.errors.required">
+                Quality Type is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Party Name</label>
+            <input type="text" class="form-control" disabled [(ngModel)]="shadeModal.party_name" name="partyName"
+              #partyname="ngModel" required />
+            <div *ngIf="partyname.invalid && (partyname.dirty || partyname.touched)" class="errors">
+              <div *ngIf="partyname.errors && partyname.errors.required">
+                Party Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Color Tone</label>
+            <!-- pattern -->
+            <input type="text" class="form-control" [(ngModel)]="shadeModal.colur_tone" name="tone" #colortone="ngModel"
+              required />
+            <div *ngIf="colortone.invalid && (colortone.dirty || colortone.touched)" class="errors">
+              <div *ngIf="colortone.errors && colortone.errors.required">
+                Color Tone is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row table table-responsive" *ngIf="shadeRecord.length">
+        <ag-grid-angular style="width: 100%; height:300px" class="ag-theme-balham" [rowData]="rowData"
+          [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'>
+        </ag-grid-angular>
+      </div>
+      <div class="row">
+        <form #sform="ngForm">
+          <div class="row col-md-12">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Item Name</label>
+                <input type="text" class="form-control" placeholder="Select Item Name" name="itemName"
+                  autocomplete="off" [(ngModel)]="record.item_name" (click)="HideShowSubForm()" required
+                  #itemname="ngModel">
+                <div *ngIf="flagDivSubForm" class="dropdown">
+                  <a href="javascript:void(0)" (click)="HideShowSubForm()" class="float-right">[X]</a>
+                  <table class="table table-bordered pointer table-responsive">
+                    <thead>
+                      <tr>
+                        <th>Item Name</th>
+                        <th>Supplier Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of supplierItemList; let i = index" (click)="selectItem(item)"
+                        class="pointer">
+                        <td style="display:none;">{{item.entry_id}}</td>
+                        <td>{{item.item_name}}</td>
+                        <td>{{item.supplier_name}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div *ngIf="itemname.invalid && (itemname.dirty || itemname.touched)" class="errors">
+                  <div *ngIf="itemname.errors && itemname.errors.required">
+                    Item Name is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Concentration</label>
+                <input type="text" class="form-control" [(ngModel)]="record.concentration" name="conctration"
+                  #Concentration="ngModel" required />
+                <div *ngIf="Concentration.invalid && (Concentration.dirty || Concentration.touched)" class="errors">
+                  <div *ngIf="Concentration.errors && Concentration.errors.required">
+                    Concentration is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Supplier Name</label>
+                <input type="text" class="form-control" disabled [(ngModel)]="record.supplier_name" name="supplerName"
+                  #SupplierName="ngModel" required />
+                <div *ngIf="SupplierName.invalid && (SupplierName.dirty || SupplierName.touched)" class="errors">
+                  <div *ngIf="SupplierName.SupplierName && SupplierName.errors.required">
+                    Supplier Name is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row col-md-12">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Rate</label>
+                <input type="text" class="form-control" [(ngModel)]="record.rate" name="rt" #Rate="ngModel"
+                  (keypress)="numberOnly($event)" digits required />
+                <div *ngIf="Rate.invalid && (Rate.dirty || Rate.touched)" class="errors">
+                  <div *ngIf="Rate.errors && Rate.errors.required">
+                    Rate is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Amount</label>
+                <input type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt" #Amount="ngModel"
+                  (keypress)="numberOnly($event)" digits required />
+                <div *ngIf="Amount.invalid && (Amount.dirty || Amount.touched)" class="errors">
+                  <div *ngIf="Amount.errors && Amount.errors.required">
+                    Amount is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <button [disabled]="sform.invalid" style="margin-top: 32px;" nbButton (click)="onAddRecord(sform)">Add
+                Record</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="box-footer">
+        <button [disabled]="vform.invalid" nbButton (click)="onCustomFormSubmit(vform)">{{subBtnName}}</button>
+        &nbsp;
+        <button nbButton type="reset" routerLink='/pages/shade/view-shade-list' id="Cancel">Cancel</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

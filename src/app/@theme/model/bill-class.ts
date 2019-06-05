@@ -23,7 +23,7 @@ export class Bill {
 export class BillRecord {
     index: any;
     entry_id: any;
-    contol_id: any;
+    control_id: any;
     gr: any;
     quality_entry_id: any;
     quality_name: any;

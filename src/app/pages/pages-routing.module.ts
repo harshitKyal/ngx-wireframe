@@ -10,6 +10,7 @@ import { QualityGuardService } from '../@theme/guard/quality-guard.service';
 import { LotGuardService } from '../@theme/guard/lot-guard.service';
 import { SupplierGuardService } from '../@theme/guard/supplier-guard.service';
 import { AuthGuard } from '../@theme/guard/auth-guard.service';
+import { ShadeGuardService } from '../@theme/guard/shade-guard.service';
 
 const routes: Routes = [{
   path: '',
@@ -62,12 +63,14 @@ const routes: Routes = [{
     {
       path: 'shade',
       loadChildren: './shade/shade.module#ShadeModule',
+      canActivate: [ShadeGuardService],
+      canLoad: [ShadeGuardService],
     },
     {
       path: '**',
       component: NotFoundComponent,
     }],
-  canActivate: [AuthGuard],
+  // canActivate: [AuthGuard],
 }];
 
 @NgModule({

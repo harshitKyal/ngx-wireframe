@@ -43,7 +43,7 @@ export class ApiService {
 
   public apiCaller(type: string, url: string, data?: any): any {
     //  this.uri = this.api + url;
-    this.uri = 'http://localhost:8000' + url;
+    this.uri = 'http://localhost:8100' + url;
     if (type === 'get') {
       return this.get(this.uri);
     } else {

@@ -27,4 +27,14 @@ export class SupplierRateRecord {
     updated_by: any;
     discount_rate: any;
     gst_rate: any;
-} 
+}
+
+export class SupplierItemRecord {
+    supplier_name: any;
+    supplier_control_id: any;
+    entry_id: any;
+    item_name: any;
+    rate: any;
+    discount_rate: any;
+    gst_rate: any;
+}

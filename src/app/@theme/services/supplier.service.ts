@@ -12,6 +12,9 @@ export class SupplierService {
   getAllSupplierData(obj) {
     return this.apiService.apiCaller('post', '/supplierList', obj);
   }
+  getAllSupplierItemData() {
+    return this.apiService.apiCaller('get', '/supplierItemList');
+  }
 
   addSupplier(supplier) {
     return this.apiService.apiCaller('post', '/addSupplier', supplier);

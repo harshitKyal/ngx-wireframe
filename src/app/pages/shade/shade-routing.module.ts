@@ -21,11 +21,6 @@ const routes: Routes = [
         path: 'edit-shade/:id',
         component: AddEditShadeComponent,
       },
-      {
-        path: '',
-        redirectTo: 'view-shade-list',
-        pathMatch: 'full',
-      },
     ]
   }
 ];
