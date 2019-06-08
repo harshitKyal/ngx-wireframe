@@ -28,6 +28,12 @@
             </div>
           </div>
         </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>New Cutting Id</label>
+            <input type="text" class="form-control" [(ngModel)]="shadeModal.cutting_id" name="cuttingId" />
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-3">
@@ -49,8 +55,8 @@
                 <tbody>
                   <tr *ngFor="let quality of qualityList; let i = index" (click)="selectQualityId(quality)"
                     class="pointer">
-                    <td style="display:none;">{{quality.entry_id}}</td>
-                    <td>{{quality.entry_id}}</td>
+                    <td style="display:none;">{{quality.quality_id}}</td>
+                    <td>{{quality.quality_id}}</td>
                     <td>{{quality.quality_name}}</td>
                     <td>{{quality.quality_type}}</td>
                     <td>{{quality.party_name}}</td>
@@ -113,6 +119,24 @@
             </div>
           </div>
         </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Lab Colour No.</label>
+            <input type="text" class="form-control" [(ngModel)]="shadeModal.lab_colour_no" name="labColourNo" />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Category</label>
+            <input type="text" class="form-control" [(ngModel)]="shadeModal.category" name="Category" />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Remark</label>
+            <textarea type="text" class="form-control" [(ngModel)]="shadeModal.remark" name="Remark"></textarea>
+          </div>
+        </div>
       </div>
       <hr>
       <div class="row table table-responsive" *ngIf="shadeRecord.length">
@@ -159,7 +183,7 @@
               <div class="form-group">
                 <label>Concentration</label>
                 <input type="text" class="form-control" [(ngModel)]="record.concentration" name="conctration"
-                  #Concentration="ngModel" required />
+                  #Concentration="ngModel" required (change)="onConcentrationChange($event.target.value)" />
                 <div *ngIf="Concentration.invalid && (Concentration.dirty || Concentration.touched)" class="errors">
                   <div *ngIf="Concentration.errors && Concentration.errors.required">
                     Concentration is required.

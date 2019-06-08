@@ -3,15 +3,20 @@ export class Shade {
     party_shade_no: any;
     process_id: any;
     quality_id: any;
-    quality_name:any;
-    quality_type:any;
-    party_name:any;
+    quality_entry_id: any;
+    quality_name: any;
+    quality_type: any;
+    party_name: any;
     colour_tone: any;
     shade_record: ShadeRecord[];
     created_date: any;
     updated_date: any;
     created_by: any;
     updated_by: any;
+    cutting_id: any;
+    lab_colour_no: any;
+    category: any;
+    remark: any;
 }
 
 export class ShadeRecord {

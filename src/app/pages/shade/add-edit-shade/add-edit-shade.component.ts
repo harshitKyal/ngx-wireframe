@@ -88,15 +88,17 @@ export class AddEditShadeComponent implements OnInit {
   }
   selectItem(item) {
     this.flagDivSubForm = false;
-    const i = this.supplierItemList.findIndex(v => v.item_name == item.item_name);
+    const i = this.supplierItemList.findIndex(v => v.entry_id == item.entry_id);
+    this.record.entry_id = this.supplierItemList[i].entry_id;
     this.record.item_name = this.supplierItemList[i].item_name;
     this.record.supplier_name = this.supplierItemList[i].supplier_name;
   }
 
   selectQualityId(value) {
     this.flagDiv = false;
-    let i = this.qualityList.findIndex(v => v.entry_id == value);
+    let i = this.qualityList.findIndex(v => v.entry_id == value.entry_id);
     this.shadeModal.quality_id = this.qualityList[i].quality_id;
+    this.shadeModal.quality_entry_id = this.qualityList[i].entry_id;
     this.shadeModal.quality_type = this.qualityList[i].quality_type;
     this.shadeModal.quality_name = this.qualityList[i].quality_name;
     this.shadeModal.party_name = this.qualityList[i].party_name;
@@ -122,8 +124,15 @@ export class AddEditShadeComponent implements OnInit {
       this.shadeService.getShadeById(this.id).subscribe(
         data => {
           if (!data[0].error) {
-            this.shadeModal = data[0].data.stock[0];
+            this.shadeModal = data[0].data.shade[0];
+
             this.shadeRecord = data[0].data.shade_record
+            let i = this.qualityList.findIndex(v => v.entry_id == this.shadeModal.quality_id);
+            this.shadeModal.quality_name = this.qualityList[i].quality_name;
+            this.shadeModal.quality_id = this.qualityList[i].quality_id;
+            this.shadeModal.quality_entry_id = this.qualityList[i].entry_id;
+            this.shadeModal.quality_type = this.qualityList[i].quality_type;
+            this.shadeModal.party_name = this.qualityList[i].party_name;
             this.shadeRecord.forEach((ele, index) => {
               ele.index = index + 1;
               // let i = this.supplierItemList.findIndex(v => v.item_name == ele.item_name);
@@ -184,7 +193,14 @@ export class AddEditShadeComponent implements OnInit {
     this.rowData = [...this.shadeRecord]
   }
 
+  onConcentrationChange(value) {
+    let i = this.supplierItemList.findIndex(v => v.entry_id == this.record.entry_id);
+    this.record.rate = this.supplierItemList[i].gst_rate;
+    this.record.amount = this.supplierItemList[i].gst_rate * value;
+  }
+
   onCustomFormSubmit(form: NgForm) {
+    this.shadeModal.quality_id = this.shadeModal.quality_entry_id;
     this.shadeModal.shade_record = this.shadeRecord;
     console.log('shade', this.shadeModal);
     // for update

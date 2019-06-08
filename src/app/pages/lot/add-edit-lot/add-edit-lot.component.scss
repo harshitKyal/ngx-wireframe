@@ -1,30 +1,19 @@
 .errors {
-    color: red;
-    font-size: 13px;
+  color: red;
+  font-size: 13px;
 }
 
 optgroup[label="GR BATCH_NO WEIGHT METRE NO_OF_CONES/TAKA"] {
-    color: red;
+  color: red;
 }
 
-optgroup{
-    margin: 1em;
-    border: 1px solid green;
-  }
-  optgroup option{
-    margin: 1em;
-    border: 1px solid orange;
-  }
-  .dropdown {
-    position: absolute;
-    border: 1px solid grey;
-    z-index: 9999;
-    background-color: white;
-    padding: 5px;
-  }
-  
-   input:focus + .dropdown  {
-    display: block;
-    z-index: 9999999;
-  }
-  
+optgroup {
+  margin: 1em;
+  border: 1px solid green;
+}
+
+optgroup option {
+  margin: 1em;
+  border: 1px solid orange;
+}
+
