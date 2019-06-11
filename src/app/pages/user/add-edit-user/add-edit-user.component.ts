@@ -21,7 +21,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     'have_user', 'can_add_user', 'can_view_user', 'can_edit_user', 'can_delete_user', 'have_party', 'can_add_party', 'can_edit_party', 'can_view_party', 'can_delete_party'
     , 'have_stock', 'can_add_stock', 'can_edit_stock', 'can_view_stock', 'can_delete_stock'];
 
-  tableForms = ["Party", "Quality", "User", "Bill", "Lot", "Program", "Shade", "Supplier", "Supplier Rate", "Shade"];
+  tableForms = ["Party", "Quality", "User", "Bill", "Lot", "Program", "Shade", "Supplier", "Supplier Rate", "Shade", "Program", "Colour Stock"];
   designation = ['Manager', 'Master', 'Accountant', 'Staff', 'Helper']
 
 
@@ -50,7 +50,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
   });
 
   disbaleFlag = true;
-  userHeadId : any;
+  userHeadId: any;
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUserId: any;
@@ -147,12 +147,12 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     //if isadmin and goup check box is falsse then users head id should be null 
     // if is admin and under name is selected then selected user name's id should be there
     //if not admin then head id should be current user's user id
-    if (this.isAdmin && !this.userModal.group_head_check_box)   {
+    if (this.isAdmin && !this.userModal.group_head_check_box) {
       console.log("in admin plus not thick")
-      this.userModal.user_head_id=null      
+      this.userModal.user_head_id = null
     }
     else if (!this.isAdmin)
-      this.userModal.user_head_id =this.currentUserId
+      this.userModal.user_head_id = this.currentUserId
 
     // console.log("before user submit")
     // console.log(this.userHeadId)
@@ -191,7 +191,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
 
   numberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+    if (charCode > 31 && ((charCode < 46 || charCode > 57) || charCode == 47)) {
       return false;
     }
     return true;

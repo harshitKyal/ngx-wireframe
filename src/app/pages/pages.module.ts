@@ -12,6 +12,7 @@ import { LotModule } from './lot/lot.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { ProgramModule } from './program/program.module';
 import { ShadeModule } from './shade/shade.module';
+import { ColourStockModule } from './colour-stock/colour-stock.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -29,7 +30,9 @@ const PAGES_COMPONENTS = [
     LotModule,
     SupplierModule,
     ProgramModule,
-    ShadeModule
+    ShadeModule,
+    ProgramModule,
+    ColourStockModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,

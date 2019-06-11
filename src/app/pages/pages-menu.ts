@@ -72,6 +72,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Colour Stock',
+    icon: 'nb-layout-default',
+    children: [
+      {
+        title: 'View Colour Stock',
+        link: '/pages/colour-stock/view-colour-stock-list',
+      },
+    ],
+  },
+  {
     title: 'Supplier',
     icon: 'nb-layout-default',
     children: [

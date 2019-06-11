@@ -1,0 +1,204 @@
+<nb-card>
+  <nb-card-header>{{topHeader}}
+  </nb-card-header>
+  <nb-card-body>
+    <form #vform="ngForm">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Supplier Name</label>
+            <select class="form-control" [(ngModel)]="colourStockModal.supplier_id" name="supplier_id"
+              #supplier="ngModel" (change)="onSupplierSelect($event.target.value)" required>
+              <option disabled value="">Select Supplier
+              </option>
+              <option *ngFor="let supplier of supplierNameList" [value]="supplier.entry_id">{{supplier.supplier_name}}
+              </option>
+            </select>
+            <div *ngIf="supplier.invalid && (supplier.dirty || supplier.touched)" class="errors">
+              <div *ngIf="supplier.errors && supplier.errors.required">
+                Supplier Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Bill no.</label>
+            <input type="text" class="form-control" [(ngModel)]="colourStockModal.bill_no" name="bill_no"
+              #billNo="ngModel" required />
+            <div *ngIf="billNo.invalid && (billNo.dirty || billNo.touched)" class="errors">
+              <div *ngIf="billNo.errors && billNo.errors.required">
+                Bill no. is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Bill Date</label>
+            <input type="text" class="form-control" [(ngModel)]="colourStockModal.bill_date" name="billdate"
+              #billDate="ngModel" required />
+            <div *ngIf="billDate.invalid && (billDate.dirty || billDate.touched)" class="errors">
+              <div *ngIf="billDate.errors && billDate.errors.required">
+                Bill Date is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Challan no.</label>
+            <input type="text" class="form-control" [(ngModel)]="colourStockModal.chl_no" name="chlno" #chlNo="ngModel"
+              required />
+            <div *ngIf="chlNo.invalid && (chlNo.dirty || chlNo.touched)" class="errors">
+              <div *ngIf="chlNo.errors && chlNo.errors.required">
+                Challan no. is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Challan Date</label>
+            <input type="text" class="form-control" [(ngModel)]="colourStockModal.chl_date" name="chldate"
+              #chlDate="ngModel" required />
+            <div *ngIf="chlDate.invalid && (chlDate.dirty || chlDate.touched)" class="errors">
+              <div *ngIf="chlDate.errors && chlDate.errors.required">
+                Challan Date is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Remark</label>
+            <textarea type="text" class="form-control" [(ngModel)]="colourStockModal.remark" name="Remark"></textarea>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Bill Amount</label>
+            <input type="text" class="form-control" [(ngModel)]="colourStockModal.bill_amount" name="billAmount"
+              #billamount="ngModel" required (keypress)="numberOnly($event)" />
+            <div *ngIf="billamount.invalid && (billamount.dirty || billamount.touched)" class="errors">
+              <div *ngIf="billamount.errors && billamount.errors.required">
+                Bill Amount is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row table table-responsive" *ngIf="colourStockRecord.length">
+        <ag-grid-angular style="width: 100%; height:300px" class="ag-theme-balham" [rowData]="rowData"
+          [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'>
+        </ag-grid-angular>
+      </div>
+      <div class="row">
+        <form #sform="ngForm">
+          <div class="row col-md-12">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Item Name</label>
+                <select class="form-control" [(ngModel)]="record.item_id" name="itemid" #item="ngModel"
+                  (change)="onItemSelect($event.target.value)" required>
+                  <option disabled value="">Select Item
+                  </option>
+                  <option *ngFor="let item of supplierItemList" [value]="item.entry_id">
+                    {{item.item_name}}
+                  </option>
+                </select>
+                <div *ngIf="item.invalid && (item.dirty || item.touched)" class="errors">
+                  <div *ngIf="item.errors && item.errors.required">
+                    Item Name is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Quantity Per Box</label>
+                <input type="text" class="form-control" [(ngModel)]="record.quantity_per_box" name="quantityperbox"
+                  (keypress)="numberOnly($event)"
+                  (change)="onQuantityChange($event.target.value);onRateChange($event.target.value)" #quantity="ngModel"
+                  required />
+                <div *ngIf="quantity.invalid && (quantity.dirty || quantity.touched)" class="errors">
+                  <div *ngIf="quantity.errors && quantity.errors.required">
+                    Quantity Per Box is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>No. of Box</label>
+                <input type="text" class="form-control" [(ngModel)]="record.no_of_box" name="box" #Box="ngModel"
+                  (keypress)="numberOnly($event)"
+                  (change)="onQuantityChange($event.target.value);onRateChange($event.target.value)" required />
+                <div *ngIf="Box.invalid && (Box.dirty || Box.touched)" class="errors">
+                  <div *ngIf="Box.errors && Box.errors.required">
+                    No. of Box is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Total Quantity</label>
+                <input type="text" class="form-control" [(ngModel)]="record.total_quantity" name="totalQuantity"
+                  (keypress)="numberOnly($event)" disbaled #totalquantity="ngModel" required />
+                <div *ngIf="totalquantity.invalid && (totalquantity.dirty || totalquantity.touched)" class="errors">
+                  <div *ngIf="totalquantity.errors && totalquantity.errors.required">
+                    Total Quantity is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row col-md-12">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Rate</label>
+                <input type="text" class="form-control" [(ngModel)]="record.rate" name="rt" #Rate="ngModel"
+                  (keypress)="numberOnly($event)" disabled digits required />
+                <div *ngIf="Rate.invalid && (Rate.dirty || Rate.touched)" class="errors">
+                  <div *ngIf="Rate.errors && Rate.errors.required">
+                    Rate is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Amount</label>
+                <input type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt" #Amount="ngModel"
+                  (keypress)="numberOnly($event)" disabled digits required />
+                <div *ngIf="Amount.invalid && (Amount.dirty || Amount.touched)" class="errors">
+                  <div *ngIf="Amount.errors && Amount.errors.required">
+                    Amount is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <button [disabled]="sform.invalid" style="margin-top: 32px;" nbButton (click)="onAddRecord(sform)">Add
+                Record</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="box-footer">
+        <button [disabled]="vform.invalid" nbButton (click)="onCustomFormSubmit(vform)">{{subBtnName}}</button>
+        &nbsp;
+        <button nbButton type="reset" routerLink='/pages/colour-stock/view-colour-stock-list'
+          id="Cancel">Cancel</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

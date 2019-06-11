@@ -11,6 +11,8 @@ import { LotGuardService } from '../@theme/guard/lot-guard.service';
 import { SupplierGuardService } from '../@theme/guard/supplier-guard.service';
 import { AuthGuard } from '../@theme/guard/auth-guard.service';
 import { ShadeGuardService } from '../@theme/guard/shade-guard.service';
+import { ProgramGuardService } from '../@theme/guard/program-guard.service';
+import { ColourStockGuardService } from '../@theme/guard/colour-stock-guard.service';
 
 const routes: Routes = [{
   path: '',
@@ -53,6 +55,8 @@ const routes: Routes = [{
     {
       path: 'program',
       loadChildren: './program/program.module#ProgramModule',
+      // canActivate: [ProgramGuardService],
+      // canLoad: [ProgramGuardService],
     },
     {
       path: 'supplier',
@@ -65,6 +69,12 @@ const routes: Routes = [{
       loadChildren: './shade/shade.module#ShadeModule',
       canActivate: [ShadeGuardService],
       canLoad: [ShadeGuardService],
+    },
+    {
+      path: 'colour-stock',
+      loadChildren: './colour-stock/colour-stock.module#ColourStockModule',
+      // canActivate: [ColourStockGuardService],
+      // canLoad: [ColourStockGuardService],
     },
     {
       path: '**',

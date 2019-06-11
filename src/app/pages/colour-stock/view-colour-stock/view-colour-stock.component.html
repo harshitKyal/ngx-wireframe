@@ -1,0 +1,32 @@
+<nb-card>
+  <nb-card-header>Colour Stock
+    <button style="float: right;margin-left: 10px" nbButton size="xsmall" status="info" (click)="onAddColourStock()">
+      Add Colour Stock
+    </button>
+    <button style="float: right;" nbButton size="xsmall" status="info" (click)="onExport()">Export</button>
+  </nb-card-header>
+  <nb-card-body>
+    <nb-radio-group class="row ml-2 mb-2" [(ngModel)]="radioSelected" (valueChange)="onradioChange($event)">
+      <nb-radio [value]="1">
+        All
+      </nb-radio>
+      <nb-radio [value]="2">
+        Non - Issued
+      </nb-radio>
+      <nb-radio [value]="3">
+        Issued
+      </nb-radio>
+    </nb-radio-group>
+    <div *ngIf="radioSelected == 1">
+      <ag-grid-angular style="width: 100%; height:500px" class="ag-theme-balham" [rowData]="rowData"
+        [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='100' (gridReady)="onGridReady($event)">
+      </ag-grid-angular>
+    </div>
+    <div *ngIf="radioSelected == 2 ||radioSelected == 3 ">
+      <ag-grid-angular style="width: 100%; height:500px" class="ag-theme-balham" [rowData]="rowIssueNonIssueData"
+        [columnDefs]="columnDefsForIssuedNonIssued" [pagination]="true" [paginationPageSize]='100'
+        (gridReady)="onIssueNonIssueGridReady($event)">
+      </ag-grid-angular>
+    </div>
+  </nb-card-body>
+</nb-card>
