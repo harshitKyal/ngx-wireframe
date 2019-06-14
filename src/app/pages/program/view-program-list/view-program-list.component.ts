@@ -46,6 +46,7 @@ export class ViewProgramListComponent implements OnInit {
   viewOwnDataPermission: any = false;
   viewGroupDataPermission = false;
   radioSelected: any = 1;
+  currentUserGroupUserIds : any;
   programReqObj = new ViewReqObj();
   constructor(private programService: ProgramService, private router: Router, private tosterService: ToastrService
     , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
@@ -54,6 +55,7 @@ export class ViewProgramListComponent implements OnInit {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserPermission = ele.user_permission;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
     this.setColumns();
@@ -69,6 +71,10 @@ export class ViewProgramListComponent implements OnInit {
           this.viewAllDataPermission = ele.can_view_all;
           this.viewGroupDataPermission = ele.can_view_group;
           this.viewOwnDataPermission = ele.can_view;
+
+          this.programReqObj.current_user_id = this.currentUserId;
+          this.programReqObj.user_head_id = this.currentUser.user_head_id;
+          this.programReqObj.group_user_ids = this.currentUserGroupUserIds;
         }
       })
     }
@@ -78,21 +84,22 @@ export class ViewProgramListComponent implements OnInit {
     this.currentUser$.unsubscribe();
   }
   getProgramData(value?) {
-    this.programReqObj = new ViewReqObj();
-    if (value) {
+
+    this.programReqObj.view_all = false ;
+    this.programReqObj.view_group= false ;
+    this.programReqObj.view_own = false ;
+    
+    if (value)
       this.radioSelected = value;
-    }
-    if (this.viewOwnDataPermission && this.radioSelected == 1) {
-      this.programReqObj.created_by = this.currentUserId;
-    }
-    if (this.viewGroupDataPermission && this.radioSelected == 2) {
-      this.programReqObj.created_by = this.currentUserId;
-      this.programReqObj.user_head_id = this.currentUser.user_head_id;
-    }
-    if (this.viewAllDataPermission && this.radioSelected == 3) {
-      this.programReqObj.created_by = null;
-      this.programReqObj.user_head_id = null;
-    }
+
+    //check which radio button is selected
+    if (this.radioSelected == 1)
+      this.programReqObj.view_own = true ;
+    else if (this.radioSelected == 2)
+      this.programReqObj.view_group = true ;
+    else if (this.radioSelected == 3)
+      this.programReqObj.view_all = true ;
+  
     this.programService.getAllPrograms(this.programReqObj).subscribe(data => {
       if (!data[0].error) {
         this.programList = data[0].data;

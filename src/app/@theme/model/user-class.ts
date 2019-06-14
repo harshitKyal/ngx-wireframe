@@ -74,6 +74,10 @@ export class UserPermission {
 
 export class ViewReqObj {
     created_by = null;
+    current_user_id = null;
     user_head_id = null;
     group_user_ids = null;
+    view_own = false;
+    view_group= false ;
+    view_all = false; 
 }

@@ -14,6 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { Subscription } from 'rxjs';
+import { ViewReqObj } from '../../../@theme/model/user-class';
 
 @Component({
   selector: 'ngx-view-quality',
@@ -82,11 +83,17 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
+  
   currentUserId: any;
   viewAllDataPermission: any = false;
   viewOwnDataPermission: any = false;
   viewGroupDataPermission = false;
   radioSelected: any = 1;
+  viewGroup : boolean = false ;
+  viewOwn :boolean = false ;
+  viewAll : boolean = false ;
+  currentUserGroupUserIds : any;
+  qualityReqObj = new ViewReqObj();
   constructor(private toasterService: ToastrService, private _http: HttpClient, private permissionService: PermissionService,
     private router: Router, private qualityService: QualityService, public printService: PrintService, private qzService: QzTrayService,
     private authService: AuthService) {
@@ -95,6 +102,9 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserPermission = ele.user_permission;
+        // console.log("ele",ele)
+        this.currentUserGroupUserIds = ele.user.group_user_ids
+        // this.currentUserGroupUserIds = ele.group_user_ids;
       }
     });
     this.setColumns();
@@ -109,6 +119,11 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
           this.viewGroupDataPermission = ele.can_view_group;
           this.viewOwnDataPermission = ele.can_view;
           this.addQualityPermission = 1;
+
+          this.qualityReqObj.current_user_id = this.currentUserId;
+          this.qualityReqObj.user_head_id = this.currentUser.user_head_id;
+          this.qualityReqObj.group_user_ids = this.currentUserGroupUserIds;
+          
         }
       });
     } this.getQualityData();
@@ -147,25 +162,24 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
       .printDocument('invoice', invoiceIds, data);
   }
   getQualityData(value?): any {
-    let body = {
-      created_by: null,
-      user_head_id: null
-    };
-    if (value) {
+
+
+    this.qualityReqObj.view_all = false ;
+    this.qualityReqObj.view_group= false ;
+    this.qualityReqObj.view_own = false ;
+    
+    if (value)
       this.radioSelected = value;
-    }
-    if (this.viewOwnDataPermission && this.radioSelected == 1) {
-      body.created_by = this.currentUserId;
-    }
-    if (this.viewGroupDataPermission && this.radioSelected == 2) {
-      body.created_by = this.currentUserId;
-      body.user_head_id = this.currentUser.user_head_id;
-    }
-    if (this.viewAllDataPermission && this.radioSelected == 3) {
-      body.created_by = null;
-      body.user_head_id = null;
-    }
-    this.qualityService.getAllQualityData(body).subscribe(data => {
+
+    //check which radio button is selected
+    if (this.radioSelected == 1)
+      this.qualityReqObj.view_own = true ;
+    else if (this.radioSelected == 2)
+      this.qualityReqObj.view_group = true ;
+    else if (this.radioSelected == 3)
+      this.qualityReqObj.view_all = true ;
+
+    this.qualityService.getAllQualityData(this.qualityReqObj).subscribe(data => {
       if (!data[0].error) {
         this.rowData = data[0].data;
         this.qualityList = data[0].data;
@@ -189,6 +203,7 @@ export class MyLinkRendererComponent implements AgRendererComponent {
   deleteQualityPermission = 0;
   currentUser$: Subscription;
   currentUserPermission = [];
+  
   currentUser;
 
   constructor(private router: Router, private modalService: NgbModal, private qualityService: QualityService,

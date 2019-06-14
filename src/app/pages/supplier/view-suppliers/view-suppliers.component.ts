@@ -33,6 +33,7 @@ export class ViewSuppliersComponent implements OnInit, OnDestroy {
   addSupplierRatePermission = 0;
   supplierList: Supplier[] = [];
   currentUserId: any;
+  currentUserGroupUserIds: any;
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
@@ -48,6 +49,7 @@ export class ViewSuppliersComponent implements OnInit, OnDestroy {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserPermission = ele.user_permission;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
     this.setColumns();
@@ -62,6 +64,10 @@ export class ViewSuppliersComponent implements OnInit, OnDestroy {
           this.viewAllDataPermission = ele.can_view_all;
           this.viewGroupDataPermission = ele.can_view_group;
           this.viewOwnDataPermission = ele.can_view;
+
+          this.supplierReqObj.current_user_id = this.currentUserId;
+          this.supplierReqObj.user_head_id = this.currentUser.user_head_id;
+          this.supplierReqObj.group_user_ids = this.currentUserGroupUserIds;
         }
         if (ele.form_name === 'Supplier Rate') {
           this.addSupplierRatePermission = 1;
@@ -100,21 +106,22 @@ export class ViewSuppliersComponent implements OnInit, OnDestroy {
   }
 
   getSupplierData(value?): any {
-    this.supplierReqObj = new ViewReqObj();
-    if (value) {
+
+    this.supplierReqObj.view_all = false ;
+    this.supplierReqObj.view_group= false ;
+    this.supplierReqObj.view_own = false ;
+    
+    if (value)
       this.radioSelected = value;
-    }
-    if (this.viewOwnDataPermission && this.radioSelected == 1) {
-      this.supplierReqObj.created_by = this.currentUserId;
-    }
-    if (this.viewGroupDataPermission && this.radioSelected == 2) {
-      this.supplierReqObj.created_by = this.currentUserId;
-      this.supplierReqObj.user_head_id = this.currentUser.user_head_id;
-    }
-    if (this.viewAllDataPermission && this.radioSelected == 3) {
-      this.supplierReqObj.created_by = null;
-      this.supplierReqObj.user_head_id = null;
-    }
+
+    //check which radio button is selected
+    if (this.radioSelected == 1)
+      this.supplierReqObj.view_own = true ;
+    else if (this.radioSelected == 2)
+      this.supplierReqObj.view_group = true ;
+    else if (this.radioSelected == 3)
+      this.supplierReqObj.view_all = true ;
+
     this.supplierService.getAllSupplierData(this.supplierReqObj).subscribe(data => {
       if (!data[0].error) {
         this.rowData = data[0].data;

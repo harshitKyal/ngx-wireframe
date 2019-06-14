@@ -49,6 +49,7 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
   viewAllDataPermission: any = false;
   viewOwnDataPermission: any = false;
   viewGroupDataPermission = false;
+  currentUserGroupUserIds ;
   radioSelected: any = 1;
   billReqObj = new ViewReqObj();
   constructor(private billService: BillInService, private router: Router, private tosterService: ToastrService
@@ -58,6 +59,7 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserPermission = ele.user_permission;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
     this.setColumns();
@@ -73,6 +75,9 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
           this.viewAllDataPermission = ele.can_view_all;
           this.viewGroupDataPermission = ele.can_view_group;
           this.viewOwnDataPermission = ele.can_view;
+          this.billReqObj.current_user_id = this.currentUserId;
+          this.billReqObj.user_head_id = this.currentUser.user_head_id;
+          this.billReqObj.group_user_ids = this.currentUserGroupUserIds;
         }
       })
     }
@@ -82,21 +87,22 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
     this.currentUser$.unsubscribe();
   }
   getBillData(value?) {
-    this.billReqObj = new ViewReqObj();
-    if (value) {
+
+    this.billReqObj.view_all = false ;
+    this.billReqObj.view_group= false ;
+    this.billReqObj.view_own = false ;
+    
+    if (value)
       this.radioSelected = value;
-    }
-    if (this.viewOwnDataPermission && this.radioSelected == 1) {
-      this.billReqObj.created_by = this.currentUserId;
-    }
-    if (this.viewGroupDataPermission && this.radioSelected == 2) {
-      this.billReqObj.created_by = this.currentUserId;
-      this.billReqObj.user_head_id = this.currentUser.user_head_id;
-    }
-    if (this.viewAllDataPermission && this.radioSelected == 3) {
-      this.billReqObj.created_by = null;
-      this.billReqObj.user_head_id = null;
-    }
+
+    //check which radio button is selected
+    if (this.radioSelected == 1)
+      this.billReqObj.view_own = true ;
+    else if (this.radioSelected == 2)
+      this.billReqObj.view_group = true ;
+    else if (this.radioSelected == 3)
+      this.billReqObj.view_all = true ;
+
     this.billService.getAllBills(this.billReqObj).subscribe(data => {
       if (!data[0].error) {
         this.billList = data[0].data;
