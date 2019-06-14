@@ -11,13 +11,19 @@ export class ColourStock {
     bill_amount: any;
     total_amount: any;
     colour_stock_record: ColourStockRecord[];
+    created_by: any;
+    updated_by: any;
+    created_date: any;
+    updated_date: any;
+    user_head_id: any;
     constructor() {
         this.supplier_id = '';
     }
 }
+
 export class ColourStockRecord {
     item_name: any;
-    item_id:any;
+    item_id: any;
     quantity_per_box: any;
     index: any;
     entry_id: any;
@@ -26,7 +32,16 @@ export class ColourStockRecord {
     total_quantity: any;
     rate: any;
     amount: any;
-    constructor(){
+    constructor() {
         this.item_id = '';
     }
+}
+
+export class ColourStockBox {
+    entry_id: any;
+    colour_stock_mast_control_id: any;
+    colour_stock_data_control_id: any;
+    quantity_per_box: any;
+    rate: any;
+    is_issued: any;
 }

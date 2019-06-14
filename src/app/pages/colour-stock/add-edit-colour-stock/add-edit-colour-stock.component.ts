@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Shade, ShadeRecord } from '../../../@theme/model/shade-class';
 import { Quality } from '../../../@theme/model/quality-class';
 import { SupplierItemRecord, Supplier } from '../../../@theme/model/supplier-class';
-import { ViewReqObj } from '../../../@theme/model/user-class';
+import { ViewReqObj, User } from '../../../@theme/model/user-class';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SupplierService } from '../../../@theme/services/supplier.service';
@@ -14,13 +14,15 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { ColourStockService } from '../../../@theme/services/colour-stock.service';
 import { ColourStock, ColourStockRecord } from '../../../@theme/model/colour-stock-class';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../@theme/services/auth.service';
 
 @Component({
   selector: 'ngx-add-edit-colour-stock',
   templateUrl: './add-edit-colour-stock.component.html',
   styleUrls: ['./add-edit-colour-stock.component.scss']
 })
-export class AddEditColourStockComponent implements OnInit {
+export class AddEditColourStockComponent implements OnInit, OnDestroy {
 
 
   colourStockModal: ColourStock;
@@ -44,13 +46,27 @@ export class AddEditColourStockComponent implements OnInit {
     { headerName: 'Amount', field: 'amount' },
 
   ];
+  currentUserId: any;
+  currentUserHeadid: any;
+  currentUser$: Subscription;
+  currentUser: User;
+
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private supplierService: SupplierService,
-    private router: Router, private colourStockService: ColourStockService, private qualityService: QualityService) {
+    private router: Router, private colourStockService: ColourStockService, private authService: AuthService) {
     this.colourStockModal = new ColourStock();
     this.record = new ColourStockRecord();
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserHeadid = ele.user.user_head_id;
+      }
+    });
     this.setColumns();
   }
-
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
   ngOnInit() {
     this.getSupplierNameList();
     // this.getSupplierItemList();
@@ -193,6 +209,8 @@ export class AddEditColourStockComponent implements OnInit {
     console.log('shade', this.colourStockModal);
     // for update
     if (this.id) {
+      this.colourStockModal.updated_by = this.currentUserId;
+
       this.colourStockService.updateColourStock(this.colourStockModal).subscribe(data => {
         console.log(data)
         if (!data[0].error) {
@@ -206,7 +224,8 @@ export class AddEditColourStockComponent implements OnInit {
         this.toasterService.error('Server Error');
       });
     } else {
-      //for add
+      this.colourStockModal.created_by = this.currentUserId;
+      this.colourStockModal.user_head_id = this.currentUserHeadid;
       console.log(this.colourStockModal)
       this.colourStockService.addColourStock(this.colourStockModal).subscribe(data => {
         data = data[0]

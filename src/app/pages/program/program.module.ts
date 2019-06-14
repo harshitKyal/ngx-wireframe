@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProgramComponent } from './program.component';
-import { AddEditProgramComponent } from './add-edit-program/add-edit-program.component';
-import { ViewProgramListComponent } from './view-program-list/view-program-list.component';
+import { AddEditProgramComponent, CustomRendererProgramRecordComponent } from './add-edit-program/add-edit-program.component';
+import { ViewProgramListComponent, CustomRendererProgramComponent } from './view-program-list/view-program-list.component';
 import { FormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +13,13 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { ProgramRoutingModule } from './program-routing.module';
 
 @NgModule({
-  declarations: [ProgramComponent, AddEditProgramComponent, ViewProgramListComponent],
+  declarations: [
+    ProgramComponent,
+    AddEditProgramComponent,
+    ViewProgramListComponent,
+    CustomRendererProgramRecordComponent,
+    CustomRendererProgramComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -24,6 +30,10 @@ import { ProgramRoutingModule } from './program-routing.module';
     NgSelectModule,
     ThemeModule,
     ProgramRoutingModule
+  ],
+  entryComponents: [
+    CustomRendererProgramRecordComponent,
+    CustomRendererProgramComponent
   ]
 })
 export class ProgramModule { }

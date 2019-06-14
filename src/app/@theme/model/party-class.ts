@@ -1,4 +1,5 @@
 export class Party {
+    entry_id: any;
     party_name: any;
     party_address1: any;
     party_address2: any;

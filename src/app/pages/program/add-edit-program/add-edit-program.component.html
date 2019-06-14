@@ -1,3 +1,226 @@
-<p>
-  add-edit-program works!
-</p>
+<nb-card>
+  <nb-card-header>{{topHeader}}
+  </nb-card-header>
+  <nb-card-body>
+    <form #vform="ngForm">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Party Name</label>
+            <select class="form-control" [(ngModel)]="programModal.party_id" name="partyid" #partyId="ngModel"
+              (change)="onPartySelect($event.target.value)" required>
+              <option disabled value="">Select Party
+              </option>
+              <option *ngFor="let party of partyList" [value]="party.entry_id">
+                {{party.party_name}}
+              </option>
+            </select>
+            <div *ngIf="partyId.invalid && (partyId.dirty || partyId.touched)" class="errors">
+              <div *ngIf="partyId.errors && partyId.errors.required">
+                Party Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Quality Id</label>
+            <input type="text" class="form-control" placeholder="Select Quality Id" name="ID" autocomplete="off"
+              [(ngModel)]="programModal.quality_id" (click)="HideShow()">
+            <div *ngIf="flagDiv" class="dropdown">
+              <a href="javascript:void(0)" (click)="HideShow()" class="float-right">[X]</a>
+              <table class="table table-bordered pointer table-responsive">
+                <thead>
+                  <tr>
+                    <th>Quality Id</th>
+                    <th>Quality Name</th>
+                    <th>Quality Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let quality of qualityList; let i = index" (click)="selectQualityId(quality)"
+                    class="pointer">
+                    <td style="display:none;">{{quality.quality_id}}</td>
+                    <td>{{quality.quality_id}}</td>
+                    <td>{{quality.quality_name}}</td>
+                    <td>{{quality.quality_type}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Quality Name</label>
+            <input type="text" class="form-control" disabled [(ngModel)]="programModal.quality_name" name="qualityName"
+              #qualityname="ngModel" required />
+            <div *ngIf="qualityname.invalid && (qualityname.dirty || qualityname.touched)" class="errors">
+              <div *ngIf="qualityname.errors && qualityname.errors.required">
+                Quality Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Quality Type</label>
+            <input type="text" class="form-control" disabled [(ngModel)]="programModal.quality_type" name="qualityType"
+              #qualitytype="ngModel" required />
+            <div *ngIf="qualitytype.invalid && (qualitytype.dirty || qualitytype.touched)" class="errors">
+              <div *ngIf="qualitytype.errors && qualitytype.errors.required">
+                Quality Type is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Program Given By</label>
+            <input type="text" class="form-control" [(ngModel)]="programModal.program_given_by" name="program_by"
+              #programBy="ngModel" required />
+            <div *ngIf="programBy.invalid && (programBy.dirty || programBy.touched)" class="errors">
+              <div *ngIf="programBy.errors && programBy.errors.required">
+                Program Given By is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Remark</label>
+            <textarea type="text" class="form-control" [(ngModel)]="programModal.remark" name="Remark"></textarea>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row table table-responsive" *ngIf="programRecord.length">
+        <ag-grid-angular style="width: 100%; height:300px" class="ag-theme-balham" [rowData]="rowData"
+          [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'>
+        </ag-grid-angular>
+      </div>
+      <div class="row">
+        <form #sform="ngForm">
+          <div class="row col-md-12">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Party Shade No</label>
+                <input type="text" class="form-control" placeholder="Select Party Shade No" name="partyshade_no"
+                  autocomplete="off" [(ngModel)]="record.party_shade_no" (click)="HideShowSubForm()" required
+                  #partyShadeNo="ngModel">
+                <div *ngIf="flagDivSubForm" class="dropdown">
+                  <a href="javascript:void(0)" (click)="HideShowSubForm()" class="float-right">[X]</a>
+                  <table class="table table-bordered pointer table-responsive">
+                    <thead>
+                      <tr>
+                        <th>Party Shade No</th>
+                        <th>Shade No</th>
+                        <th>Colour Tone</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let shade of shadeList; let i = index" (click)="selectShade(shade)" class="pointer">
+                        <td style="display:none;">{{shade.entry_id}}</td>
+                        <td>{{shade.party_shade_no}}</td>
+                        <td>{{shade.shade_no}}</td>
+                        <td>{{shade.colour_tone}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div *ngIf="partyShadeNo.invalid && (partyShadeNo.dirty || partyShadeNo.touched)" class="errors">
+                  <div *ngIf="partyShadeNo.errors && partyShadeNo.errors.required">
+                    Party Shade No. is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Shade No.</label>
+                <input type="text" class="form-control" disabled [(ngModel)]="record.shade_no" name="shadeNo"
+                  #shadeno="ngModel" required />
+                <div *ngIf="shadeno.invalid && (shadeno.dirty || shadeno.touched)" class="errors">
+                  <div *ngIf="shadeno.errors && shadeno.errors.required">
+                    Shade No. is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Colour Tone</label>
+                <input type="text" disabled class="form-control" [(ngModel)]="record.concentration" name="colourTone"
+                  #tone="ngModel" required />
+                <div *ngIf="tone.invalid && (tone.dirty || tone.touched)" class="errors">
+                  <div *ngIf="tone.errors && tone.errors.required">
+                    Colour Tone is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row col-md-12">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Quantity</label>
+                <input type="text" class="form-control" [(ngModel)]="record.rate" name="rt" #Rate="ngModel"
+                  (keypress)="numberOnly($event)" digits required />
+                <div *ngIf="Rate.invalid && (Rate.dirty || Rate.touched)" class="errors">
+                  <div *ngIf="Rate.errors && Rate.errors.required">
+                    Rate is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Batch</label>
+                <input type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt" #Amount="ngModel"
+                  (keypress)="numberOnly($event)" digits required />
+                <div *ngIf="Amount.invalid && (Amount.dirty || Amount.touched)" class="errors">
+                  <div *ngIf="Amount.errors && Amount.errors.required">
+                    Amount is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Lot no.</label>
+                <input type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt" #Amount="ngModel"
+                  (keypress)="numberOnly($event)" digits required />
+                <div *ngIf="Amount.invalid && (Amount.dirty || Amount.touched)" class="errors">
+                  <div *ngIf="Amount.errors && Amount.errors.required">
+                    Amount is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Remark</label>
+                <input type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt" #Amount="ngModel"
+                  (keypress)="numberOnly($event)" digits required />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <button [disabled]="sform.invalid" style="margin-top: 32px;" nbButton (click)="onAddRecord(sform)">Add
+                Record</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="box-footer">
+        <button [disabled]="vform.invalid" nbButton (click)="onCustomFormSubmit(vform)">{{subBtnName}}</button>
+        &nbsp;
+        <button nbButton type="reset" routerLink='/pages/program/view-program-list' id="Cancel">Cancel</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

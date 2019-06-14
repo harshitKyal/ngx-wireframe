@@ -9,7 +9,7 @@ export class PartyService {
 
   constructor(private apiService: ApiService) { }
 
-  getPartyList(obj) {
+  getPartyList(obj?) {
     return this.apiService.apiCaller('post', '/partyData', obj);
   }
   updateParty(party: Party) {

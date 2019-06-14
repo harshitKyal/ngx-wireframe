@@ -17,6 +17,7 @@ export class Shade {
     lab_colour_no: any;
     category: any;
     remark: any;
+    user_head_id: any;
 }
 
 export class ShadeRecord {

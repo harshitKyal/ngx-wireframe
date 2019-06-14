@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -6,7 +6,7 @@ import { AgRendererComponent } from 'ag-grid-angular';
 import { Shade, ShadeRecord } from '../../../@theme/model/shade-class';
 import { Party } from '../../../@theme/model/party-class';
 import { Quality } from '../../../@theme/model/quality-class';
-import { ViewReqObj } from '../../../@theme/model/user-class';
+import { ViewReqObj, User } from '../../../@theme/model/user-class';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PartyService } from '../../../@theme/services/party.service';
 import { QualityService } from '../../../@theme/services/quality.service';
@@ -16,13 +16,15 @@ import { NgForm } from '@angular/forms';
 import { ShadeService } from '../../../@theme/services/shade.service';
 import { Supplier, SupplierItemRecord } from '../../../@theme/model/supplier-class';
 import { SupplierService } from '../../../@theme/services/supplier.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../@theme/services/auth.service';
 
 @Component({
   selector: 'ngx-add-edit-shade',
   templateUrl: './add-edit-shade.component.html',
   styleUrls: ['./add-edit-shade.component.scss']
 })
-export class AddEditShadeComponent implements OnInit {
+export class AddEditShadeComponent implements OnInit, OnDestroy {
 
   shadeModal: Shade;
   flagDivSubForm = false;
@@ -35,6 +37,10 @@ export class AddEditShadeComponent implements OnInit {
   shadeRecord: ShadeRecord[] = [];
   record: ShadeRecord;
   qualityList: Quality[] = [];
+  currentUserId: any;
+  currentUserHeadid: any;
+  currentUser$: Subscription;
+  currentUser: User;
   supplierItemList: SupplierItemRecord[] = [];
   qualityViewReqObj = new ViewReqObj();
   columnDefs = [
@@ -47,12 +53,23 @@ export class AddEditShadeComponent implements OnInit {
 
   ];
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private supplierService: SupplierService,
-    private router: Router, private shadeService: ShadeService, private qualityService: QualityService) {
+    private router: Router, private shadeService: ShadeService, private qualityService: QualityService,
+    private authService: AuthService) {
     this.shadeModal = new Shade();
     this.record = new ShadeRecord();
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserHeadid = ele.user.user_head_id;
+      }
+    });
     this.setColumns();
   }
 
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
   ngOnInit() {
     this.getQuality();
     this.getSupplierItemList();
@@ -205,6 +222,7 @@ export class AddEditShadeComponent implements OnInit {
     console.log('shade', this.shadeModal);
     // for update
     if (this.id) {
+      this.shadeModal.updated_by = this.currentUserId;
       this.shadeService.updateShade(this.shadeModal).subscribe(data => {
         console.log(data)
         if (!data[0].error) {
@@ -218,7 +236,8 @@ export class AddEditShadeComponent implements OnInit {
         this.toasterService.error('Server Error');
       });
     } else {
-      //for add
+      this.shadeModal.created_by = this.currentUserId;
+      this.shadeModal.user_head_id = this.currentUserHeadid;
       console.log(this.shadeModal)
       this.shadeService.addShade(this.shadeModal).subscribe(data => {
         data = data[0]
