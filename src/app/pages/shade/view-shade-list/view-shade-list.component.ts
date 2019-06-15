@@ -13,6 +13,9 @@ import { AuthService } from '../../../@theme/services/auth.service';
 import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Shade } from '../../../@theme/model/shade-class';
 import { ShadeService } from '../../../@theme/services/shade.service';
+import { Quality } from '../../../@theme/model/quality-class';
+import { QualityService } from '../../../@theme/services/quality.service';
+import { element } from '@angular/core/src/render3';
 
 @Component({
   selector: 'ngx-view-shade-list',
@@ -27,19 +30,19 @@ export class ViewShadeListComponent implements OnInit {
   gridColumnApi;
   addShadePermission = 1;
   columnDefs = [
-    { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
-    { headerName: 'Party Shade No.', field: 'party_shade_no', sortable: true, filter: true, width: 100 },
-    { headerName: 'Process Name', field: 'process_name', sortable: true, filter: true, width: 100 },
-    { headerName: 'Quality Id', field: 'quality_id', sortable: true, filter: true },
-    { headerName: 'Quality Name', field: 'quality_name', sortable: true, filter: true, width: 100 },
+    { headerName: 'Actions', field: 'entry_id', sortable: false, width: 100 },
+    { headerName: 'Party Shade No.', field: 'party_shade_no', sortable: true, filter: true, width: 150 },
+    { headerName: 'Process Name', field: 'process_name', sortable: true, filter: true },
+    { headerName: 'Quality Id', field: 'quality_id', sortable: true, filter: true, width: 100 },
+    { headerName: 'Quality Name', field: 'quality_name', sortable: true, filter: true },
     { headerName: 'Quality Type', field: 'quality_type', sortable: true, filter: true },
-    { headerName: 'Party Name', field: 'party_name', sortable: true, filter: true, width: 100 },
+    { headerName: 'Party Name', field: 'party_name', sortable: true, filter: true },
     { headerName: 'Colour Tone', field: 'colour_tone', sortable: true, filter: true },
   ];
   columnExportDefs = [
     'party_shade_no', 'process_name', 'quality_id', 'quality_name', 'quality_type', 'party_name', 'colour_tone'];
   currentUserId: any;
-  currentUserGroupUserIds : any;
+  currentUserGroupUserIds: any;
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
@@ -48,8 +51,12 @@ export class ViewShadeListComponent implements OnInit {
   viewGroupDataPermission = false;
   radioSelected: any = 1;
   shadeReqObj = new ViewReqObj();
+  qualityViewReqObj = new ViewReqObj();
+  qualityList: Quality[] = [];
+
   constructor(private shadeService: ShadeService, private router: Router, private tosterService: ToastrService
-    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
+    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService,
+    private qualityService: QualityService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -78,32 +85,54 @@ export class ViewShadeListComponent implements OnInit {
         }
       })
     }
-    this.getShadeData();
+    this.getQualityData();
   }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
+  getQualityData() {
+    this.qualityViewReqObj.current_user_id = this.currentUserId;
+    this.qualityViewReqObj.user_head_id = this.currentUser.user_head_id;
+    this.qualityViewReqObj.group_user_ids = this.currentUserGroupUserIds;
+    this.qualityViewReqObj.view_group = true;
+    this.qualityService.getAllQualityData(this.qualityViewReqObj).subscribe(data => {
+      if (!data[0].error) {
+        this.qualityList = data[0].data;
+        if (this.qualityList.length) {
+          this.getShadeData();
+        }
+      }
+    })
+  }
   getShadeData(value?) {
 
-    this.shadeReqObj.view_all = false ;
-    this.shadeReqObj.view_group= false ;
-    this.shadeReqObj.view_own = false ;
-    
+    this.shadeReqObj.view_all = false;
+    this.shadeReqObj.view_group = false;
+    this.shadeReqObj.view_own = false;
+
     if (value)
       this.radioSelected = value;
 
     //check which radio button is selected
     if (this.radioSelected == 1)
-      this.shadeReqObj.view_own = true ;
+      this.shadeReqObj.view_own = true;
     else if (this.radioSelected == 2)
-      this.shadeReqObj.view_group = true ;
+      this.shadeReqObj.view_group = true;
     else if (this.radioSelected == 3)
-      this.shadeReqObj.view_all = true ;
+      this.shadeReqObj.view_all = true;
 
     this.shadeService.getAllShades(this.shadeReqObj).subscribe(data => {
       if (!data[0].error) {
         this.shadeList = data[0].data;
-        this.rowData = data[0].data;
+        this.shadeList.forEach(ele => {
+          const i = this.qualityList.findIndex(v => v.entry_id == ele.quality_id);
+          if (i > -1) {
+            ele.party_name = this.qualityList[i].party_name;
+            ele.quality_name = this.qualityList[i].quality_name;
+            ele.quality_type = this.qualityList[i].quality_type;
+          }
+        });
+        this.rowData = this.shadeList;
       } else {
         this.tosterService.error(data[0].message);
       }

@@ -16,6 +16,7 @@ import { ColourStockService } from '../../../@theme/services/colour-stock.servic
 import { ColourStock, ColourStockRecord } from '../../../@theme/model/colour-stock-class';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'ngx-add-edit-colour-stock',
@@ -50,9 +51,11 @@ export class AddEditColourStockComponent implements OnInit, OnDestroy {
   currentUserHeadid: any;
   currentUser$: Subscription;
   currentUser: User;
+  currentUserGroupUserIds: any;
 
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private supplierService: SupplierService,
-    private router: Router, private colourStockService: ColourStockService, private authService: AuthService) {
+    private router: Router, private colourStockService: ColourStockService, private authService: AuthService,
+    private datePipe: DatePipe) {
     this.colourStockModal = new ColourStock();
     this.record = new ColourStockRecord();
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -60,6 +63,7 @@ export class AddEditColourStockComponent implements OnInit, OnDestroy {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserHeadid = ele.user.user_head_id;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
     this.setColumns();
@@ -86,6 +90,10 @@ export class AddEditColourStockComponent implements OnInit, OnDestroy {
   }
 
   getSupplierNameList() {
+    this.supplierReqObj.current_user_id = this.currentUserId;
+    this.supplierReqObj.user_head_id = this.currentUser.user_head_id;
+    this.supplierReqObj.group_user_ids = this.currentUserGroupUserIds;
+    this.supplierReqObj.view_group = true;
     this.supplierService.getAllSupplierData(this.supplierReqObj).subscribe(data => {
       if (!data[0].error) {
         this.supplierNameList = data[0].data;
@@ -102,7 +110,7 @@ export class AddEditColourStockComponent implements OnInit, OnDestroy {
   }
   onItemSelect(item) {
     const i = this.supplierItemList.findIndex(v => v.entry_id == item);
-    this.record.entry_id = this.supplierItemList[i].entry_id;
+    this.record.item_id = this.supplierItemList[i].entry_id;
     this.record.item_name = this.supplierItemList[i].item_name;
     this.record.rate = this.supplierItemList[i].gst_rate;
   }
@@ -125,16 +133,20 @@ export class AddEditColourStockComponent implements OnInit, OnDestroy {
       this.colourStockService.getColourStockById(this.id).subscribe(
         data => {
           if (!data[0].error) {
-            this.colourStockModal = data[0].data.colour_stock[0];
-            this.colourStockRecord = data[0].data.colour_stock_record
+            this.colourStockModal = data[0].data.colourStock[0];
+            this.colourStockModal.bill_date = this.datePipe.transform(this.colourStockModal.bill_date, "yyyy-MM-dd");
+            this.colourStockModal.chl_date = this.datePipe.transform(this.colourStockModal.chl_date, "yyyy-MM-dd");
+            this.colourStockRecord = data[0].data.colourStock_record;
             let i = this.supplierNameList.findIndex(v => v.entry_id == this.colourStockModal.supplier_id);
             this.colourStockModal.supplier_name = this.supplierNameList[i].supplier_name;
             this.getSupplierItemList(this.colourStockModal.supplier_id);
             this.colourStockRecord.forEach((ele, index) => {
               ele.index = index + 1;
               let i = this.supplierItemList.findIndex(v => v.entry_id == ele.item_id);
-              ele.rate = this.supplierItemList[i].gst_rate;
-              ele.item_name = this.supplierItemList[i].item_name;
+              if (i > -1) {
+                ele.rate = this.supplierItemList[i].gst_rate;
+                ele.item_name = this.supplierItemList[i].item_name;
+              }
             })
             this.rowData = [...this.colourStockRecord]
             this.colourStockModal.colour_stock_record = this.colourStockRecord

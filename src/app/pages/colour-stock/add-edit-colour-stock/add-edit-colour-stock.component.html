@@ -39,8 +39,9 @@
         <div class="col-md-2">
           <div class="form-group">
             <label>Bill Date</label>
-            <input type="text" class="form-control" [(ngModel)]="colourStockModal.bill_date" name="billdate"
-              #billDate="ngModel" required />
+            <input type="date" class="form-control" [(ngModel)]="colourStockModal.bill_date" name="billdate"
+              data-toggle="tooltip" #billDate="ngModel" data-trigger="hover" data-placement="top"
+              data-title="Date Opened" required>
             <div *ngIf="billDate.invalid && (billDate.dirty || billDate.touched)" class="errors">
               <div *ngIf="billDate.errors && billDate.errors.required">
                 Bill Date is required.
@@ -63,8 +64,9 @@
         <div class="col-md-2">
           <div class="form-group">
             <label>Challan Date</label>
-            <input type="text" class="form-control" [(ngModel)]="colourStockModal.chl_date" name="chldate"
-              #chlDate="ngModel" required />
+            <input type="date" class="form-control" [(ngModel)]="colourStockModal.chl_date" name="chldate"
+              data-toggle="tooltip" #chlDate="ngModel" data-trigger="hover" data-placement="top"
+              data-title="Date Opened" required>
             <div *ngIf="chlDate.invalid && (chlDate.dirty || chlDate.touched)" class="errors">
               <div *ngIf="chlDate.errors && chlDate.errors.required">
                 Challan Date is required.

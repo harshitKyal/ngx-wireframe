@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
@@ -13,13 +13,16 @@ import { PartyService } from '../../../@theme/services/party.service';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { ViewReqObj } from '../../../@theme/model/user-class';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../@theme/services/auth.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-add-edit-bill-in',
   templateUrl: './add-edit-bill-in.component.html',
   styleUrls: ['./add-edit-bill-in.component.scss']
 })
-export class AddEditBillInComponent implements OnInit {
+export class AddEditBillInComponent implements OnInit, OnDestroy {
 
   billModal: Bill;
   id: any;
@@ -32,6 +35,11 @@ export class AddEditBillInComponent implements OnInit {
   record: BillRecord;
   qualityList: Quality[] = [];
   qualityViewReqObj = new ViewReqObj();
+  currentUserId: any;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
+  currentUserGroupUserIds: any;
   columnDefs = [
     { headerName: 'Actions', field: 'index' },
     { headerName: 'Gr', field: 'gr' },
@@ -46,9 +54,19 @@ export class AddEditBillInComponent implements OnInit {
   ];
   partyReqObj = new ViewReqObj();
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
-    private router: Router, private billService: BillInService, private qualityService: QualityService) {
+    private router: Router, private billService: BillInService, private qualityService: QualityService,
+    private datePipe: DatePipe,
+    private authService: AuthService) {
     this.billModal = new Bill();
     this.record = new BillRecord();
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserPermission = ele.user_permission;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
+      }
+    });
     this.setColumns();
   }
 
@@ -58,6 +76,9 @@ export class AddEditBillInComponent implements OnInit {
     this.onPageLoad();
   }
 
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
+  }
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
@@ -71,6 +92,10 @@ export class AddEditBillInComponent implements OnInit {
   }
 
   getQuality() {
+    this.qualityViewReqObj.current_user_id = this.currentUserId;
+    this.qualityViewReqObj.user_head_id = this.currentUser.user_head_id;
+    this.qualityViewReqObj.group_user_ids = this.currentUserGroupUserIds;
+    this.qualityViewReqObj.view_group = true;
     this.qualityService.getAllQualityData(this.qualityViewReqObj).subscribe(data => {
       if (!data[0].error) {
         this.qualityList = data[0].data;
@@ -85,7 +110,10 @@ export class AddEditBillInComponent implements OnInit {
   }
   getPartyList() {
     this.partyReqObj = new ViewReqObj();
-
+    this.partyReqObj.current_user_id = this.currentUserId;
+    this.partyReqObj.user_head_id = this.currentUser.user_head_id;
+    this.partyReqObj.group_user_ids = this.currentUserGroupUserIds;
+    this.partyReqObj.view_group = true;
     this.partyService.getPartyList(this.partyReqObj).subscribe(
       data => {
         if (!data[0].error) {
@@ -113,12 +141,16 @@ export class AddEditBillInComponent implements OnInit {
         data => {
           if (!data[0].error) {
             this.billModal = data[0].data.stock[0];
-            this.billRecord = data[0].data.bill_record
+            this.billRecord = data[0].data.bill_record;
+            this.billModal.bill_date = this.datePipe.transform(this.billModal.bill_date, "yyyy-MM-dd");
+            this.billModal.chl_date = this.datePipe.transform(this.billModal.chl_date, "yyyy-MM-dd");
             this.billRecord.forEach((ele, index) => {
               ele.index = index + 1;
               let i = this.qualityList.findIndex(v => v.entry_id == ele.quality_entry_id);
-              ele.quality_name = this.qualityList[i].quality_name;
-              ele.quality_type = this.qualityList[i].quality_type;
+              if (i > -1) {
+                ele.quality_name = this.qualityList[i].quality_name;
+                ele.quality_type = this.qualityList[i].quality_type;
+              }
             })
             this.rowData = [...this.billRecord]
             this.billModal.bill_record = this.billRecord

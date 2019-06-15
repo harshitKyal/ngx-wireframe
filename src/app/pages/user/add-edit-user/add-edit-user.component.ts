@@ -122,8 +122,6 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
   }
   onAssign(value) {
     this.showUserNameListFlag = value.returnValue;
-    alert(this.showUserNameListFlag);
-    alert(value.returnValue)
   }
   getUsers() {
     this.usersList = [];

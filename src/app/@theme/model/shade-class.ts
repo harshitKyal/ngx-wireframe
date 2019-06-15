@@ -24,6 +24,7 @@ export class ShadeRecord {
     index: any;
     entry_id: any;
     control_id: any;
+    supplier_item_id: any;
     item_name: any;
     supplier_name: any;
     concentration: any;

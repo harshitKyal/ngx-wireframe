@@ -24,6 +24,7 @@ export class ColourStock {
 export class ColourStockRecord {
     item_name: any;
     item_id: any;
+    supplier_item_id: any;
     quantity_per_box: any;
     index: any;
     entry_id: any;

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShadeComponent } from './shade.component';
-import { AddEditShadeComponent } from './add-edit-shade/add-edit-shade.component';
-import { ViewShadeListComponent } from './view-shade-list/view-shade-list.component';
+import { AddEditShadeComponent, CustomRendererShadeRecordComponent } from './add-edit-shade/add-edit-shade.component';
+import { ViewShadeListComponent, CustomRendererShadeInComponent } from './view-shade-list/view-shade-list.component';
 import { FormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +13,17 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { ShadeRoutingModule } from './shade-routing.module';
 
 @NgModule({
-  declarations: [ShadeComponent, AddEditShadeComponent, ViewShadeListComponent],
+  declarations: [
+    ShadeComponent,
+    AddEditShadeComponent,
+    ViewShadeListComponent,
+    CustomRendererShadeInComponent,
+    CustomRendererShadeRecordComponent
+  ],
+  entryComponents: [
+    CustomRendererShadeInComponent,
+    CustomRendererShadeRecordComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,

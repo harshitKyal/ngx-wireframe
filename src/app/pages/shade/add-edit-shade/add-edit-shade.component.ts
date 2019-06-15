@@ -41,6 +41,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   currentUserHeadid: any;
   currentUser$: Subscription;
   currentUser: User;
+  currentUserGroupUserIds: any;
   supplierItemList: SupplierItemRecord[] = [];
   qualityViewReqObj = new ViewReqObj();
   columnDefs = [
@@ -61,7 +62,8 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
       if (ele != null) {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
-        this.currentUserHeadid = ele.user.user_head_id;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
+
       }
     });
     this.setColumns();
@@ -89,6 +91,10 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   }
 
   getQuality() {
+    this.qualityViewReqObj.current_user_id = this.currentUserId;
+    this.qualityViewReqObj.user_head_id = this.currentUser.user_head_id;
+    this.qualityViewReqObj.group_user_ids = this.currentUserGroupUserIds;
+    this.qualityViewReqObj.view_group = true;
     this.qualityService.getAllQualityData(this.qualityViewReqObj).subscribe(data => {
       if (!data[0].error) {
         this.qualityList = data[0].data;
@@ -106,7 +112,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   selectItem(item) {
     this.flagDivSubForm = false;
     const i = this.supplierItemList.findIndex(v => v.entry_id == item.entry_id);
-    this.record.entry_id = this.supplierItemList[i].entry_id;
+    this.record.supplier_item_id = this.supplierItemList[i].entry_id;
     this.record.item_name = this.supplierItemList[i].item_name;
     this.record.supplier_name = this.supplierItemList[i].supplier_name;
   }
@@ -211,7 +217,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   }
 
   onConcentrationChange(value) {
-    let i = this.supplierItemList.findIndex(v => v.entry_id == this.record.entry_id);
+    let i = this.supplierItemList.findIndex(v => v.entry_id == this.record.supplier_item_id);
     this.record.rate = this.supplierItemList[i].gst_rate;
     this.record.amount = this.supplierItemList[i].gst_rate * value;
   }

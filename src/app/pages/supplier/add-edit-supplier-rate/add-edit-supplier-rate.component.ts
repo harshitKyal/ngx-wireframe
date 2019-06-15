@@ -40,12 +40,15 @@ export class AddEditSupplierRateComponent implements OnInit {
   currentUserId: any;
   currentUser$: Subscription;
   currentUser;
+  currentUserGroupUserIds: any;
+
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private authService: AuthService,
     private router: Router, private supplierService: SupplierService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
     this.supplierRateRecord = new SupplierRateRecord();
@@ -73,6 +76,10 @@ export class AddEditSupplierRateComponent implements OnInit {
   }
   getSupplierList() {
     this.supplierReqObj = new ViewReqObj();
+    this.supplierReqObj.current_user_id = this.currentUserId;
+    this.supplierReqObj.user_head_id = this.currentUser.user_head_id;
+    this.supplierReqObj.group_user_ids = this.currentUserGroupUserIds;
+    this.supplierReqObj.view_group = true;
     this.supplierService.getAllSupplierData(this.supplierReqObj).subscribe(
       data => {
         if (!data[0].error) {

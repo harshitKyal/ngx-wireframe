@@ -20,18 +20,17 @@ export class AuthService {
     const user = new LoginModal();
     user.UserName = username;
     user.Password = password;
-    
+
     return this.onLogin(user)
       .map((result) => {
-        if (!result[0].error) {
+        if (!result[0].error && result[0].data.hasRows) {
           console.log('result login', result);
           // const res = JSON.parse(result);
           localStorage.setItem('isLogged', 'true');
-          this.currentUser.next({ 'user': result[0].data.user, 'user_permission': result[0].data.user_permission, 'token': result[0].data.token ,'group_user_ids' : result[0].data.group_user_ids});
+          this.currentUser.next({ 'user': result[0].data.user, 'user_permission': result[0].data.user_permission, 'token': result[0].data.token, 'group_user_ids': result[0].data.group_user_ids });
           localStorage.setItem('currentUser', JSON.stringify(result[0].data.user));
           localStorage.setItem('currentUserPermission', JSON.stringify(result[0].data.user_permission));
           localStorage.setItem('currentUserToken', JSON.stringify(result[0].data.token));
-          localStorage.setItem('currentGroupUserIds', JSON.stringify(result[0].data.group_user_ids));
         }
         return result;
       }).catch((error: any) => Observable.throw(error || 'Server error'));

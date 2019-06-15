@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ColDef } from 'ag-grid-community';
@@ -10,24 +10,19 @@ import { Quality } from '../../../@theme/model/quality-class';
 import { LotService } from '../../../@theme/services/lot.service';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { ViewReqObj } from '../../../@theme/model/user-class';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../@theme/services/auth.service';
 declare var $;
 @Component({
   selector: 'app-add-edit-lot',
   templateUrl: './add-edit-lot.component.html',
   styleUrls: ['./add-edit-lot.component.scss']
 })
-export class AddEditLotComponent implements OnInit {
+export class AddEditLotComponent implements OnInit, OnDestroy {
 
 
   flagDiv = false;
   lotDataObj: LotData;
-
-  // grSelection: string;
-  // customerID: number;
-
-
-
-
   lotModal: LotMast;
   id: any;
   subBtnName = '';
@@ -37,6 +32,11 @@ export class AddEditLotComponent implements OnInit {
   grList = [];
   lotDataArray: LotData[] = [];
   qualityViewReqObj = new ViewReqObj();
+  currentUserId: any;
+  currentUser$: Subscription;
+  currentUserPermission = [];
+  currentUser;
+  currentUserGroupUserIds: any;
 
   qualityList: Quality[] = [];
   lotDetailObj: LotWeightMtrDetail[] = [];
@@ -54,15 +54,27 @@ export class AddEditLotComponent implements OnInit {
   unit = [{ 'id': 'wt', 'value': 'Weight' }, { 'id': 'mtr', 'value': 'Metre' }];
   items: LotWeightMtrDetail[] = [];
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private qualityService: QualityService,
-    private router: Router, private lotService: LotService) {
+    private router: Router, private lotService: LotService, private authService: AuthService) {
     this.lotModal = new LotMast();
     this.lotDataObj = new LotData();
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserPermission = ele.user_permission;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
+      }
+    });
     this.setColumns();
   }
 
   ngOnInit() {
     this.getQuality();
     this.onPageLoad();
+  }
+
+  ngOnDestroy() {
+    this.currentUser$.unsubscribe();
   }
 
   HideShow() {
@@ -116,6 +128,10 @@ export class AddEditLotComponent implements OnInit {
   }
 
   getQuality() {
+    this.qualityViewReqObj.current_user_id = this.currentUserId;
+    this.qualityViewReqObj.user_head_id = this.currentUser.user_head_id;
+    this.qualityViewReqObj.group_user_ids = this.currentUserGroupUserIds;
+    this.qualityViewReqObj.view_group = true;
     this.qualityService.getAllQualityData(this.qualityViewReqObj).subscribe(data => {
       if (!data[0].error) {
         this.qualityList = data[0].data;

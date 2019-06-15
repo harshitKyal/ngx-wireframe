@@ -25,11 +25,10 @@ export class LoginComponent {
 
     // On submit button click
     onSubmit() {
-
         this.authService.signinUser(this.loginReq.UserName, this.loginReq.Password).subscribe(
             data => {
                 console.log((data))
-                if (!data[0].error) {
+                if (!data[0].error && data[0].data.hasRows) {
                     this.userPermission = [];
                     this.userPermission = data[0].data.user_permission;
                     if (this.userPermission.length) {
