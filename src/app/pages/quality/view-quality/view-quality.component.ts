@@ -163,7 +163,6 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
   }
   getQualityData(value?): any {
 
-
     this.qualityReqObj.view_all = false ;
     this.qualityReqObj.view_group= false ;
     this.qualityReqObj.view_own = false ;

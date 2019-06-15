@@ -63,6 +63,7 @@ export class ViewColourStockComponent implements OnInit {
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
+  currentUserGroupUserIds : any;
   viewAllDataPermission: any = false;
   viewOwnDataPermission: any = false;
   viewGroupDataPermission = false;
@@ -75,6 +76,7 @@ export class ViewColourStockComponent implements OnInit {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserPermission = ele.user_permission;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
     this.setColumns();
@@ -87,6 +89,7 @@ export class ViewColourStockComponent implements OnInit {
         if (ele.form_name === 'Colour Stock') {
           // this.addUserPermission = ele.can_add;
           this.addColourStockPermission = 1;
+          
         }
       })
     }
@@ -110,6 +113,7 @@ export class ViewColourStockComponent implements OnInit {
 
   getColourStockData() {
     this.colourStockReqObj = new ViewReqObj();
+    
     this.colourStockService.getAllColourStock(this.colourStockReqObj).subscribe(data => {
       if (!data[0].error) {
         this.colourStockList = data[0].data;

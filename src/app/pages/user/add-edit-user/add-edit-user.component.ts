@@ -66,7 +66,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
         this.userHeadId = ele.user.user_head_id;
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
-        this.currentUser
+        this.currentUser;
         this.currentUserPermission = ele.user_permission;
         if (ele.user.user_name === "admin") {
           this.tableHeading = [];
