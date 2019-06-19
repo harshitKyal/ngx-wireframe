@@ -95,7 +95,7 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
   }
 
   getSubTypeList(type) {
-    console.log(type)
+    // console.log(type)
     this.qualitySubTypeList = [];
     this.qualityService.getSubTypeListByType(type).subscribe(
       data => {
@@ -118,10 +118,10 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
     if (this.id) {
       this.qualityModal.updated_by = this.currentUserId;
       this.qualityService.updateQuality(this.qualityModal).subscribe(data => {
-        console.log(data)
+        // console.log(data)
         // data= data[0].data
-        console.log("in edit quality")
-        console.log(data)
+        // console.log("in edit quality")
+        // console.log(data)
         if (!data[0].error) {
           this.toasterService.success("Updated Successfully");
           form.resetForm();
@@ -136,7 +136,7 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
       //for add
       this.qualityModal.created_by = this.currentUserId;
       this.qualityModal.user_head_id = this.currentUserHeadid;
-      console.log(this.qualityModal)
+      // console.log(this.qualityModal)
       this.qualityService.addQuality(this.qualityModal).subscribe(data => {
         // data = data[0]
         if (!data[0].error) {

@@ -4,7 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { Party } from '../../../@theme/model/party-class';
 import { PartyService } from '../../../@theme/services/party.service';
-
+import { AuthService } from '../../../@theme/services/auth.service';
+import { User, UserPermission } from '../../../@theme/model/user-class';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-add-edit-party',
   templateUrl: './add-edit-party.component.html',
@@ -16,9 +18,25 @@ export class AddEditPartyComponent implements OnInit {
   topHeader = '';
   partyModal: Party;
 
+  currentUserId: any;
+  currentUserHeadid: any;
+  currentUser$: Subscription;
+  currentUser: User;
+  currentUserPermission: UserPermission[] = [];
+
   constructor(private toasterService: ToastrService, private route: ActivatedRoute,
-    private router: Router, private partyService: PartyService) {
+    private router: Router, private partyService: PartyService, private authService: AuthService) {
     this.partyModal = new Party();
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserHeadid = ele.user.user_head_id;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
+
+
   }
 
   ngOnInit() {
@@ -57,6 +75,7 @@ export class AddEditPartyComponent implements OnInit {
   onCustomFormSubmit(form: NgForm) {
     //for update
     if (this.id) {
+      this.partyModal.updated_by = this.currentUserId;
       this.partyService.updateParty(this.partyModal).subscribe(data => {
         if (!data[0].error) {
           this.toasterService.success(data[0].message);
@@ -69,7 +88,11 @@ export class AddEditPartyComponent implements OnInit {
         this.toasterService.error('Server Error');
       });
     } else {
+
       //for add
+      this.partyModal.created_by = this.currentUserId;
+      this.partyModal.user_head_id = this.currentUserHeadid;
+      console.log("party Modal")
       console.log(this.partyModal)
       this.partyService.addParty(this.partyModal).subscribe(data => {
         // data = data[0]

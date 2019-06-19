@@ -16,6 +16,7 @@ export class Party {
     created_by: any;
     updated_date: any;
     updated_by: any;
+    user_head_id : any;
     constructor() {
     }
 }
