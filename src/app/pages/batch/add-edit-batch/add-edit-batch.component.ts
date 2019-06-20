@@ -267,6 +267,7 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
     console.log('batch', this.batchModal);
     // for update
     if (this.id) {
+      this.batchModal.updated_by = this.currentUserId;
       this.batchService.updateBatch(this.batchModal).subscribe(data => {
         console.log(data)
         if (!data[0].error) {

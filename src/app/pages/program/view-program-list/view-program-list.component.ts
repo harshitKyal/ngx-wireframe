@@ -114,7 +114,7 @@ export class ViewProgramListComponent implements OnInit {
       if (column.field === 'entry_id') {
         column.cellRendererFramework = CustomRendererProgramComponent;
         column.cellRendererParams = {
-          inRouterLink: '/pages/program/add-edit-program/',
+          inRouterLink: '/pages/program/edit-program/',
           inViewLink: '/pages/program/view-program/',
           action: this
         };
@@ -128,7 +128,7 @@ export class ViewProgramListComponent implements OnInit {
   }
   onAddProgram() {
     if (this.addProgramPermission) {
-      this.router.navigate(['/pages/program/add-edit-program']);
+      this.router.navigate(['/pages/program/add-program']);
     } else {
       const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to add program. If you want to add program ask admin for permission.');
       if (res) {

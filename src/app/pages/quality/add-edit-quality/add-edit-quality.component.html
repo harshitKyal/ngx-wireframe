@@ -75,7 +75,7 @@
             <select class="form-control" [(ngModel)]="qualityModal.party_name" name="partyname" #partyName="ngModel"
               required>
               <option disabled value="">Select Party Name</option>
-              <option *ngFor="let p of partyNameList" [value]="p.ID">{{p.Name}}</option>
+              <option *ngFor="let p of partyNameList" [value]="p.entry_id">{{p.party_name}}</option>
             </select>
             <div *ngIf="partyName.invalid && (partyName.dirty || partyName.touched)" class="errors">
               <div *ngIf="partyName.errors && partyName.errors.required">

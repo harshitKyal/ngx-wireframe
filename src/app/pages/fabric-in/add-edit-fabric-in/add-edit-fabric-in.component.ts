@@ -72,7 +72,7 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getQuality();
-    // this.getPartyList();
+    this.getPartyList();
     this.onPageLoad();
   }
 

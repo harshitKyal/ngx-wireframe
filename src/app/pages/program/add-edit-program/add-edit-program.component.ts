@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Program, ProgramRecord } from '../../../@theme/model/program-class';
 import { Quality } from '../../../@theme/model/quality-class';
 import { Subscription } from 'rxjs';
-import { User } from '../../../@core/data/users';
 import { Party } from '../../../@theme/model/party-class';
-import { ViewReqObj } from '../../../@theme/model/user-class';
+import { ViewReqObj, User } from '../../../@theme/model/user-class';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PartyService } from '../../../@theme/services/party.service';
@@ -53,6 +52,10 @@ export class AddEditProgramComponent implements OnInit {
     { headerName: 'Amount', field: 'amount' },
 
   ];
+  viewPartyReqOb = new ViewReqObj();
+  currentUserPermission: any;
+  currentUserGroupUserIds: any;
+
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
     private router: Router, private programService: ProgramService, private qualityService: QualityService,
     private authService: AuthService) {
@@ -63,6 +66,8 @@ export class AddEditProgramComponent implements OnInit {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserHeadid = ele.user.user_head_id;
+        this.currentUserPermission = ele.user_permission;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
     this.setColumns();
@@ -99,7 +104,11 @@ export class AddEditProgramComponent implements OnInit {
   }
 
   getPartyList() {
-    this.partyService.getPartyList().subscribe(data => {
+    this.viewPartyReqOb.view_group = true;
+    this.viewPartyReqOb.current_user_id = this.currentUserId;
+    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
+    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
+    this.partyService.getPartyList(this.viewPartyReqOb).subscribe(data => {
       if (!data[0].error) {
         this.partyList = data[0].data;
       }

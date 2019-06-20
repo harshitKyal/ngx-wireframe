@@ -102,9 +102,9 @@
           [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'>
         </ag-grid-angular>
       </div>
-      <div class="row">
+      <div>
         <form #sform="ngForm">
-          <div class="row col-md-12">
+          <div class="row">
             <div class="col-md-4">
               <div class="form-group">
                 <label>Party Shade No</label>
@@ -153,7 +153,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>Colour Tone</label>
-                <input type="text" disabled class="form-control" [(ngModel)]="record.concentration" name="colourTone"
+                <input type="text" disabled class="form-control" [(ngModel)]="record.colour_tone" name="colourTone"
                   #tone="ngModel" required />
                 <div *ngIf="tone.invalid && (tone.dirty || tone.touched)" class="errors">
                   <div *ngIf="tone.errors && tone.errors.required">
@@ -162,29 +162,29 @@
                 </div>
               </div>
             </div>
-
-          </div>
-          <div class="row col-md-12">
             <div class="col-md-2">
               <div class="form-group">
                 <label>Quantity</label>
-                <input type="text" class="form-control" [(ngModel)]="record.rate" name="rt" #Rate="ngModel"
+                <input type="text" class="form-control" [(ngModel)]="record.quantity" name="qty" #Quantity="ngModel"
                   (keypress)="numberOnly($event)" digits required />
-                <div *ngIf="Rate.invalid && (Rate.dirty || Rate.touched)" class="errors">
-                  <div *ngIf="Rate.errors && Rate.errors.required">
-                    Rate is required.
+                <div *ngIf="Quantity.invalid && (Quantity.dirty || Quantity.touched)" class="errors">
+                  <div *ngIf="Quantity.errors && Quantity.errors.required">
+                    Quantity is required.
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+
+          </div>
+          <div class="row">
+            <div class="col-md-4">
               <div class="form-group">
                 <label>Batch</label>
-                <input type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt" #Amount="ngModel"
+                <input type="text" class="form-control" [(ngModel)]="record.batch" name="Batch" #btch="ngModel"
                   (keypress)="numberOnly($event)" digits required />
-                <div *ngIf="Amount.invalid && (Amount.dirty || Amount.touched)" class="errors">
-                  <div *ngIf="Amount.errors && Amount.errors.required">
-                    Amount is required.
+                <div *ngIf="btch.invalid && (btch.dirty || btch.touched)" class="errors">
+                  <div *ngIf="btch.errors && btch.errors.required">
+                    Batch is required.
                   </div>
                 </div>
               </div>
@@ -192,11 +192,11 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>Lot no.</label>
-                <input type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt" #Amount="ngModel"
+                <input type="text" class="form-control" [(ngModel)]="record.lot_no" name="lotNo" #lotno="ngModel"
                   (keypress)="numberOnly($event)" digits required />
-                <div *ngIf="Amount.invalid && (Amount.dirty || Amount.touched)" class="errors">
-                  <div *ngIf="Amount.errors && Amount.errors.required">
-                    Amount is required.
+                <div *ngIf="lotno.invalid && (lotno.dirty || lotno.touched)" class="errors">
+                  <div *ngIf="lotno.errors && lotno.errors.required">
+                    Lot no. is required.
                   </div>
                 </div>
               </div>
@@ -204,8 +204,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>Remark</label>
-                <input type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt" #Amount="ngModel"
-                  (keypress)="numberOnly($event)" digits required />
+                <textarea type="text" class="form-control" [(ngModel)]="record.remark" name="Remark"></textarea>
               </div>
             </div>
             <div class="col-md-2">

@@ -6,7 +6,8 @@ import { Quality } from '../../../@theme/model/quality-class';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { Subscription } from 'rxjs';
-import { User, UserPermission } from '../../../@theme/model/user-class';
+import { User, UserPermission, ViewReqObj } from '../../../@theme/model/user-class';
+import { PartyService } from '../../../@theme/services/party.service';
 
 @Component({
   selector: 'app-add-edit-quality',
@@ -19,7 +20,7 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
   id: any;
   qualityTypeList = [];
   // qualityTypeList = [{ 'ID': '1', 'Name': 'Type1' }, { 'ID': '2', 'Name': 'Type2' }];
-  partyNameList = [{ 'ID': '1', 'Name': 'Party1' }, { 'ID': '2', 'Name': 'Party2' }];
+  partyNameList = [];
   qualitySubTypeList = [];
   subBtnName = '';
   topHeader = '';
@@ -28,7 +29,9 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
   currentUser$: Subscription;
   currentUser: User;
   currentUserPermission: UserPermission[] = [];
-  constructor(private toasterService: ToastrService, private route: ActivatedRoute,
+  viewPartyReqOb = new ViewReqObj();
+  currentUserGroupUserIds: any;
+  constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
     private router: Router, private qualityService: QualityService, private authService: AuthService) {
     this.qualityModal = new Quality();
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -37,12 +40,14 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
         this.currentUserId = ele.user.user_id;
         this.currentUserHeadid = ele.user.user_head_id;
         this.currentUserPermission = ele.user_permission;
+        this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
   }
 
   ngOnInit() {
     this.getTypeList();
+    this.getPartyList();
     this.onPageLoad();
   }
   ngOnDestroy() {
@@ -56,12 +61,8 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
       this.topHeader = 'Edit Quality';
       this.qualityService.getQualityById(this.id).subscribe(
         data => {
-          //console.log("sdad" , data[0])
-          // data=data[0]
-          console.log(data)
           if (!data[0].error) {
             this.qualityModal = data[0].data[0];
-            //console.log("hjgh",this.qualityModal)
             this.getSubTypeList(this.qualityModal.quality_type);
           } else {
             this.toasterService.error(data[0].message);
@@ -82,6 +83,23 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
         console.log("fdsfds", data)
         if (!data[0].error) {
           this.qualityTypeList = data[0].data;
+        } else {
+          this.toasterService.error(data[0].message);
+        }
+      }, error => {
+        this.toasterService.error(error);
+      });
+  }
+  getPartyList() {
+    this.partyNameList = [];
+    this.viewPartyReqOb.view_group = true;
+    this.viewPartyReqOb.current_user_id = this.currentUserId;
+    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
+    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
+    this.partyService.getPartyList(this.viewPartyReqOb).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.partyNameList = data[0].data;
         } else {
           this.toasterService.error(data[0].message);
         }

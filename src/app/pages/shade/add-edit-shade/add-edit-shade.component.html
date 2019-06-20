@@ -28,12 +28,6 @@
             </div>
           </div>
         </div>
-        <div class="col-md-2">
-          <div class="form-group">
-            <label>New Cutting Id</label>
-            <input type="text" class="form-control" [(ngModel)]="shadeModal.cutting_id" name="cuttingId" />
-          </div>
-        </div>
       </div>
       <div class="row">
         <div class="col-md-3">
@@ -110,8 +104,8 @@
           <div class="form-group">
             <label>Color Tone</label>
             <!-- pattern -->
-            <input type="text" class="form-control" [(ngModel)]="shadeModal.colour_tone" name="tone" #colortone="ngModel"
-              required />
+            <input type="text" class="form-control" [(ngModel)]="shadeModal.colour_tone" name="tone"
+              #colortone="ngModel" required />
             <div *ngIf="colortone.invalid && (colortone.dirty || colortone.touched)" class="errors">
               <div *ngIf="colortone.errors && colortone.errors.required">
                 Color Tone is required.
