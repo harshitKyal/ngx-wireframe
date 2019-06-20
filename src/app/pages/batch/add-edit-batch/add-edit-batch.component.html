@@ -6,12 +6,12 @@
       <div class="row">
         <div class="col-md-2">
           <div class="form-group">
-            <label>Lot No.</label>
-            <input type="text" class="form-control" [(ngModel)]="lotModal.lot_id" name="lotId" #LotId="ngModel"
+            <label>Batch No.</label>
+            <input type="text" class="form-control" [(ngModel)]="batchModal.batch_id" name="batchId" #BatchId="ngModel"
               required />
-            <div *ngIf="LotId.invalid && (LotId.dirty || LotId.touched)" class="errors">
-              <div *ngIf="LotId.errors && LotId.errors.required">
-                Lot No is required.
+            <div *ngIf="BatchId.invalid && (BatchId.dirty || BatchId.touched)" class="errors">
+              <div *ngIf="BatchId.errors && BatchId.errors.required">
+                Batch No is required.
               </div>
             </div>
           </div>
@@ -20,7 +20,7 @@
           <div class="form-group">
             <label>Quality Id</label>
             <!-- pattern -->
-            <select class="form-control" [(ngModel)]="lotModal.quality_entry_id" name="quality_id" #quality="ngModel"
+            <select class="form-control" [(ngModel)]="batchModal.quality_entry_id" name="quality_id" #quality="ngModel"
               (change)="onQualitySelect($event.target.value)" required>
               <option disabled value="">Select Quality Id
               </option>
@@ -37,7 +37,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Quality Name</label>
-            <input type="text" class="form-control" [(ngModel)]="lotModal.quality_name" name="quallityname"
+            <input type="text" class="form-control" [(ngModel)]="batchModal.quality_name" name="quallityname"
               #qualityName="ngModel" required />
             <div *ngIf="qualityName.invalid && (qualityName.dirty || qualityName.touched)" class="errors">
               <div *ngIf="qualityName.errors && qualityName.errors.required">
@@ -49,7 +49,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Quality Type</label>
-            <input type="text" class="form-control" [(ngModel)]="lotModal.quality_type" name="qualitytype"
+            <input type="text" class="form-control" [(ngModel)]="batchModal.quality_type" name="qualitytype"
               #qualityType="ngModel" required />
             <div *ngIf="qualityType.invalid && (qualityType.dirty || qualityType.touched)" class="errors">
               <div *ngIf="qualityType.errors && qualityType.errors.required">
@@ -60,7 +60,7 @@
         </div>
       </div>
       <hr>
-      <div class="row col-md-12 table table-responsive" *ngIf="lotDataArray.length">
+      <div class="row col-md-12 table table-responsive" *ngIf="batchDataArray.length">
         <ag-grid-angular style="width: 55%; height:300px" class="ag-theme-balham" [rowData]="rowData"
           [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'>
         </ag-grid-angular>
@@ -72,7 +72,7 @@
               <div class="form-group">
                 <label>GR</label>
                 <input type="text" class="form-control" placeholder="Select Gr" name="Gr" autocomplete="off"
-                  [(ngModel)]="lotDataObj.gr" (click)="HideShow()">
+                  [(ngModel)]="batchDataObj.gr" (click)="HideShow()">
                 <div *ngIf="flagDiv" class="dropdown">
                   <a href="javascript:void(0)" (click)="HideShow()" class="float-right">[X]</a>
                   <table class="table table-bordered pointer table-responsive">
@@ -100,7 +100,7 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label>Batch No.</label>
-                <input type="text" class="form-control" [(ngModel)]="lotDataObj.batch_no" name="batch" #Batch="ngModel"
+                <input type="text" class="form-control" [(ngModel)]="batchDataObj.batch_no" name="batch" #Batch="ngModel"
                   required />
                 <div *ngIf="Batch.invalid && (Batch.dirty || Batch.touched)" class="errors">
                   <div *ngIf="Batch.errors && Batch.errors.required">
@@ -112,7 +112,7 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label>Mtr</label>
-                <input type="text" class="form-control" [(ngModel)]="lotDataObj.mtr" name="Mtr"
+                <input type="text" class="form-control" [(ngModel)]="batchDataObj.mtr" name="Mtr"
                   (keypress)="numberOnly($event)" digits />
                 <!-- <div *ngIf="GR.invalid && (GR.dirty || GR.touched)" class="errors">
                     <div *ngIf="GR.errors && GR.errors.required">
@@ -124,7 +124,7 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label>Weight</label>
-                <input type="text" class="form-control" [(ngModel)]="lotDataObj.wt" name="Wt" #weight="ngModel"
+                <input type="text" class="form-control" [(ngModel)]="batchDataObj.wt" name="Wt" #weight="ngModel"
                   (keypress)="numberOnly($event)" digits required />
                 <div *ngIf="weight.invalid && (weight.dirty || weight.touched)" class="errors">
                   <div *ngIf="weight.errors && weight.errors.required">
@@ -138,7 +138,7 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label>No. of Taka</label>
-                <input type="text" class="form-control" [(ngModel)]="lotDataObj.no_of_cones_taka" name="noOfTaka"
+                <input type="text" class="form-control" [(ngModel)]="batchDataObj.no_of_cones_taka" name="noOfTaka"
                   #taka="ngModel" (keypress)="numberOnly($event)" digits required />
                 <div *ngIf="taka.invalid && (taka.dirty || taka.touched)" class="errors">
                   <div *ngIf="taka.errors && taka.errors.required">
@@ -150,7 +150,7 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label>Unit</label>
-                <select class="form-control" [(ngModel)]="lotDataObj.unit" name="unit" #Unit="ngModel"
+                <select class="form-control" [(ngModel)]="batchDataObj.unit" name="unit" #Unit="ngModel"
                   (change)="onUnitSelect($event.target.value)">
                   <option disabled value="">Select Unit
                   </option>
@@ -177,7 +177,7 @@
       <div class="box-footer">
         <button nbButton [disabled]="vform.invalid" (click)="onCustomFormSubmit(vform)">{{subBtnName}}</button>
         &nbsp;
-        <button nbButton type="reset" routerLink='/pages/lot/view-lot-list' id="Cancel">Cancel</button>
+        <button nbButton type="reset" routerLink='/pages/batch/view-batch-list' id="Cancel">Cancel</button>
       </div>
     </form>
   </nb-card-body>

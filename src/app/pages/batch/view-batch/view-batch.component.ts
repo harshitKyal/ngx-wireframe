@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LotMast } from '../../../@theme/model/lot-class';
-import { LotService } from '../../../@theme/services/lot.service';
+import { BatchMast } from '../../../@theme/model/batch-class';
+import { BatchService } from '../../../@theme/services/batch.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { PermissionService } from '../../../@theme/services/permission.service';
@@ -15,27 +15,27 @@ import { Subscription } from 'rxjs';
 import { ViewReqObj } from '../../../@theme/model/user-class';
 
 @Component({
-  selector: 'ngx-view-lot',
-  templateUrl: './view-lot.component.html',
-  styleUrls: ['./view-lot.component.scss']
+  selector: 'ngx-view-batch',
+  templateUrl: './view-batch.component.html',
+  styleUrls: ['./view-batch.component.scss']
 })
-export class ViewLotComponent implements OnInit, OnDestroy {
+export class ViewBatchComponent implements OnInit, OnDestroy {
 
-  lotList: LotMast[] = [];
+  batchList: BatchMast[] = [];
   currentUser;
   rowData;
   gridApi;
   gridColumnApi;
-  addLotPermission = 1;
+  addBatchPermission = 1;
   columnDefs = [
     { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
-    { headerName: 'Lot No.', field: 'lot_id', sortable: true, filter: true },
+    { headerName: 'Batch No.', field: 'batch_id', sortable: true, filter: true },
     { headerName: 'Quality Id', field: 'quality_id', sortable: true, filter: true },
     { headerName: 'Quality Name', field: 'quality_name', sortable: true, filter: true },
     { headerName: 'Quality Type', field: 'quality_type', sortable: true, filter: true },
   ];
   columnExportDefs = [
-    'lot_id', 'quality_id', 'quality_name', 'quality_type'];
+    'batch_id', 'quality_id', 'quality_name', 'quality_type'];
   currentUserId: any;
   currentUser$: Subscription;
   currentUserPermission = [];
@@ -45,9 +45,9 @@ export class ViewLotComponent implements OnInit, OnDestroy {
   radioSelected: any = 1;
 
   currentUserGroupUserIds : any;
-  lotReqObj = new ViewReqObj();
+  batchReqObj = new ViewReqObj();
 
-  constructor(private lotService: LotService, private router: Router, private tosterService: ToastrService
+  constructor(private batchService: BatchService, private router: Router, private tosterService: ToastrService
     , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
@@ -64,44 +64,44 @@ export class ViewLotComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.currentUserPermission.length) {
       this.currentUserPermission.forEach(ele => {
-        if (ele.form_name === 'Lot') {
-          // this.addLotPermission = ele.can_add;
-          this.addLotPermission = 1;
+        if (ele.form_name === 'Batch') {
+          // this.addBatchPermission = ele.can_add;
+          this.addBatchPermission = 1;
           this.viewAllDataPermission = ele.can_view_all;
           this.viewGroupDataPermission = ele.can_view_group;
           this.viewOwnDataPermission = ele.can_view;
 
-          this.lotReqObj.current_user_id = this.currentUserId;
-          this.lotReqObj.user_head_id = this.currentUser.user_head_id;
-          this.lotReqObj.group_user_ids = this.currentUserGroupUserIds;
+          this.batchReqObj.current_user_id = this.currentUserId;
+          this.batchReqObj.user_head_id = this.currentUser.user_head_id;
+          this.batchReqObj.group_user_ids = this.currentUserGroupUserIds;
         }
       })
     }
-    this.getLotData();
+    this.getBatchData();
   }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
-  getLotData(value?) {
+  getBatchData(value?) {
 
-    this.lotReqObj.view_all = false ;
-    this.lotReqObj.view_group= false ;
-    this.lotReqObj.view_own = false ;
+    this.batchReqObj.view_all = false ;
+    this.batchReqObj.view_group= false ;
+    this.batchReqObj.view_own = false ;
     
     if (value)
       this.radioSelected = value;
 
     //check which radio button is selected
     if (this.radioSelected == 1)
-      this.lotReqObj.view_own = true ;
+      this.batchReqObj.view_own = true ;
     else if (this.radioSelected == 2)
-      this.lotReqObj.view_group = true ;
+      this.batchReqObj.view_group = true ;
     else if (this.radioSelected == 3)
-      this.lotReqObj.view_all = true ;
+      this.batchReqObj.view_all = true ;
 
-    this.lotService.getAllLots(this.lotReqObj).subscribe(data => {
+    this.batchService.getAllBatchs(this.batchReqObj).subscribe(data => {
       if (!data[0].error) {
-        this.lotList = data[0].data;
+        this.batchList = data[0].data;
         this.rowData = data[0].data;
       } else {
         this.tosterService.error(data[0].message);
@@ -111,10 +111,10 @@ export class ViewLotComponent implements OnInit, OnDestroy {
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'entry_id') {
-        column.cellRendererFramework = CustomRendererLotComponent;
+        column.cellRendererFramework = CustomRendererBatchComponent;
         column.cellRendererParams = {
-          inRouterLink: '/pages/lot/edit-lot/',
-          inViewLink: '/pages/lot/view-lot/',
+          inRouterLink: '/pages/batch/edit-batch/',
+          inViewLink: '/pages/batch/view-batch/',
           action: this
         };
       }
@@ -125,11 +125,11 @@ export class ViewLotComponent implements OnInit, OnDestroy {
     this.gridColumnApi = params.columnApi;
     // this.getUserList(this.currentUserId);
   }
-  onAddLot() {
-    if (this.addLotPermission) {
-      this.router.navigate(['/pages/lot/add-lot']);
+  onAddBatch() {
+    if (this.addBatchPermission) {
+      this.router.navigate(['/pages/batch/add-batch']);
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to add lot. If you want to add lot ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to add batch. If you want to add batch ask admin for permission.');
       if (res) {
 
       } else {
@@ -158,22 +158,22 @@ export class ViewLotComponent implements OnInit, OnDestroy {
 
 @Component({
   template: `
-  <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editLot()"></i>
+  <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editBatch()"></i>
   <i class="ft-info font-medium-1 mr-2" style="color:#4ca6ff"></i>
-  <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteLot()"></i>`,
-  styleUrls: ['./view-lot.component.scss']
+  <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteBatch()"></i>`,
+  styleUrls: ['./view-batch.component.scss']
 })
 
-export class CustomRendererLotComponent implements AgRendererComponent {
+export class CustomRendererBatchComponent implements AgRendererComponent {
   params: any;
-  editLotPermission = 1;
-  deleteLotPermission = 1;
+  editBatchPermission = 1;
+  deleteBatchPermission = 1;
   currentUserId: any;
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
 
-  constructor(private router: Router, private _modalService: NgbModal, private lotService: LotService,
+  constructor(private router: Router, private _modalService: NgbModal, private batchService: BatchService,
     private toasterService: ToastrService, private permissionService: PermissionService, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
@@ -185,21 +185,21 @@ export class CustomRendererLotComponent implements AgRendererComponent {
   agInit(params: any): void {
     this.params = params;
     this.currentUserPermission.forEach(ele => {
-      if (ele.form_name === 'Lot') {
+      if (ele.form_name === 'Batch') {
         if (this.params.action.radioSelected == 1) {
-          this.editLotPermission = ele.can_edit;
-          this.deleteLotPermission = ele.can_delete;
+          this.editBatchPermission = ele.can_edit;
+          this.deleteBatchPermission = ele.can_delete;
         } else if (this.params.action.radioSelected == 2) {
-          this.editLotPermission = ele.can_edit_group;
-          this.deleteLotPermission = ele.can_delete_group;
+          this.editBatchPermission = ele.can_edit_group;
+          this.deleteBatchPermission = ele.can_delete_group;
         } else if (this.params.action.radioSelected == 3) {
-          this.editLotPermission = ele.can_edit_all;
-          this.deleteLotPermission = ele.can_delete_all;
+          this.editBatchPermission = ele.can_edit_all;
+          this.deleteBatchPermission = ele.can_delete_all;
         }
       }
     })
-    // this.editLotPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_lot);
-    // this.deleteLotPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_lot);
+    // this.editBatchPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_edit_batch);
+    // this.deleteBatchPermission = parseInt(JSON.parse(localStorage.getItem('currentUser')).can_delete_batch);
   }
   refresh(): boolean {
     return false;
@@ -209,11 +209,11 @@ export class CustomRendererLotComponent implements AgRendererComponent {
     //  this.router.navigate([this.params.inViewLink + 0]);
   }
 
-  editLot() {
-    if (this.editLotPermission) {
+  editBatch() {
+    if (this.editBatchPermission) {
       this.router.navigate([this.params.inRouterLink + this.params.value]);
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to edit lot. If you want to edit lot ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to edit batch. If you want to edit batch ask admin for permission.');
       if (res) {
 
       } else {
@@ -221,16 +221,16 @@ export class CustomRendererLotComponent implements AgRendererComponent {
       }
     }
   }
-  onDeleteLot() {
-    if (this.deleteLotPermission) {
+  onDeleteBatch() {
+    if (this.deleteBatchPermission) {
       const modalRef = this._modalService.open(ConfirmDialogComponent);
-      modalRef.componentInstance.titleFrom = 'Delete Lot ';
-      modalRef.componentInstance.message = 'Are you sure you want to delete this lot?';
+      modalRef.componentInstance.titleFrom = 'Delete Batch ';
+      modalRef.componentInstance.message = 'Are you sure you want to delete this batch?';
       modalRef.result
         .then((result) => {
           if (result) {
             const id = this.params.value;
-            this.lotService.deleteLotById(id).subscribe(data => {
+            this.batchService.deleteBatchById(id).subscribe(data => {
               if (!data[0].error) {
                 this.params.action.getBillData();
                 this.toasterService.success(data[0].message);
@@ -241,7 +241,7 @@ export class CustomRendererLotComponent implements AgRendererComponent {
           }
         });
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to delete lot. If you want to delete lot ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to delete batch. If you want to delete batch ask admin for permission.');
       if (res) {
 
       } else {

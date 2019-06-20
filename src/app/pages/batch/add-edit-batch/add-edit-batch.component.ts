@@ -5,32 +5,32 @@ import { ColDef } from 'ag-grid-community';
 import { NgForm } from '@angular/forms';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { LotData, LotMast, LotWeightMtrDetail } from '../../../@theme/model/lot-class';
+import { BatchMast, BatchData, BatchWeightMtrDetail } from '../../../@theme/model/batch-class';
 import { Quality } from '../../../@theme/model/quality-class';
-import { LotService } from '../../../@theme/services/lot.service';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
+import { BatchService } from '../../../@theme/services/batch.service';
 declare var $;
 @Component({
-  selector: 'app-add-edit-lot',
-  templateUrl: './add-edit-lot.component.html',
-  styleUrls: ['./add-edit-lot.component.scss']
+  selector: 'app-add-edit-batch',
+  templateUrl: './add-edit-batch.component.html',
+  styleUrls: ['./add-edit-batch.component.scss']
 })
-export class AddEditLotComponent implements OnInit, OnDestroy {
+export class AddEditBatchComponent implements OnInit, OnDestroy {
 
 
   flagDiv = false;
-  lotDataObj: LotData;
-  lotModal: LotMast;
+  batchDataObj: BatchData;
+  batchModal: BatchMast;
   id: any;
   subBtnName = '';
   topHeader = '';
   viewFlag = false;
   rowData: any;
   grList = [];
-  lotDataArray: LotData[] = [];
+  batchDataArray: BatchData[] = [];
   qualityViewReqObj = new ViewReqObj();
   currentUserId: any;
   currentUser$: Subscription;
@@ -39,7 +39,7 @@ export class AddEditLotComponent implements OnInit, OnDestroy {
   currentUserGroupUserIds: any;
 
   qualityList: Quality[] = [];
-  lotDetailObj: LotWeightMtrDetail[] = [];
+  batchDetailObj: BatchWeightMtrDetail[] = [];
   showDetailFlag = false;
   selectLabel = 'GR' + '    ' + 'BATCH NO' + '      ' + 'WEIGHT' + '      ' + 'METRE' + '      ' + 'NO OF CONES/TAKA';
   columnDefs = [
@@ -52,11 +52,11 @@ export class AddEditLotComponent implements OnInit, OnDestroy {
 
   ];
   unit = [{ 'id': 'wt', 'value': 'Weight' }, { 'id': 'mtr', 'value': 'Metre' }];
-  items: LotWeightMtrDetail[] = [];
+  items: BatchWeightMtrDetail[] = [];
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private qualityService: QualityService,
-    private router: Router, private lotService: LotService, private authService: AuthService) {
-    this.lotModal = new LotMast();
-    this.lotDataObj = new LotData();
+    private router: Router, private batchService: BatchService, private authService: AuthService) {
+    this.batchModal = new BatchMast();
+    this.batchDataObj = new BatchData();
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -85,23 +85,23 @@ export class AddEditLotComponent implements OnInit, OnDestroy {
   selectGr(gr) {
     this.flagDiv = false;
     const i = this.grList.findIndex(v => v.gr == gr.gr);
-    this.lotDataObj.gr = this.grList[i].gr;
-    this.lotDataObj.wt = this.grList[i].wt;
-    this.lotDataObj.mtr = this.grList[i].mtr;
-    this.lotDataObj.no_of_cones_taka = this.grList[i].no_of_cones;
-    this.lotDataObj.batch_no = this.grList[i].batch_no;
+    this.batchDataObj.gr = this.grList[i].gr;
+    this.batchDataObj.wt = this.grList[i].wt;
+    this.batchDataObj.mtr = this.grList[i].mtr;
+    this.batchDataObj.no_of_cones_taka = this.grList[i].no_of_cones;
+    this.batchDataObj.batch_no = this.grList[i].batch_no;
   }
 
   onQualitySelect(value) {
     const i = this.qualityList.findIndex(v => v.entry_id == value);
-    this.lotModal.quality_name = this.qualityList[i].quality_name;
-    this.lotModal.quality_type = this.qualityList[i].quality_type;
+    this.batchModal.quality_name = this.qualityList[i].quality_name;
+    this.batchModal.quality_type = this.qualityList[i].quality_type;
     // console.log('in on quality select ' , value)
     this.getGrListByQualityId(value);
   }
 
   getGrListByQualityId(qualityid) {
-    this.lotService.getGrListByQualityId(qualityid).subscribe(data => {
+    this.batchService.getGrListByQualityId(qualityid).subscribe(data => {
       if (!data[0].error) {
         this.grList = data[0].data;
         // console.log("in qq")
@@ -112,13 +112,13 @@ export class AddEditLotComponent implements OnInit, OnDestroy {
 
   onUnitSelect(value) {
     this.showDetailFlag = true;
-    this.lotDataObj.unit = value;
+    this.batchDataObj.unit = value;
   }
 
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
-        column.cellRendererFramework = CustomRendererLotDataComponent;
+        column.cellRendererFramework = CustomRendererBatchDataComponent;
         column.cellRendererParams = {
           // inRouterLink: '/user/edit-user/',
           action: this
@@ -144,23 +144,23 @@ export class AddEditLotComponent implements OnInit, OnDestroy {
     if (this.id != null) {
       if (this.id) {
         this.subBtnName = 'Update';
-        this.topHeader = 'Edit Lot';
+        this.topHeader = 'Edit Batch';
 
       } else {
-        this.topHeader = 'Lot View';
+        this.topHeader = 'Batch View';
         this.viewFlag = true;
       }
-      this.lotService.getLotById(this.id).subscribe(
+      this.batchService.getBatchById(this.id).subscribe(
         data => {
           if (!data[0].error) {
-            this.lotModal = data[0].data.lot[0];
-            this.lotDataArray = data[0].data.lot_data
-            this.lotDataArray.forEach((ele, index) => {
+            this.batchModal = data[0].data.batch[0];
+            this.batchDataArray = data[0].data.batch_data
+            this.batchDataArray.forEach((ele, index) => {
               ele.index = index + 1;
             });
-            this.getGrListByQualityId(this.lotModal.quality_entry_id);
-            this.rowData = [...this.lotDataArray]
-            this.lotModal.lot_data = this.lotDataArray
+            this.getGrListByQualityId(this.batchModal.quality_entry_id);
+            this.rowData = [...this.batchDataArray]
+            this.batchModal.batch_data = this.batchDataArray
           } else {
             this.toasterService.error(data.message);
           }
@@ -169,7 +169,7 @@ export class AddEditLotComponent implements OnInit, OnDestroy {
         });
     } else {
       this.subBtnName = 'Save';
-      this.topHeader = 'Add Lot';
+      this.topHeader = 'Add Batch';
     }
   }
 
@@ -183,96 +183,96 @@ export class AddEditLotComponent implements OnInit, OnDestroy {
   onAddRecord(form: NgForm) {
     let flag = 0;
     let j = 1;
-    if (!this.lotDataArray.length) {
-      this.lotDataObj.index = j;
+    if (!this.batchDataArray.length) {
+      this.batchDataObj.index = j;
     } else {
-      this.lotDataArray.forEach(ele => {
-        if (ele.gr == this.lotDataObj.gr) {
+      this.batchDataArray.forEach(ele => {
+        if (ele.gr == this.batchDataObj.gr) {
           if (this.items.length) {
             this.items.forEach((ele, index) => {
               if (ele.entry_id === undefined) {
-                let obj = new LotWeightMtrDetail();
+                let obj = new BatchWeightMtrDetail();
                 obj = ele;
                 obj.quantity = ele.value;
-                this.lotDataObj.lot_quality_detail.push(obj);
+                this.batchDataObj.batch_quality_detail.push(obj);
               }
             });
           } else {
-            this.lotDataObj.lot_quality_detail = [];
+            this.batchDataObj.batch_quality_detail = [];
           }
-          ele = this.lotDataObj
+          ele = this.batchDataObj
           flag = 1;
         }
       });
       if (!flag) {
-        this.lotDataObj.index = this.lotDataArray.length + 1;
+        this.batchDataObj.index = this.batchDataArray.length + 1;
         if (this.items.length) {
-          this.lotDataObj.lot_quality_detail = [];
+          this.batchDataObj.batch_quality_detail = [];
           this.items.forEach((ele, index) => {
-            let obj = new LotWeightMtrDetail();
+            let obj = new BatchWeightMtrDetail();
             obj.quantity = ele.value;
-            this.lotDataObj.lot_quality_detail.push(obj);
+            this.batchDataObj.batch_quality_detail.push(obj);
           });
-          this.lotDataArray.push(this.lotDataObj);
+          this.batchDataArray.push(this.batchDataObj);
         } else {
-          this.lotDataObj.lot_quality_detail = [];
+          this.batchDataObj.batch_quality_detail = [];
         }
       }
     }
     // if (this.items.length) {
-    //   this.lotDataObj.lot_quality_detail = [];
+    //   this.batchDataObj.batch_quality_detail = [];
     //   this.items.forEach((ele, index) => {
-    //     let obj = new LotWeightMtrDetail();
+    //     let obj = new BatchWeightMtrDetail();
     //     obj.quantity = ele.value;
-    //     this.lotDataObj.lot_quality_detail.push(obj);
+    //     this.batchDataObj.batch_quality_detail.push(obj);
     //   });
     // }
-    // this.lotDataObj.lot_quality_detail = this.lotDetailObj;
-    // this.lotDataArray.forEach(ele => {
-    //   if (ele.gr == this.lotDataObj.gr) {
-    //     ele = this.lotDataObj
+    // this.batchDataObj.batch_quality_detail = this.batchDetailObj;
+    // this.batchDataArray.forEach(ele => {
+    //   if (ele.gr == this.batchDataObj.gr) {
+    //     ele = this.batchDataObj
     //     flag = 1;
     //   }
     // });
     // if (!flag) {
-    //   this.lotDataArray.push(this.lotDataObj);
+    //   this.batchDataArray.push(this.batchDataObj);
     // }
-    this.lotDetailObj = [];
-    this.rowData = [...this.lotDataArray];
-    this.lotDataObj = new LotData();
+    this.batchDetailObj = [];
+    this.rowData = [...this.batchDataArray];
+    this.batchDataObj = new BatchData();
     form.resetForm();
   }
 
   onEditRecord(data) {
-    let i = this.lotDataArray.findIndex(v => v.index == data);
+    let i = this.batchDataArray.findIndex(v => v.index == data);
     this.items = [];
-    this.lotDataArray[i].lot_quality_detail.forEach(ele => {
+    this.batchDataArray[i].batch_quality_detail.forEach(ele => {
       this.showDetailFlag = true;
       ele.value = ele.quantity !== undefined ? ele.quantity : ele.value;
       ele.display = ele.quantity !== undefined ? ele.quantity : ele.value;
       this.items.push(ele);
     })
-    this.lotDetailObj = this.lotDataArray[i].lot_quality_detail;
-    this.lotDataObj = this.lotDataArray[i];
+    this.batchDetailObj = this.batchDataArray[i].batch_quality_detail;
+    this.batchDataObj = this.batchDataArray[i];
   }
 
   deleteRecord(data) {
-    let i = this.lotDataArray.findIndex(v => v.index == data);
-    this.lotDataArray.splice(i, 1);
-    this.rowData = [...this.lotDataArray]
+    let i = this.batchDataArray.findIndex(v => v.index == data);
+    this.batchDataArray.splice(i, 1);
+    this.rowData = [...this.batchDataArray]
   }
 
   onCustomFormSubmit(form: NgForm) {
-    this.lotModal.lot_data = this.lotDataArray;
-    console.log('lot', this.lotModal);
+    this.batchModal.batch_data = this.batchDataArray;
+    console.log('batch', this.batchModal);
     // for update
     if (this.id) {
-      this.lotService.updateLot(this.lotModal).subscribe(data => {
+      this.batchService.updateBatch(this.batchModal).subscribe(data => {
         console.log(data)
         if (!data[0].error) {
           this.toasterService.success(data[0].message);
           form.resetForm();
-          this.router.navigate(['/pages/lot/view-lot-list']);
+          this.router.navigate(['/pages/batch/view-batch-list']);
         } else {
           this.toasterService.error(data[0].message);
         }
@@ -280,13 +280,13 @@ export class AddEditLotComponent implements OnInit, OnDestroy {
         this.toasterService.error('Server Error');
       });
     } else {
-      console.log(this.lotModal)
-      this.lotService.addLot(this.lotModal).subscribe(data => {
+      console.log(this.batchModal)
+      this.batchService.addBatch(this.batchModal).subscribe(data => {
         data = data[0]
         if (!data.error) {
           this.toasterService.success(data.message);
           form.resetForm();
-          this.router.navigate(['/pages/lot/view-lot-list']);
+          this.router.navigate(['/pages/batch/view-batch-list']);
         } else {
           this.toasterService.error(data.message);
         }
@@ -300,10 +300,10 @@ export class AddEditLotComponent implements OnInit, OnDestroy {
   template: `
   <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editRecord()"></i>
   <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteRecord()"></i>`,
-  styleUrls: ['./add-edit-lot.component.scss']
+  styleUrls: ['./add-edit-batch.component.scss']
 })
 
-export class CustomRendererLotDataComponent implements AgRendererComponent {
+export class CustomRendererBatchDataComponent implements AgRendererComponent {
   params: any;
 
   constructor() {

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewLotComponent } from './view-lot.component';
+import { AddEditBatchComponent } from './add-edit-batch.component';
 
-describe('ViewLotComponent', () => {
-  let component: ViewLotComponent;
-  let fixture: ComponentFixture<ViewLotComponent>;
+describe('AddEditBatchComponent', () => {
+  let component: AddEditBatchComponent;
+  let fixture: ComponentFixture<AddEditBatchComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewLotComponent ]
+      declarations: [ AddEditBatchComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewLotComponent);
+    fixture = TestBed.createComponent(AddEditBatchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

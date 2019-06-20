@@ -7,9 +7,9 @@ import { FabricInGuardService } from '../@theme/guard/fabric-in-guard.service';
 import { UserGuardService } from '../@theme/guard/user-guard.service';
 import { PartyGuardService } from '../@theme/guard/party-guard.service';
 import { QualityGuardService } from '../@theme/guard/quality-guard.service';
-import { LotGuardService } from '../@theme/guard/lot-guard.service';
 import { SupplierGuardService } from '../@theme/guard/supplier-guard.service';
 import { ShadeGuardService } from '../@theme/guard/shade-guard.service';
+import { BatchGuardService } from '../@theme/guard/batch-guard.service';
 
 const routes: Routes = [{
   path: '',
@@ -44,10 +44,10 @@ const routes: Routes = [{
       canLoad: [FabricInGuardService],
     },
     {
-      path: 'lot',
-      loadChildren: './lot/lot.module#LotModule',
-      canActivate: [LotGuardService],
-      canLoad: [LotGuardService],
+      path: 'batch',
+      loadChildren: './batch/batch.module#BatchModule',
+      canActivate: [BatchGuardService],
+      canLoad: [BatchGuardService],
     },
     {
       path: 'program',

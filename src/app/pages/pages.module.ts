@@ -7,7 +7,7 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PartyModule } from './party/party.module';
 import { QualityModule } from './quality/quality.module';
 import { UserModule } from './user/user.module';
-import { LotModule } from './lot/lot.module';
+import { BatchModule } from './batch/batch.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { ProgramModule } from './program/program.module';
 import { ShadeModule } from './shade/shade.module';
@@ -27,7 +27,7 @@ const PAGES_COMPONENTS = [
     QualityModule,
     FabricInModule,
     UserModule,
-    LotModule,
+    BatchModule,
     SupplierModule,
     ProgramModule,
     ShadeModule,

@@ -21,7 +21,7 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     'have_user', 'can_add_user', 'can_view_user', 'can_edit_user', 'can_delete_user', 'have_party', 'can_add_party', 'can_edit_party', 'can_view_party', 'can_delete_party'
     , 'have_stock', 'can_add_stock', 'can_edit_stock', 'can_view_stock', 'can_delete_stock'];
 
-  tableForms = ["Party", "Quality", "User", "Fabric In", "Lot", "Program", "Shade", "Supplier", "Supplier Rate", "Shade", "Program", "Colour Stock"];
+  tableForms = ["Party", "Quality", "User", "Fabric In", "Batch", "Program", "Shade", "Supplier", "Supplier Rate", "Shade", "Program", "Colour Stock"];
   designation = ['Manager', 'Master', 'Accountant', 'Staff', 'Helper']
 
 

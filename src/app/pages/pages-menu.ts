@@ -42,12 +42,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Lot',
+    title: 'Batch',
     icon: 'nb-layout-default',
     children: [
       {
-        title: 'View Lot',
-        link: '/pages/lot/view-lot-list',
+        title: 'View Batch',
+        link: '/pages/batch/view-batch-list',
       },
     ],
   },

@@ -10,7 +10,7 @@ import { PermissionService } from '../services/permission.service';
 @Injectable({
   providedIn: 'root'
 })
-export class LotGuardService {
+export class BatchGuardService {
 
   currentUser: User;
   currentUser$: Subscription;
@@ -24,7 +24,7 @@ export class LotGuardService {
         this.currentUserPermission = data.user_permission;
         if (this.currentUserPermission.length) {
           this.currentUserPermission.forEach(ele => {
-            if (ele.form_name === 'Lot') {
+            if (ele.form_name === 'Batch') {
               this.userPermission = new UserPermission();
               this.userPermission = ele;
             }
@@ -37,7 +37,7 @@ export class LotGuardService {
     if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Lot. If you want to View Lot ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Batch. If you want to View Batch ask admin for permission.');
       if (res) {
 
       } else {
@@ -50,7 +50,7 @@ export class LotGuardService {
     if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Lot. If you want to View Lot ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Batch. If you want to View Batch ask admin for permission.');
       if (res) {
 
       } else {
