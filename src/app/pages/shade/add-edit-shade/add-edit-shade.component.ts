@@ -11,13 +11,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PartyService } from '../../../@theme/services/party.service';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { ColDef } from 'ag-grid-community';
-import { CustomRendererStockRecordComponent } from '../../bill-in/add-edit-bill-in/add-edit-bill-in.component';
 import { NgForm } from '@angular/forms';
 import { ShadeService } from '../../../@theme/services/shade.service';
 import { Supplier, SupplierItemRecord } from '../../../@theme/model/supplier-class';
 import { SupplierService } from '../../../@theme/services/supplier.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
+import { CustomRendererStockRecordComponent } from '../../fabric-in/add-edit-fabric-in/add-edit-fabric-in.component';
 
 @Component({
   selector: 'ngx-add-edit-shade',

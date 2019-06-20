@@ -32,12 +32,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Bill',
+    title: 'Fabric In',
     icon: 'nb-layout-default',
     children: [
       {
-        title: 'View Bill',
-        link: '/pages/bill/view-bill-list',
+        title: 'View Fabric In',
+        link: '/pages/fabric-in/view-fabric-in-list',
       },
     ],
   },

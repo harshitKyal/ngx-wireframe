@@ -5,10 +5,10 @@ import { NgForm } from '@angular/forms';
 import { ColDef } from 'ag-grid-community';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Bill, BillRecord } from '../../../@theme/model/bill-class';
+import { Fabric, FabricInRecord } from '../../../@theme/model/fabric-in-class';
 import { Party } from '../../../@theme/model/party-class';
 import { Quality } from '../../../@theme/model/quality-class';
-import { BillInService } from '../../../@theme/services/bill-in.service';
+import { FabricInService } from '../../../@theme/services/fabric-in.service';
 import { PartyService } from '../../../@theme/services/party.service';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
@@ -18,21 +18,21 @@ import { AuthService } from '../../../@theme/services/auth.service';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-add-edit-bill-in',
-  templateUrl: './add-edit-bill-in.component.html',
-  styleUrls: ['./add-edit-bill-in.component.scss']
+  selector: 'app-add-edit-fabric-in',
+  templateUrl: './add-edit-fabric-in.component.html',
+  styleUrls: ['./add-edit-fabric-in.component.scss']
 })
-export class AddEditBillInComponent implements OnInit, OnDestroy {
+export class AddEditFabricInComponent implements OnInit, OnDestroy {
 
-  billModal: Bill;
+  fabricModal: Fabric;
   id: any;
   subBtnName = '';
   topHeader = '';
   viewFlag = false;
   rowData: any;
   partyList: Party[] = [];
-  billRecord: BillRecord[] = [];
-  record: BillRecord;
+  fabricRecord: FabricInRecord[] = [];
+  record: FabricInRecord;
   qualityList: Quality[] = [];
   qualityViewReqObj = new ViewReqObj();
   currentUserId: any;
@@ -54,11 +54,11 @@ export class AddEditBillInComponent implements OnInit, OnDestroy {
   ];
   partyReqObj = new ViewReqObj();
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
-    private router: Router, private billService: BillInService, private qualityService: QualityService,
+    private router: Router, private fabricService: FabricInService, private qualityService: QualityService,
     private datePipe: DatePipe,
     private authService: AuthService) {
-    this.billModal = new Bill();
-    this.record = new BillRecord();
+    this.fabricModal = new Fabric();
+    this.record = new FabricInRecord();
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -131,20 +131,20 @@ export class AddEditBillInComponent implements OnInit, OnDestroy {
     if (this.id != null) {
       if (this.id) {
         this.subBtnName = 'Update';
-        this.topHeader = 'Edit Bill';
+        this.topHeader = 'Edit Fabric In';
 
       } else {
-        this.topHeader = 'Bill View';
+        this.topHeader = 'Fabric In View';
         this.viewFlag = true;
       }
-      this.billService.getBillById(this.id).subscribe(
+      this.fabricService.getFabricInById(this.id).subscribe(
         data => {
           if (!data[0].error) {
-            this.billModal = data[0].data.stock[0];
-            this.billRecord = data[0].data.bill_record;
-            this.billModal.bill_date = this.datePipe.transform(this.billModal.bill_date, "yyyy-MM-dd");
-            this.billModal.chl_date = this.datePipe.transform(this.billModal.chl_date, "yyyy-MM-dd");
-            this.billRecord.forEach((ele, index) => {
+            this.fabricModal = data[0].data.stock[0];
+            this.fabricRecord = data[0].data.bill_record;
+            this.fabricModal.bill_date = this.datePipe.transform(this.fabricModal.bill_date, "yyyy-MM-dd");
+            this.fabricModal.chl_date = this.datePipe.transform(this.fabricModal.chl_date, "yyyy-MM-dd");
+            this.fabricRecord.forEach((ele, index) => {
               ele.index = index + 1;
               let i = this.qualityList.findIndex(v => v.entry_id == ele.quality_entry_id);
               if (i > -1) {
@@ -152,8 +152,8 @@ export class AddEditBillInComponent implements OnInit, OnDestroy {
                 ele.quality_type = this.qualityList[i].quality_type;
               }
             })
-            this.rowData = [...this.billRecord]
-            this.billModal.bill_record = this.billRecord
+            this.rowData = [...this.fabricRecord]
+            this.fabricModal.fabric_record = this.fabricRecord
           } else {
             this.toasterService.error(data.message);
           }
@@ -176,49 +176,49 @@ export class AddEditBillInComponent implements OnInit, OnDestroy {
   onAddRecord(form: NgForm) {
     let flag = 0;
     let j = 1;
-    if (this.billRecord.length) {
+    if (this.fabricRecord.length) {
       this.record.index = j;
     } else {
-      this.record.index = this.billRecord.length + 1;
+      this.record.index = this.fabricRecord.length + 1;
     }
-    this.billRecord.forEach(ele => {
+    this.fabricRecord.forEach(ele => {
       if (ele.gr == this.record.gr) {
         ele = this.record
         flag = 1;
       }
     });
     if (!flag) {
-      this.billRecord.push(this.record);
+      this.fabricRecord.push(this.record);
     }
-    this.rowData = [...this.billRecord];
-    this.record = new BillRecord();
+    this.rowData = [...this.fabricRecord];
+    this.record = new FabricInRecord();
     form.resetForm();
   }
 
   onEditRecord(data) {
-    let i = this.billRecord.findIndex(v => v.index == data);
-    this.record = this.billRecord[i];
+    let i = this.fabricRecord.findIndex(v => v.index == data);
+    this.record = this.fabricRecord[i];
   }
 
   deleteRecord(data) {
-    let i = this.billRecord.findIndex(v => v.index == data);
-    this.billRecord.splice(i, 1);
-    this.rowData = [...this.billRecord]
+    let i = this.fabricRecord.findIndex(v => v.index == data);
+    this.fabricRecord.splice(i, 1);
+    this.rowData = [...this.fabricRecord]
   }
 
   onCustomFormSubmit(form: NgForm) {
-    this.billModal.bill_record = this.billRecord;
-    console.log('bill', this.billModal);
+    this.fabricModal.fabric_record = this.fabricRecord;
+    console.log('bill', this.fabricModal);
     // for update
     if (this.id) {
-      this.billService.updateBill(this.billModal).subscribe(data => {
+      this.fabricService.updateFabricIn(this.fabricModal).subscribe(data => {
         console.log(data)
         // data = data[0].data
         // console.log(data)
         if (!data[0].error) {
           this.toasterService.success(data[0].message);
           form.resetForm();
-          this.router.navigate(['/pages/bill/view-bill-list']);
+          this.router.navigate(['/pages/fabric-in/view-fabric-in-list']);
         } else {
           this.toasterService.error(data[0].message);
         }
@@ -227,13 +227,13 @@ export class AddEditBillInComponent implements OnInit, OnDestroy {
       });
     } else {
       //for add
-      console.log(this.billModal)
-      this.billService.addBill(this.billModal).subscribe(data => {
+      console.log(this.fabricModal)
+      this.fabricService.addFabricIn(this.fabricModal).subscribe(data => {
         data = data[0]
         if (!data.error) {
           this.toasterService.success(data.message);
           form.resetForm();
-          this.router.navigate(['/pages/bill/view-bill-list']);
+          this.router.navigate(['/pages/fabric-in/view-fabric-in-list']);
         } else {
           this.toasterService.error(data.message);
         }
@@ -247,7 +247,7 @@ export class AddEditBillInComponent implements OnInit, OnDestroy {
   template: `
   <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editRecord()"></i>
   <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteRecord()"></i>`,
-  styleUrls: ['./add-edit-bill-in.component.scss']
+  styleUrls: ['./add-edit-fabric-in.component.scss']
 })
 
 export class CustomRendererStockRecordComponent implements AgRendererComponent {

@@ -8,7 +8,7 @@ import { PermissionService } from '../services/permission.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BillInGuardService implements CanLoad, CanActivate {
+export class FabricInGuardService implements CanLoad, CanActivate {
 
   currentUser: User;
   currentUser$: Subscription;
@@ -16,14 +16,14 @@ export class BillInGuardService implements CanLoad, CanActivate {
   userPermission: UserPermission;
 
   constructor(private router: Router, private activateroute: ActivatedRoute,
-    private authService: AuthService, private permissionService:PermissionService) {
+    private authService: AuthService, private permissionService: PermissionService) {
     this.currentUser$ = this.authService.currentUser.subscribe(data => {
       if (data != null) {
         this.currentUser = data;
         this.currentUserPermission = data.user_permission;
         if (this.currentUserPermission.length) {
           this.currentUserPermission.forEach(ele => {
-            if (ele.form_name === 'Bill') {
+            if (ele.form_name === 'Fabric In') {
               this.userPermission = new UserPermission();
               this.userPermission = ele;
             }
@@ -39,7 +39,7 @@ export class BillInGuardService implements CanLoad, CanActivate {
     if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Bill. If you want to View Bill ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Fabric In. If you want to View Fabric In ask admin for permission.');
       if (res) {
 
       } else {
@@ -54,7 +54,7 @@ export class BillInGuardService implements CanLoad, CanActivate {
     if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Bill. If you want to View Bill ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Fabric In. If you want to View Fabric In ask admin for permission.');
       if (res) {
 
       } else {

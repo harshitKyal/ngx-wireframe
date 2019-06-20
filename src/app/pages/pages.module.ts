@@ -6,13 +6,13 @@ import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PartyModule } from './party/party.module';
 import { QualityModule } from './quality/quality.module';
-import { BillInModule } from './bill-in/bill-in.module';
 import { UserModule } from './user/user.module';
 import { LotModule } from './lot/lot.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { ProgramModule } from './program/program.module';
 import { ShadeModule } from './shade/shade.module';
 import { ColourStockModule } from './colour-stock/colour-stock.module';
+import { FabricInModule } from './fabric-in/fabric-in.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -25,7 +25,7 @@ const PAGES_COMPONENTS = [
     MiscellaneousModule,
     PartyModule,
     QualityModule,
-    BillInModule,
+    FabricInModule,
     UserModule,
     LotModule,
     SupplierModule,

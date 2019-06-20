@@ -1,4 +1,4 @@
-export class Bill {
+export class Fabric {
     entry_id: any;
     stock_id: any;
     stock_in_type: any;
@@ -12,7 +12,7 @@ export class Bill {
     batch_no: any;
     remark: any;
     bill_id: any;
-    bill_record: BillRecord[];
+    fabric_record: FabricInRecord[];
     record_count: any;
     created_date: any;
     updated_date: any;
@@ -20,7 +20,7 @@ export class Bill {
     updated_by: any;
 }
 
-export class BillRecord {
+export class FabricInRecord {
     index: any;
     entry_id: any;
     control_id: any;

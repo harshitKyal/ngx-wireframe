@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Bill } from '../../../@theme/model/bill-class';
-import { BillInService } from '../../../@theme/services/bill-in.service';
+import { Fabric } from '../../../@theme/model/fabric-in-class';
+import { FabricInService } from '../../../@theme/services/fabric-in.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { PermissionService } from '../../../@theme/services/permission.service';
@@ -15,18 +15,18 @@ import { AuthService } from '../../../@theme/services/auth.service';
 import { ViewReqObj } from '../../../@theme/model/user-class';
 
 @Component({
-  selector: 'ngx-view-bill-in',
-  templateUrl: './view-bill-in.component.html',
-  styleUrls: ['./view-bill-in.component.scss']
+  selector: 'ngx-view-fabric-in',
+  templateUrl: './view-fabric-in.component.html',
+  styleUrls: ['./view-fabric-in.component.scss']
 })
-export class ViewBillInComponent implements OnInit, OnDestroy {
+export class ViewFabricInComponent implements OnInit, OnDestroy {
 
 
-  billList: Bill[] = [];
+  fabricList: Fabric[] = [];
   rowData;
   gridApi;
   gridColumnApi;
-  addBillPermission = 1;
+  addFabricPermission = 1;
   columnDefs = [
     { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
     { headerName: 'Stock Id', field: 'stock_id', sortable: true, filter: true, width: 100 },
@@ -49,10 +49,10 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
   viewAllDataPermission: any = false;
   viewOwnDataPermission: any = false;
   viewGroupDataPermission = false;
-  currentUserGroupUserIds ;
+  currentUserGroupUserIds;
   radioSelected: any = 1;
-  billReqObj = new ViewReqObj();
-  constructor(private billService: BillInService, private router: Router, private tosterService: ToastrService
+  fabricInReqObj = new ViewReqObj();
+  constructor(private fabricService: FabricInService, private router: Router, private tosterService: ToastrService
     , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
@@ -69,43 +69,43 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.currentUserPermission.length) {
       this.currentUserPermission.forEach(ele => {
-        if (ele.form_name === 'Bill') {
+        if (ele.form_name === 'Fabric In') {
           // this.addUserPermission = ele.can_add;
-          this.addBillPermission = 1;
+          this.addFabricPermission = 1;
           this.viewAllDataPermission = ele.can_view_all;
           this.viewGroupDataPermission = ele.can_view_group;
           this.viewOwnDataPermission = ele.can_view;
-          this.billReqObj.current_user_id = this.currentUserId;
-          this.billReqObj.user_head_id = this.currentUser.user_head_id;
-          this.billReqObj.group_user_ids = this.currentUserGroupUserIds;
+          this.fabricInReqObj.current_user_id = this.currentUserId;
+          this.fabricInReqObj.user_head_id = this.currentUser.user_head_id;
+          this.fabricInReqObj.group_user_ids = this.currentUserGroupUserIds;
         }
       })
     }
-    this.getBillData();
+    this.getFabricInData();
   }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
-  getBillData(value?) {
+  getFabricInData(value?) {
 
-    this.billReqObj.view_all = false ;
-    this.billReqObj.view_group= false ;
-    this.billReqObj.view_own = false ;
-    
+    this.fabricInReqObj.view_all = false;
+    this.fabricInReqObj.view_group = false;
+    this.fabricInReqObj.view_own = false;
+
     if (value)
       this.radioSelected = value;
 
     //check which radio button is selected
     if (this.radioSelected == 1)
-      this.billReqObj.view_own = true ;
+      this.fabricInReqObj.view_own = true;
     else if (this.radioSelected == 2)
-      this.billReqObj.view_group = true ;
+      this.fabricInReqObj.view_group = true;
     else if (this.radioSelected == 3)
-      this.billReqObj.view_all = true ;
+      this.fabricInReqObj.view_all = true;
 
-    this.billService.getAllBills(this.billReqObj).subscribe(data => {
+    this.fabricService.getAllFabricIns(this.fabricInReqObj).subscribe(data => {
       if (!data[0].error) {
-        this.billList = data[0].data;
+        this.fabricList = data[0].data;
         this.rowData = data[0].data;
       } else {
         this.tosterService.error(data[0].message);
@@ -115,10 +115,10 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'entry_id') {
-        column.cellRendererFramework = CustomRendererBillInComponent;
+        column.cellRendererFramework = CustomRendererFabricInComponent;
         column.cellRendererParams = {
-          inRouterLink: '/pages/bill/edit-bill/',
-          inViewLink: '/pages/bill/view-bill/',
+          inRouterLink: '/pages/fabric-in/edit-fabric-in/',
+          inViewLink: '/pages/fabric-in/view-fabric-in/',
           action: this
         };
       }
@@ -129,11 +129,11 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
     this.gridColumnApi = params.columnApi;
     // this.getUserList(this.currentUserId);
   }
-  onAddBill() {
-    if (this.addBillPermission) {
-      this.router.navigate(['/pages/bill/add-bill']);
+  onAddFabricIn() {
+    if (this.addFabricPermission) {
+      this.router.navigate(['/pages/fabric-in/add-fabric-in']);
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to add bill. If you want to add bill ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to add Fabric In. If you want to add Fabric In detail ask admin for permission.');
       if (res) {
 
       } else {
@@ -162,22 +162,22 @@ export class ViewBillInComponent implements OnInit, OnDestroy {
 
 @Component({
   template: `
-  <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editBill()"></i>
-  <i class="ft-info font-medium-1 mr-2" style="color:#4ca6ff" (click)="viewBill()"></i>
-  <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteBill()"></i>`,
-  styleUrls: ['./view-bill-in.component.scss']
+  <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editFabric()"></i>
+  <i class="ft-info font-medium-1 mr-2" style="color:#4ca6ff" (click)="viewFabric()"></i>
+  <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteFabric()"></i>`,
+  styleUrls: ['./view-fabric-in.component.scss']
 })
 
-export class CustomRendererBillInComponent implements AgRendererComponent, OnDestroy {
+export class CustomRendererFabricInComponent implements AgRendererComponent, OnDestroy {
   params: any;
-  editBillPermission = 1;
-  deleteBillPermission = 1;
+  editFabricPermission = 1;
+  deleteFabricPermission = 1;
   currentUserId: any;
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
 
-  constructor(private router: Router, private _modalService: NgbModal, private billService: BillInService,
+  constructor(private router: Router, private _modalService: NgbModal, private fabricService: FabricInService,
     private toasterService: ToastrService, private permissionService: PermissionService, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
@@ -189,16 +189,16 @@ export class CustomRendererBillInComponent implements AgRendererComponent, OnDes
   agInit(params: any): void {
     this.params = params;
     this.currentUserPermission.forEach(ele => {
-      if (ele.form_name === 'Bill') {
+      if (ele.form_name === 'Fabric In') {
         if (this.params.action.radioSelected == 1) {
-          this.editBillPermission = ele.can_edit;
-          this.deleteBillPermission = ele.can_delete;
+          this.editFabricPermission = ele.can_edit;
+          this.deleteFabricPermission = ele.can_delete;
         } else if (this.params.action.radioSelected == 2) {
-          this.editBillPermission = ele.can_edit_group;
-          this.deleteBillPermission = ele.can_delete_group;
+          this.editFabricPermission = ele.can_edit_group;
+          this.deleteFabricPermission = ele.can_delete_group;
         } else if (this.params.action.radioSelected == 3) {
-          this.editBillPermission = ele.can_edit_all;
-          this.deleteBillPermission = ele.can_delete_all;
+          this.editFabricPermission = ele.can_edit_all;
+          this.deleteFabricPermission = ele.can_delete_all;
         }
       }
     })
@@ -212,15 +212,15 @@ export class CustomRendererBillInComponent implements AgRendererComponent, OnDes
     return false;
   }
 
-  viewBill() {
+  viewFabric() {
     //  this.router.navigate([this.params.inViewLink + 0]);
   }
 
-  editBill() {
-    if (this.editBillPermission) {
+  editFabric() {
+    if (this.editFabricPermission) {
       this.router.navigate([this.params.inRouterLink + this.params.value]);
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to edit bill. If you want to edit bill ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to edit Fabric In detail. If you want to edit Fabric In detail ask admin for permission.');
       if (res) {
 
       } else {
@@ -228,18 +228,18 @@ export class CustomRendererBillInComponent implements AgRendererComponent, OnDes
       }
     }
   }
-  onDeleteBill() {
-    if (this.deleteBillPermission) {
+  onDeleteFabric() {
+    if (this.deleteFabricPermission) {
       const modalRef = this._modalService.open(ConfirmDialogComponent);
-      modalRef.componentInstance.titleFrom = 'Delete Bill ';
-      modalRef.componentInstance.message = 'Are you sure you want to delete this bill?';
+      modalRef.componentInstance.titleFrom = 'Delete Fabric In detail ';
+      modalRef.componentInstance.message = 'Are you sure you want to delete this detail?';
       modalRef.result
         .then((result) => {
           if (result) {
             const id = this.params.value;
-            this.billService.deleteBillById(id).subscribe(data => {
+            this.fabricService.deleteFabricInById(id).subscribe(data => {
               if (!data[0].error) {
-                this.params.action.getBillData();
+                this.params.action.getFabricInData();
                 this.toasterService.success(data[0].message);
               } else {
                 this.toasterService.error(data[0].message);
@@ -248,7 +248,7 @@ export class CustomRendererBillInComponent implements AgRendererComponent, OnDes
           }
         });
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to delete bill. If you want to delete bill ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to delete Fabric In detail. If you want to delete Fabric In detail ask admin for permission.');
       if (res) {
 
       } else {

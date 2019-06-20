@@ -3,16 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
-import { BillInGuardService } from '../@theme/guard/bill-in-guard.service';
+import { FabricInGuardService } from '../@theme/guard/fabric-in-guard.service';
 import { UserGuardService } from '../@theme/guard/user-guard.service';
 import { PartyGuardService } from '../@theme/guard/party-guard.service';
 import { QualityGuardService } from '../@theme/guard/quality-guard.service';
 import { LotGuardService } from '../@theme/guard/lot-guard.service';
 import { SupplierGuardService } from '../@theme/guard/supplier-guard.service';
-import { AuthGuard } from '../@theme/guard/auth-guard.service';
 import { ShadeGuardService } from '../@theme/guard/shade-guard.service';
-import { ProgramGuardService } from '../@theme/guard/program-guard.service';
-import { ColourStockGuardService } from '../@theme/guard/colour-stock-guard.service';
 
 const routes: Routes = [{
   path: '',
@@ -41,10 +38,10 @@ const routes: Routes = [{
       canLoad: [UserGuardService]
     },
     {
-      path: 'bill',
-      loadChildren: './bill-in/bill-in.module#BillInModule',
-      canActivate: [BillInGuardService],
-      canLoad: [BillInGuardService],
+      path: 'fabric-in',
+      loadChildren: './fabric-in/fabric-in.module#FabricInModule',
+      canActivate: [FabricInGuardService],
+      canLoad: [FabricInGuardService],
     },
     {
       path: 'lot',

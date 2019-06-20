@@ -12,11 +12,11 @@ import { ProgramService } from '../../../@theme/services/program.service';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { ColDef } from 'ag-grid-community';
-import { CustomRendererStockRecordComponent } from '../../bill-in/add-edit-bill-in/add-edit-bill-in.component';
 import { NgForm } from '@angular/forms';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
+import { CustomRendererStockRecordComponent } from '../../fabric-in/add-edit-fabric-in/add-edit-fabric-in.component';
 
 @Component({
   selector: 'ngx-add-edit-program',

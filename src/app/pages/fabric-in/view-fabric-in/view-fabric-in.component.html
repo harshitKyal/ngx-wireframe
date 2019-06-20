@@ -1,13 +1,13 @@
 <nb-card>
-  <nb-card-header>Bill
-    <button style="float: right;margin-left: 10px" nbButton size="xsmall" status="info" (click)="onAddBill()">
-      Add Bill
+  <nb-card-header>Fabric In
+    <button style="float: right;margin-left: 10px" nbButton size="xsmall" status="info" (click)="onAddFabricIn()">
+      Add Fabric In
     </button>
     <button style="float: right;" nbButton size="xsmall" status="info" (click)="onExport()">Export</button>
   </nb-card-header>
   <nb-card-body>
     <div  *ngIf="viewGroupDataPermission && !viewAllDataPermission">
-      <nb-radio-group class="row ml-2 mb-2" [(ngModel)]="radioSelected" (valueChange)="getBillData($event)">
+      <nb-radio-group class="row ml-2 mb-2" [(ngModel)]="radioSelected" (valueChange)="getFabricInData($event)">
         <nb-radio [value]="1">
           View Own
         </nb-radio>
@@ -17,7 +17,7 @@
       </nb-radio-group>
     </div>
     <div *ngIf="viewGroupDataPermission && viewAllDataPermission">
-      <nb-radio-group class="row ml-2 mb-2" [(ngModel)]="radioSelected" (valueChange)="getBillData($event)">
+      <nb-radio-group class="row ml-2 mb-2" [(ngModel)]="radioSelected" (valueChange)="getFabricInData($event)">
         <nb-radio class="radio-inline" [value]="1">
           View Own
         </nb-radio>

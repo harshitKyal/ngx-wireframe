@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AddEditFabricInComponent } from './add-edit-fabric-in.component';
 
-import { BillInComponent } from './bill-in.component';
 
-describe('BillInComponent', () => {
-  let component: BillInComponent;
-  let fixture: ComponentFixture<BillInComponent>;
+describe('AddEditFabricInComponent', () => {
+  let component: AddEditFabricInComponent;
+  let fixture: ComponentFixture<AddEditFabricInComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BillInComponent ]
+      declarations: [ AddEditFabricInComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BillInComponent);
+    fixture = TestBed.createComponent(AddEditFabricInComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

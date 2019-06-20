@@ -4,27 +4,27 @@ import { ApiService } from './api.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BillInService {
+export class FabricInService {
 
   constructor(private apiService: ApiService) { }
 
-  getAllBills(billReqObj){
-    return this.apiService.apiCaller('post', '/stockList',billReqObj);
+  getAllFabricIns(billReqObj) {
+    return this.apiService.apiCaller('post', '/stockList', billReqObj);
   }
 
-  addBill(bill) {
-    return this.apiService.apiCaller('post', '/addStock',bill);
+  addFabricIn(bill) {
+    return this.apiService.apiCaller('post', '/addStock', bill);
   }
 
-  getBillById(id) {
+  getFabricInById(id) {
     return this.apiService.apiCaller('get', '/getStockById/' + id);
   }
 
-  updateBill(bill) {
+  updateFabricIn(bill) {
     return this.apiService.apiCaller('post', '/updateStock', bill);
   }
 
-  deleteBillById(id) {
+  deleteFabricInById(id) {
     return this.apiService.apiCaller('get', '/deleteStock/' + id);
   }
 }

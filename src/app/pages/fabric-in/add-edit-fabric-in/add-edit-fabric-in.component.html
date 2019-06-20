@@ -7,7 +7,7 @@
         <div class="col-md-2">
           <div class="form-group">
             <label>Stock Id</label>
-            <input type="text" class="form-control" [(ngModel)]="billModal.stock_id" name="stockId" #StockId="ngModel"
+            <input type="text" class="form-control" [(ngModel)]="fabricModal.stock_id" name="stockId" #StockId="ngModel"
               required />
             <div *ngIf="StockId.invalid && (StockId.dirty || StockId.touched)" class="errors">
               <div *ngIf="StockId.errors && StockId.errors.required">
@@ -19,7 +19,7 @@
         <div class="col-md-2">
           <div class="form-group">
             <label>Stock In Type</label>
-            <input type="text" class="form-control" [(ngModel)]="billModal.stock_in_type" name="stockType"
+            <input type="text" class="form-control" [(ngModel)]="fabricModal.stock_in_type" name="stockType"
               #StockType="ngModel" required />
             <div *ngIf="StockType.invalid && (StockType.dirty || StockType.touched)" class="errors">
               <div *ngIf="StockType.errors && StockType.errors.required">
@@ -32,7 +32,7 @@
           <div class="form-group">
             <label>Party Name</label>
             <!-- pattern -->
-            <select class="form-control" [(ngModel)]="billModal.party_name" name="partyname" #party="ngModel">
+            <select class="form-control" [(ngModel)]="fabricModal.party_name" name="partyname" #party="ngModel">
               <option disabled value="">Select Party Name
               </option>
               <option *ngFor="let party of partyList" [value]="party.party_name">{{party.party_name}}</option>
@@ -47,7 +47,7 @@
         <!-- <div class="col-md-3">
           <div class="form-group">
             <label>Transfer Challan No.</label>
-            <input type="text" class="form-control" [(ngModel)]="billModal.transfer_challan_no" name="transfer" />
+            <input type="text" class="form-control" [(ngModel)]="fabricModal.transfer_challan_no" name="transfer" />
           </div>
         </div>
         <div class="col-md-2">
@@ -58,7 +58,7 @@
         <div class="col-md-2">
           <div class="form-group">
             <label>Bill No.</label>
-            <input type="text" class="form-control" [(ngModel)]="billModal.bill_no" name="bill" #Bill="ngModel"
+            <input type="text" class="form-control" [(ngModel)]="fabricModal.bill_no" name="bill" #Bill="ngModel"
               required />
             <div *ngIf="Bill.invalid && (Bill.dirty || Bill.touched)" class="errors">
               <div *ngIf="Bill.errors && Bill.errors.required">
@@ -70,7 +70,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Bill Date</label>
-            <input type="date" class="form-control" [(ngModel)]="billModal.bill_date" name="billdate"
+            <input type="date" class="form-control" [(ngModel)]="fabricModal.bill_date" name="billdate"
               #BillDate="ngModel" required data-trigger="hover" data-placement="top" data-title="Date Opened"
               data-toggle="tooltip" />
             <div *ngIf="BillDate.invalid && (BillDate.dirty || BillDate.touched)" class="errors">
@@ -83,7 +83,7 @@
         <div class="col-md-2">
           <div class="form-group">
             <label>Chl No.</label>
-            <input type="text" class="form-control" [(ngModel)]="billModal.chl_no" name="chl" #Chl="ngModel" required />
+            <input type="text" class="form-control" [(ngModel)]="fabricModal.chl_no" name="chl" #Chl="ngModel" required />
             <div *ngIf="Chl.invalid && (Chl.dirty || Chl.touched)" class="errors">
               <div *ngIf="Chl.errors && Chl.errors.required">
                 Challan No. is required.
@@ -94,7 +94,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Chl Date</label>
-            <input type="date" class="form-control" [(ngModel)]="billModal.chl_date" name="chldate"
+            <input type="date" class="form-control" [(ngModel)]="fabricModal.chl_date" name="chldate"
               data-toggle="tooltip" #ChlDate="ngModel" data-trigger="hover" data-placement="top"
               data-title="Date Opened" required>
             <div *ngIf="ChlDate.invalid && (ChlDate.dirty || ChlDate.touched)" class="errors">
@@ -110,7 +110,7 @@
           <div class="form-group">
             <label>Batch</label>
             <!-- pattern -->
-            <input type="text" class="form-control" [(ngModel)]="billModal.batch_no" name="batchs" #Batch="ngModel"
+            <input type="text" class="form-control" [(ngModel)]="fabricModal.batch_no" name="batchs" #Batch="ngModel"
               required />
             <div *ngIf="Batch.invalid && (Batch.dirty || Batch.touched)" class="errors">
               <div *ngIf="Batch.errors && Batch.errors.required">
@@ -122,12 +122,12 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Remark</label>
-            <input type="text" class="form-control" [(ngModel)]="billModal.remark" name="remark" />
+            <input type="text" class="form-control" [(ngModel)]="fabricModal.remark" name="remark" />
           </div>
         </div>
       </div>
       <hr>
-      <div class="row table table-responsive" *ngIf="billRecord.length">
+      <div class="row table table-responsive" *ngIf="fabricRecord.length">
         <ag-grid-angular style="width: 100%; height:300px" class="ag-theme-balham" [rowData]="rowData"
           [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'>
         </ag-grid-angular>
@@ -250,7 +250,7 @@
       <div class="box-footer">
         <button [disabled]="vform.invalid" nbButton (click)="onCustomFormSubmit(vform)">{{subBtnName}}</button>
         &nbsp;
-        <button nbButton type="reset" routerLink='/pages/bill/view-bill-list' id="Cancel">Cancel</button>
+        <button nbButton type="reset" routerLink='/pages/fabric-in/view-fabric-in-list' id="Cancel">Cancel</button>
       </div>
     </form>
   </nb-card-body>

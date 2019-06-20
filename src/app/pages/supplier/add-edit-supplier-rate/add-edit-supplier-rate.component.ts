@@ -5,13 +5,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SupplierService } from '../../../@theme/services/supplier.service';
 import { NgForm } from '@angular/forms';
 import { ColDef } from 'ag-grid-community';
-import { CustomRendererStockRecordComponent } from '../../bill-in/add-edit-bill-in/add-edit-bill-in.component';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
+import { CustomRendererStockRecordComponent } from '../../fabric-in/add-edit-fabric-in/add-edit-fabric-in.component';
 
 @Component({
   selector: 'ngx-add-edit-supplier-rate',
