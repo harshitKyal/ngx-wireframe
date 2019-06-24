@@ -13,6 +13,7 @@ import { ProgramModule } from './program/program.module';
 import { ShadeModule } from './shade/shade.module';
 import { ColourStockModule } from './colour-stock/colour-stock.module';
 import { FabricInModule } from './fabric-in/fabric-in.module';
+import { ProcessModule } from './process/process.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -32,7 +33,8 @@ const PAGES_COMPONENTS = [
     ProgramModule,
     ShadeModule,
     ProgramModule,
-    ColourStockModule
+    ColourStockModule,
+    ProcessModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,

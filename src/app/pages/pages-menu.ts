@@ -62,6 +62,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Process',
+    icon: 'nb-layout-default',
+    children: [
+      {
+        title: 'View Process',
+        link: '/pages/process/view-process-list',
+      },
+    ],
+  },
+  {
     title: 'Shade',
     icon: 'nb-layout-default',
     children: [

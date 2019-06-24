@@ -10,6 +10,7 @@ import { QualityGuardService } from '../@theme/guard/quality-guard.service';
 import { SupplierGuardService } from '../@theme/guard/supplier-guard.service';
 import { ShadeGuardService } from '../@theme/guard/shade-guard.service';
 import { BatchGuardService } from '../@theme/guard/batch-guard.service';
+import { ProcessGuardService } from '../@theme/guard/process-guard.service';
 
 const routes: Routes = [{
   path: '',
@@ -54,6 +55,12 @@ const routes: Routes = [{
       loadChildren: './program/program.module#ProgramModule',
       // canActivate: [ProgramGuardService],
       // canLoad: [ProgramGuardService],
+    },
+    {
+      path: 'process',
+      loadChildren: './process/process.module#ProcessModule',
+      // canActivate: [ProcessGuardService],
+      // canLoad: [ProcessGuardService],
     },
     {
       path: 'supplier',

@@ -2,7 +2,7 @@ export class Fabric {
     entry_id: any;
     stock_id: any;
     stock_in_type: any;
-    transfer_challan_no: any;
+    batch: any;
     party_id: any = '';
     party_name: any;
     date: any;

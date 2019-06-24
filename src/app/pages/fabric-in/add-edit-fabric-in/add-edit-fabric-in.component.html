@@ -44,15 +44,12 @@
                 </div> -->
           </div>
         </div>
-        <!-- <div class="col-md-3">
-          <div class="form-group">
-            <label>Transfer Challan No.</label>
-            <input type="text" class="form-control" [(ngModel)]="fabricModal.transfer_challan_no" name="transfer" />
+        <div class="col-md-3">
+          <div class="mt-4">
+            <nb-checkbox name="Batch" [(ngModel)]="fabricModal.batch">Batch
+            </nb-checkbox>
           </div>
         </div>
-        <div class="col-md-2">
-          <button style="margin-top: 32px;" class="btn btn-primary btn-raised">Transfer</button>
-        </div> -->
       </div>
       <div class="row">
         <div class="col-md-2">
@@ -83,7 +80,8 @@
         <div class="col-md-2">
           <div class="form-group">
             <label>Chl No.</label>
-            <input type="text" class="form-control" [(ngModel)]="fabricModal.chl_no" name="chl" #Chl="ngModel" required />
+            <input type="text" class="form-control" [(ngModel)]="fabricModal.chl_no" name="chl" #Chl="ngModel"
+              required />
             <div *ngIf="Chl.invalid && (Chl.dirty || Chl.touched)" class="errors">
               <div *ngIf="Chl.errors && Chl.errors.required">
                 Challan No. is required.
