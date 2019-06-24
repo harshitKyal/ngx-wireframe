@@ -37,6 +37,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   shadeRecord: ShadeRecord[] = [];
   record: ShadeRecord;
   qualityList: Quality[] = [];
+  partyNameList: Party[] = [];
   currentUserId: any;
   currentUserHeadid: any;
   currentUser$: Subscription;
@@ -44,6 +45,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   currentUserGroupUserIds: any;
   supplierItemList: SupplierItemRecord[] = [];
   qualityViewReqObj = new ViewReqObj();
+  viewPartyReqOb = new ViewReqObj();
   columnDefs = [
     { headerName: 'Actions', field: 'index' },
     { headerName: 'Item Name', field: 'item_name' },
@@ -55,7 +57,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   ];
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private supplierService: SupplierService,
     private router: Router, private shadeService: ShadeService, private qualityService: QualityService,
-    private authService: AuthService) {
+    private authService: AuthService, private partyService: PartyService) {
     this.shadeModal = new Shade();
     this.record = new ShadeRecord();
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -74,6 +76,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.getQuality();
+    this.getPartyList();
     this.getSupplierItemList();
     this.onPageLoad();
   }
@@ -88,6 +91,24 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
         };
       }
     });
+  }
+
+  getPartyList() {
+    this.partyNameList = [];
+    this.viewPartyReqOb.view_group = true;
+    this.viewPartyReqOb.current_user_id = this.currentUserId;
+    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
+    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
+    this.partyService.getPartyList(this.viewPartyReqOb).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.partyNameList = data[0].data;
+        } else {
+          this.toasterService.error(data[0].message);
+        }
+      }, error => {
+        this.toasterService.error(error);
+      });
   }
 
   getQuality() {
@@ -124,7 +145,10 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
     this.shadeModal.quality_entry_id = this.qualityList[i].entry_id;
     this.shadeModal.quality_type = this.qualityList[i].quality_type;
     this.shadeModal.quality_name = this.qualityList[i].quality_name;
-    this.shadeModal.party_name = this.qualityList[i].party_name;
+    let partyIndex = this.partyNameList.findIndex(v => v.entry_id == this.qualityList[i].party_id);
+    if (partyIndex > -1) {
+      this.shadeModal.party_name = this.partyNameList[partyIndex].party_name;
+    }
   }
   HideShowSubForm() {
     this.flagDivSubForm = !this.flagDivSubForm;
@@ -155,7 +179,10 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
             this.shadeModal.quality_id = this.qualityList[i].quality_id;
             this.shadeModal.quality_entry_id = this.qualityList[i].entry_id;
             this.shadeModal.quality_type = this.qualityList[i].quality_type;
-            this.shadeModal.party_name = this.qualityList[i].party_name;
+            let partyIndex = this.partyNameList.findIndex(v => v.entry_id == this.qualityList[i].party_id);
+            if (partyIndex > -1) {
+              this.shadeModal.party_name = this.partyNameList[partyIndex].party_name;
+            }
             this.shadeRecord.forEach((ele, index) => {
               ele.index = index + 1;
               // let i = this.supplierItemList.findIndex(v => v.item_name == ele.item_name);

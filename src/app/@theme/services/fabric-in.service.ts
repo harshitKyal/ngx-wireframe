@@ -8,20 +8,24 @@ export class FabricInService {
 
   constructor(private apiService: ApiService) { }
 
-  getAllFabricIns(billReqObj) {
-    return this.apiService.apiCaller('post', '/stockList', billReqObj);
+  getAllFabricIns(fabricReqObj) {
+    return this.apiService.apiCaller('post', '/stockList', fabricReqObj);
   }
 
-  addFabricIn(bill) {
-    return this.apiService.apiCaller('post', '/addStock', bill);
+  getAllFabricByParty(fabricReqObj) {
+    return this.apiService.apiCaller('post', '/stockListByParty', fabricReqObj);
+  }
+
+  addFabricIn(fabric) {
+    return this.apiService.apiCaller('post', '/addStock', fabric);
   }
 
   getFabricInById(id) {
     return this.apiService.apiCaller('get', '/getStockById/' + id);
   }
 
-  updateFabricIn(bill) {
-    return this.apiService.apiCaller('post', '/updateStock', bill);
+  updateFabricIn(fabric) {
+    return this.apiService.apiCaller('post', '/updateStock', fabric);
   }
 
   deleteFabricInById(id) {

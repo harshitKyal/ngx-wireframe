@@ -12,6 +12,10 @@ export class ProgramService {
     return this.apiService.apiCaller('post', '/programList', programReqObj);
   }
 
+  getProgramGivenByList(programReqObj) {
+    return this.apiService.apiCaller('post', '/programGivenByList', programReqObj);
+  }
+
   addProgram(program) {
     return this.apiService.apiCaller('post', '/addProgram', program);
   }

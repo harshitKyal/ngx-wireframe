@@ -13,6 +13,8 @@ import * as XLSX from 'xlsx';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { ViewReqObj } from '../../../@theme/model/user-class';
+import { PartyService } from '../../../@theme/services/party.service';
+import { Party } from '../../../@theme/model/party-class';
 
 @Component({
   selector: 'ngx-view-fabric-in',
@@ -52,8 +54,12 @@ export class ViewFabricInComponent implements OnInit, OnDestroy {
   currentUserGroupUserIds;
   radioSelected: any = 1;
   fabricInReqObj = new ViewReqObj();
+  partyNameList: Party[] = [];
+  viewPartyReqOb = new ViewReqObj();
+
   constructor(private fabricService: FabricInService, private router: Router, private tosterService: ToastrService
-    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
+    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService,
+    private partyService: PartyService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -81,11 +87,30 @@ export class ViewFabricInComponent implements OnInit, OnDestroy {
         }
       })
     }
+    this.getPartyList();
     this.getFabricInData();
   }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
+  getPartyList() {
+    this.partyNameList = [];
+    this.viewPartyReqOb.view_group = true;
+    this.viewPartyReqOb.current_user_id = this.currentUserId;
+    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
+    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
+    this.partyService.getPartyList(this.viewPartyReqOb).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.partyNameList = data[0].data;
+        } else {
+          this.tosterService.error(data[0].message);
+        }
+      }, error => {
+        this.tosterService.error(error);
+      });
+  }
+
   getFabricInData(value?) {
 
     this.fabricInReqObj.view_all = false;
@@ -106,7 +131,13 @@ export class ViewFabricInComponent implements OnInit, OnDestroy {
     this.fabricService.getAllFabricIns(this.fabricInReqObj).subscribe(data => {
       if (!data[0].error) {
         this.fabricList = data[0].data;
-        this.rowData = data[0].data;
+        this.fabricList.forEach(ele => {
+          let i = this.partyNameList.findIndex(v => v.entry_id == ele.party_id);
+          if (i > -1) {
+            ele.party_name = this.partyNameList[i].party_name;
+          }
+        })
+        this.rowData = this.fabricList;
       } else {
         this.tosterService.error(data[0].message);
       }

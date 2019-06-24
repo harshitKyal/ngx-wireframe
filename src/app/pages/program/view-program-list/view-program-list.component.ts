@@ -13,6 +13,10 @@ import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import * as XLSX from 'xlsx';
+import { Quality } from '../../../@theme/model/quality-class';
+import { Party } from '../../../@theme/model/party-class';
+import { QualityService } from '../../../@theme/services/quality.service';
+import { PartyService } from '../../../@theme/services/party.service';
 
 @Component({
   selector: 'ngx-view-program-list',
@@ -46,10 +50,16 @@ export class ViewProgramListComponent implements OnInit {
   viewOwnDataPermission: any = false;
   viewGroupDataPermission = false;
   radioSelected: any = 1;
-  currentUserGroupUserIds : any;
+  currentUserGroupUserIds: any;
   programReqObj = new ViewReqObj();
+  qualityViewReqObj = new ViewReqObj();
+  qualityList: Quality[] = [];
+  partyNameList: Party[] = [];
+  viewPartyReqOb = new ViewReqObj();
+
   constructor(private programService: ProgramService, private router: Router, private tosterService: ToastrService
-    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
+    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService,
+    private qualityService: QualityService, private partyService: PartyService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -78,32 +88,72 @@ export class ViewProgramListComponent implements OnInit {
         }
       })
     }
+    this.getQualityData();
+    this.getPartyList();
     this.getProgramData();
   }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
+  getPartyList() {
+    this.partyNameList = [];
+    this.viewPartyReqOb.view_group = true;
+    this.viewPartyReqOb.current_user_id = this.currentUserId;
+    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
+    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
+    this.partyService.getPartyList(this.viewPartyReqOb).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.partyNameList = data[0].data;
+        } else {
+          this.tosterService.error(data[0].message);
+        }
+      }, error => {
+        this.tosterService.error(error);
+      });
+  }
+  getQualityData() {
+    this.qualityViewReqObj.current_user_id = this.currentUserId;
+    this.qualityViewReqObj.user_head_id = this.currentUser.user_head_id;
+    this.qualityViewReqObj.group_user_ids = this.currentUserGroupUserIds;
+    this.qualityViewReqObj.view_group = true;
+    this.qualityService.getAllQualityData(this.qualityViewReqObj).subscribe(data => {
+      if (!data[0].error) {
+        this.qualityList = data[0].data;
+      }
+    })
+  }
   getProgramData(value?) {
+    this.programReqObj.view_all = false;
+    this.programReqObj.view_group = false;
+    this.programReqObj.view_own = false;
 
-    this.programReqObj.view_all = false ;
-    this.programReqObj.view_group= false ;
-    this.programReqObj.view_own = false ;
-    
     if (value)
       this.radioSelected = value;
 
     //check which radio button is selected
     if (this.radioSelected == 1)
-      this.programReqObj.view_own = true ;
+      this.programReqObj.view_own = true;
     else if (this.radioSelected == 2)
-      this.programReqObj.view_group = true ;
+      this.programReqObj.view_group = true;
     else if (this.radioSelected == 3)
-      this.programReqObj.view_all = true ;
-  
+      this.programReqObj.view_all = true;
+
     this.programService.getAllPrograms(this.programReqObj).subscribe(data => {
       if (!data[0].error) {
         this.programList = data[0].data;
-        this.rowData = data[0].data;
+        this.programList.forEach(ele => {
+          const i = this.qualityList.findIndex(v => v.entry_id == ele.quality_id);
+          if (i > -1) {
+            ele.quality_name = this.qualityList[i].quality_name;
+            ele.quality_type = this.qualityList[i].quality_type;
+          }
+          const partyIndex = this.partyNameList.findIndex(v => v.entry_id == ele.party_id);
+          if (partyIndex > -1) {
+            ele.party_name = this.partyNameList[partyIndex].party_name;
+          }
+        });
+        this.rowData = this.programList;
       } else {
         this.tosterService.error(data[0].message);
       }

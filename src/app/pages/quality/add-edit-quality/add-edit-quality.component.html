@@ -72,7 +72,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Party Name</label>
-            <select class="form-control" [(ngModel)]="qualityModal.party_name" name="partyname" #partyName="ngModel"
+            <select class="form-control" [(ngModel)]="qualityModal.party_id" name="partyname" #partyName="ngModel"
               required>
               <option disabled value="">Select Party Name</option>
               <option *ngFor="let p of partyNameList" [value]="p.entry_id">{{p.party_name}}</option>

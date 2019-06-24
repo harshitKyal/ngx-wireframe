@@ -15,6 +15,8 @@ import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialo
 import { AuthService } from '../../../@theme/services/auth.service';
 import { Subscription } from 'rxjs';
 import { ViewReqObj } from '../../../@theme/model/user-class';
+import { Party } from '../../../@theme/model/party-class';
+import { PartyService } from '../../../@theme/services/party.service';
 
 @Component({
   selector: 'ngx-view-quality',
@@ -29,7 +31,7 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
     { headerName: 'Quality Name', field: 'quality_name', sortable: true, filter: 'agDateColumnFilter' },
     { headerName: 'Quality Type', field: 'quality_type', sortable: true, filter: true },
     { headerName: 'Quality Sub Type', field: 'quality_sub_type', sortable: true, filter: true },
-    { headerName: 'Party Name', field: 'party_name', sortable: true, filter: true },
+    { headerName: 'Party Name', field: 'party_id', sortable: true, filter: true },
   ];
   addQualityPermission = 0;
   rowData: any;
@@ -54,7 +56,7 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
         title: 'Quality Sub Type',
         filter: false,
       },
-      party_name: {
+      party_id: {
         title: 'Party Name',
         filter: false,
       },
@@ -83,20 +85,23 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
-  
+
   currentUserId: any;
   viewAllDataPermission: any = false;
   viewOwnDataPermission: any = false;
   viewGroupDataPermission = false;
   radioSelected: any = 1;
-  viewGroup : boolean = false ;
-  viewOwn :boolean = false ;
-  viewAll : boolean = false ;
-  currentUserGroupUserIds : any;
+  viewGroup: boolean = false;
+  viewOwn: boolean = false;
+  viewAll: boolean = false;
+  currentUserGroupUserIds: any;
+  partyNameList: Party[] = [];
   qualityReqObj = new ViewReqObj();
+  viewPartyReqOb = new ViewReqObj();
+
   constructor(private toasterService: ToastrService, private _http: HttpClient, private permissionService: PermissionService,
     private router: Router, private qualityService: QualityService, public printService: PrintService, private qzService: QzTrayService,
-    private authService: AuthService) {
+    private authService: AuthService, private partyService: PartyService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -123,13 +128,31 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
           this.qualityReqObj.current_user_id = this.currentUserId;
           this.qualityReqObj.user_head_id = this.currentUser.user_head_id;
           this.qualityReqObj.group_user_ids = this.currentUserGroupUserIds;
-          
+
         }
       });
+      this.getPartyList();
     } this.getQualityData();
   }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
+  }
+  getPartyList() {
+    this.partyNameList = [];
+    this.viewPartyReqOb.view_group = true;
+    this.viewPartyReqOb.current_user_id = this.currentUserId;
+    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
+    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
+    this.partyService.getPartyList(this.viewPartyReqOb).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.partyNameList = data[0].data;
+        } else {
+          this.toasterService.error(data[0].message);
+        }
+      }, error => {
+        this.toasterService.error(error);
+      });
   }
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
@@ -163,25 +186,32 @@ export class ViewQualityComponent implements OnInit, OnDestroy {
   }
   getQualityData(value?): any {
 
-    this.qualityReqObj.view_all = false ;
-    this.qualityReqObj.view_group= false ;
-    this.qualityReqObj.view_own = false ;
-    
+    this.qualityReqObj.view_all = false;
+    this.qualityReqObj.view_group = false;
+    this.qualityReqObj.view_own = false;
+
     if (value)
       this.radioSelected = value;
 
     //check which radio button is selected
     if (this.radioSelected == 1)
-      this.qualityReqObj.view_own = true ;
+      this.qualityReqObj.view_own = true;
     else if (this.radioSelected == 2)
-      this.qualityReqObj.view_group = true ;
+      this.qualityReqObj.view_group = true;
     else if (this.radioSelected == 3)
-      this.qualityReqObj.view_all = true ;
+      this.qualityReqObj.view_all = true;
 
     this.qualityService.getAllQualityData(this.qualityReqObj).subscribe(data => {
       if (!data[0].error) {
-        this.rowData = data[0].data;
         this.qualityList = data[0].data;
+        this.qualityList.forEach(ele => {
+          const i = this.partyNameList.findIndex(v => v.entry_id == ele.party_id);
+          if (i > -1) {
+            ele.party_id = this.partyNameList[i].party_name;
+          }
+        });
+        this.rowData = this.qualityList;
+
         this.source = new LocalDataSource(this.qualityList);
       } else
         this.toasterService.error(data[0].message)
@@ -202,7 +232,7 @@ export class MyLinkRendererComponent implements AgRendererComponent {
   deleteQualityPermission = 0;
   currentUser$: Subscription;
   currentUserPermission = [];
-  
+
   currentUser;
 
   constructor(private router: Router, private modalService: NgbModal, private qualityService: QualityService,

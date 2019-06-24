@@ -3,13 +3,14 @@ export class Fabric {
     stock_id: any;
     stock_in_type: any;
     transfer_challan_no: any;
+    party_id: any = '';
     party_name: any;
     date: any;
     bill_no: any;
     chl_no: any;
     bill_date: any;
     chl_date: any;
-    batch_no: any;
+    lot_no: any;
     remark: any;
     bill_id: any;
     fabric_record: FabricInRecord[];

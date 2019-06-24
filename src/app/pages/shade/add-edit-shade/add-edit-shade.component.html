@@ -47,7 +47,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let quality of qualityList; let i = index" (click)="selectQualityId(quality)"
+                  <tr *ngFor="let quality of qualityList; let i = index" (
+                    click)="selectQualityId(quality)"
                     class="pointer">
                     <td style="display:none;">{{quality.quality_id}}</td>
                     <td>{{quality.quality_id}}</td>

@@ -12,6 +12,10 @@ export class ShadeService {
     return this.apiService.apiCaller('post', '/shadeList', shadeReqObj);
   }
 
+  getShadesByQualityId(shadeReqObj) {
+    return this.apiService.apiCaller('post', '/shadeListByQualityId', shadeReqObj);
+  }
+
   addShade(shade) {
     return this.apiService.apiCaller('post', '/addShade', shade);
   }

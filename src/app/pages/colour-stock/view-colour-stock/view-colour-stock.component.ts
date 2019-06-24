@@ -40,21 +40,15 @@ export class ViewColourStockComponent implements OnInit {
 
   columnDefsForIssuedNonIssued = [
     { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
-    { headerName: 'Supplier Name', field: 'supplier_name', sortable: true, filter: true },
-    { headerName: 'Bill No.', field: 'bill_no', sortable: true, filter: true },
-    { headerName: 'Bill Date', field: 'bill_date', sortable: true, filter: true },
-    { headerName: 'Chl No.', field: 'chl_no', sortable: true, filter: true },
-    { headerName: 'Chl Date', field: 'chl_date', sortable: true, filter: true },
-    { headerName: 'Item Name', field: 'item_name', sortable: true, filter: true },
-    { headerName: 'Quantity', field: 'quantity', sortable: true, filter: true },
+    { headerName: 'Box no.', field: 'entry_id', sortable: false, width: 120 },
+    { headerName: 'Quantity', field: 'quantity_per_box', sortable: true, filter: true },
     { headerName: 'Rate', field: 'rate', sortable: true, filter: true },
-    { headerName: 'Amount', field: 'amount', sortable: true, filter: true },
   ];
 
   columnExportDefs = [
     'supplier_name', 'bill_no', 'bill_date', 'chl_no', 'chl_date', 'remark', 'bill_amount'];
   columnExportIssueNonIssueDefs = [
-    'supplier_name', 'bill_no', 'bill_date', 'chl_no', 'chl_date', 'item_name', 'quantity', 'rate', 'amount'];
+    'entry_id', 'quantity_per_box', 'rate'];
 
   rowIssueNonIssueData;
   gridIssueNonIssueApi;
@@ -63,7 +57,7 @@ export class ViewColourStockComponent implements OnInit {
   currentUser$: Subscription;
   currentUserPermission = [];
   currentUser;
-  currentUserGroupUserIds : any;
+  currentUserGroupUserIds: any;
   viewAllDataPermission: any = false;
   viewOwnDataPermission: any = false;
   viewGroupDataPermission = false;
@@ -89,7 +83,7 @@ export class ViewColourStockComponent implements OnInit {
         if (ele.form_name === 'Colour Stock') {
           // this.addUserPermission = ele.can_add;
           this.addColourStockPermission = 1;
-          
+
         }
       })
     }
@@ -103,17 +97,30 @@ export class ViewColourStockComponent implements OnInit {
     if (value == 1) {
       this.getColourStockData();
     } else {
-      this.getIssuedNonIssuedData(value);
+      this.getIssuedNonIssuedData();
     }
   }
 
-  getIssuedNonIssuedData(value) {
-    this.rowIssueNonIssueData = this.colourStockList;
+  getIssuedNonIssuedData() {
+    alert(this.radioSelected)
+    let isIssued;
+    if (this.radioSelected == 3) {
+      isIssued = 1;
+    } else {
+      isIssued = 0;
+    }
+    this.colourStockService.getIssuedNonIssueData(isIssued).subscribe(data => {
+      if (!data[0].error) {
+        this.rowIssueNonIssueData = data[0].data;
+      } else {
+        this.tosterService.error(data[0].message);
+      }
+    });
   }
 
   getColourStockData() {
     this.colourStockReqObj = new ViewReqObj();
-    
+
     this.colourStockService.getAllColourStock(this.colourStockReqObj).subscribe(data => {
       if (!data[0].error) {
         this.colourStockList = data[0].data;
@@ -135,7 +142,7 @@ export class ViewColourStockComponent implements OnInit {
       }
     });
     this.columnDefsForIssuedNonIssued.forEach((column: ColDef) => {
-      if (column.field === 'entry_id') {
+      if (column.headerName === 'Actions') {
         column.cellRendererFramework = CustomRendererIssueNonIssueColourStockComponent;
         column.cellRendererParams = {
           action: this

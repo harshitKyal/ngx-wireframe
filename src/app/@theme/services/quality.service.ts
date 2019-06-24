@@ -13,6 +13,10 @@ export class QualityService {
     return this.apiService.apiCaller('post', '/qualityData', data);
   }
 
+  getAllQualityByPartyId(data) {
+    return this.apiService.apiCaller('post', '/getQualityByPartyId', data);
+  }
+
   addQuality(quality) {
     return this.apiService.apiCaller('post', '/addQuality', quality);
   }

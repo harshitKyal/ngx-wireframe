@@ -12,6 +12,9 @@ export class ColourStockService {
   getAllColourStock(colourStockReqObj) {
     return this.apiService.apiCaller('post', '/colourStockList', colourStockReqObj);
   }
+  getIssuedNonIssueData(isIssued) {
+    return this.apiService.apiCaller('get', '/getIssuedNonIssuedList/' + isIssued);
+  }
 
   addColourStock(colourStock) {
     return this.apiService.apiCaller('post', '/addColourStock', colourStock);

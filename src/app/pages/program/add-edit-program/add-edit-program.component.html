@@ -80,8 +80,10 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Program Given By</label>
-            <input type="text" class="form-control" [(ngModel)]="programModal.program_given_by" name="program_by"
-              #programBy="ngModel" required />
+            <input id="typeahead-focus" type="text" class="form-control" [(ngModel)]="programModal.program_given_by"
+              [ngbTypeahead]="search" (focus)="focus$.next($event.target.value)"
+              (click)="click$.next($event.target.value)" #instance="ngbTypeahead" #programBy="ngModel" required
+              name="program_by" />
             <div *ngIf="programBy.invalid && (programBy.dirty || programBy.touched)" class="errors">
               <div *ngIf="programBy.errors && programBy.errors.required">
                 Program Given By is required.
@@ -125,7 +127,7 @@
                       <tr *ngFor="let shade of shadeList; let i = index" (click)="selectShade(shade)" class="pointer">
                         <td style="display:none;">{{shade.entry_id}}</td>
                         <td>{{shade.party_shade_no}}</td>
-                        <td>{{shade.shade_no}}</td>
+                        <td>{{shade.entry_id}}</td>
                         <td>{{shade.colour_tone}}</td>
                       </tr>
                     </tbody>
@@ -162,6 +164,10 @@
                 </div>
               </div>
             </div>
+
+
+          </div>
+          <div class="row">
             <div class="col-md-2">
               <div class="form-group">
                 <label>Quantity</label>
@@ -174,30 +180,55 @@
                 </div>
               </div>
             </div>
-
-          </div>
-          <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
               <div class="form-group">
                 <label>Batch</label>
                 <input type="text" class="form-control" [(ngModel)]="record.batch" name="Batch" #btch="ngModel"
-                  (keypress)="numberOnly($event)" digits required />
-                <div *ngIf="btch.invalid && (btch.dirty || btch.touched)" class="errors">
-                  <div *ngIf="btch.errors && btch.errors.required">
-                    Batch is required.
-                  </div>
+                  placeholder="Select Batch" autocomplete="off" (keypress)="numberOnly($event)" digits
+                  (click)="HideShowBatch()">
+                <div *ngIf="flagDivBatch" class="dropdown">
+                  <a href="javascript:void(0)" (click)="HideShowBatch()" class="float-right">[X]</a>
+                  <table class="table table-bordered pointer table-responsive">
+                    <thead>
+                      <tr>
+                        <th>Batch No.</th>
+                        <th>Total Weight</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let batch of batchList; let i = index" (click)="selectBatch(batch)" class="pointer">
+                        <td style="display:none;">{{batch.batch_no}}</td>
+                        <td>{{batch.batch_no}}</td>
+                        <td>{{batch.total_wt}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <div class="form-group">
                 <label>Lot no.</label>
                 <input type="text" class="form-control" [(ngModel)]="record.lot_no" name="lotNo" #lotno="ngModel"
-                  (keypress)="numberOnly($event)" digits required />
-                <div *ngIf="lotno.invalid && (lotno.dirty || lotno.touched)" class="errors">
-                  <div *ngIf="lotno.errors && lotno.errors.required">
-                    Lot no. is required.
-                  </div>
+                  placeholder="Select Lot" autocomplete="off" (keypress)="numberOnly($event)" digits
+                  (click)="HideShowLot()">
+                <div *ngIf="flagDivLot" class="dropdown">
+                  <a href="javascript:void(0)" (click)="HideShowLot()" class="float-right">[X]</a>
+                  <table class="table table-bordered pointer table-responsive">
+                    <thead>
+                      <tr>
+                        <th>Lot No.</th>
+                        <th>Total Weight</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let lot of lotList; let i = index" (click)="selectLot(lot)" class="pointer">
+                        <td style="display:none;">{{lot.lot_no}}</td>
+                        <td>{{lot.lot_no}}</td>
+                        <td>{{lot.total_wt}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

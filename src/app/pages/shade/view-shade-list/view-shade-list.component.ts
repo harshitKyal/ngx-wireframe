@@ -16,6 +16,8 @@ import { ShadeService } from '../../../@theme/services/shade.service';
 import { Quality } from '../../../@theme/model/quality-class';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { element } from '@angular/core/src/render3';
+import { Party } from '../../../@theme/model/party-class';
+import { PartyService } from '../../../@theme/services/party.service';
 
 @Component({
   selector: 'ngx-view-shade-list',
@@ -53,10 +55,12 @@ export class ViewShadeListComponent implements OnInit {
   shadeReqObj = new ViewReqObj();
   qualityViewReqObj = new ViewReqObj();
   qualityList: Quality[] = [];
+  partyNameList: Party[] = [];
+  viewPartyReqOb = new ViewReqObj();
 
   constructor(private shadeService: ShadeService, private router: Router, private tosterService: ToastrService
     , private permissionService: PermissionService, private papa: Papa, private authService: AuthService,
-    private qualityService: QualityService) {
+    private qualityService: QualityService, private partyService: PartyService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -85,10 +89,29 @@ export class ViewShadeListComponent implements OnInit {
         }
       })
     }
+    this.getPartyList();
     this.getQualityData();
   }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
+  }
+
+  getPartyList() {
+    this.partyNameList = [];
+    this.viewPartyReqOb.view_group = true;
+    this.viewPartyReqOb.current_user_id = this.currentUserId;
+    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
+    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
+    this.partyService.getPartyList(this.viewPartyReqOb).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.partyNameList = data[0].data;
+        } else {
+          this.tosterService.error(data[0].message);
+        }
+      }, error => {
+        this.tosterService.error(error);
+      });
   }
   getQualityData() {
     this.qualityViewReqObj.current_user_id = this.currentUserId;
@@ -127,7 +150,11 @@ export class ViewShadeListComponent implements OnInit {
         this.shadeList.forEach(ele => {
           const i = this.qualityList.findIndex(v => v.entry_id == ele.quality_id);
           if (i > -1) {
-            ele.party_name = this.qualityList[i].party_name;
+            let partyIndex = this.partyNameList.findIndex(v => v.entry_id == this.qualityList[i].party_id);
+            if (partyIndex > -1) {
+              ele.party_name = this.partyNameList[partyIndex].party_name;
+            }
+            // ele.party_name = this.qualityList[i].party_name;
             ele.quality_name = this.qualityList[i].quality_name;
             ele.quality_type = this.qualityList[i].quality_type;
           }

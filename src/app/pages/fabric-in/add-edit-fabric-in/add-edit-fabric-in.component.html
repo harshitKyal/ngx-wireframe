@@ -32,10 +32,10 @@
           <div class="form-group">
             <label>Party Name</label>
             <!-- pattern -->
-            <select class="form-control" [(ngModel)]="fabricModal.party_name" name="partyname" #party="ngModel">
+            <select class="form-control" [(ngModel)]="fabricModal.party_id" name="partyid" #party="ngModel">
               <option disabled value="">Select Party Name
               </option>
-              <option *ngFor="let party of partyList" [value]="party.party_name">{{party.party_name}}</option>
+              <option *ngFor="let party of partyList" [value]="party.entry_id">{{party.party_name}}</option>
             </select>
             <!-- <div *ngIf="party.invalid && (party.dirty || party.touched)" class="errors">
                   <div *ngIf="party.errors && party.errors.required">
@@ -108,13 +108,13 @@
       <div class="row">
         <div class="col-md-3">
           <div class="form-group">
-            <label>Batch</label>
+            <label>Lot</label>
             <!-- pattern -->
-            <input type="text" class="form-control" [(ngModel)]="fabricModal.batch_no" name="batchs" #Batch="ngModel"
+            <input type="text" class="form-control" [(ngModel)]="fabricModal.lot_no" name="lots" #Lot="ngModel"
               required />
-            <div *ngIf="Batch.invalid && (Batch.dirty || Batch.touched)" class="errors">
-              <div *ngIf="Batch.errors && Batch.errors.required">
-                Batch is required.
+            <div *ngIf="Lot.invalid && (Lot.dirty || Lot.touched)" class="errors">
+              <div *ngIf="Lot.errors && Lot.errors.required">
+                Lot is required.
               </div>
             </div>
           </div>

@@ -12,6 +12,10 @@ export class BatchService {
     return this.apiService.apiCaller('post', '/batchList', batchReqObj);
   }
 
+  getAllBatchByQualityId(batchReqObj) {
+    return this.apiService.apiCaller('post', '/batchListByQualityId', batchReqObj);
+  }
+
   addBatch(batch) {
     return this.apiService.apiCaller('post', '/addBatch', batch);
   }
