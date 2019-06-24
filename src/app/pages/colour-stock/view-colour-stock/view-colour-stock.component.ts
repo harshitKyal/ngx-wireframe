@@ -102,7 +102,6 @@ export class ViewColourStockComponent implements OnInit {
   }
 
   getIssuedNonIssuedData() {
-    alert(this.radioSelected)
     let isIssued;
     if (this.radioSelected == 3) {
       isIssued = 1;
@@ -295,13 +294,14 @@ export class CustomRendererColourStockComponent implements AgRendererComponent, 
 
 @Component({
   template: `
-  <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="issueBox()"></i>`,
+  <i *ngIf="!isIssued" class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="issueBox()"></i>`,
   styleUrls: ['./view-colour-stock.component.scss']
 })
 
 export class CustomRendererIssueNonIssueColourStockComponent implements AgRendererComponent {
   params: any;
-
+  radioSelected: any;
+  isIssued;
 
   constructor(private router: Router, private _modalService: NgbModal, private colourStockService: ColourStockService,
     private toasterService: ToastrService, private permissionService: PermissionService, private authService: AuthService) {
@@ -309,6 +309,12 @@ export class CustomRendererIssueNonIssueColourStockComponent implements AgRender
   }
   agInit(params: any): void {
     this.params = params;
+    this.radioSelected = this.params.action.radioSelected;
+    if (this.radioSelected == 3) {
+      this.isIssued = 1;
+    } else {
+      this.isIssued = 0;
+    }
   }
 
   refresh(): boolean {
@@ -316,7 +322,21 @@ export class CustomRendererIssueNonIssueColourStockComponent implements AgRender
   }
 
   issueBox() {
-
+    const modalRef = this._modalService.open(ConfirmDialogComponent);
+    modalRef.componentInstance.titleFrom = 'Issue Colour Box ';
+    modalRef.componentInstance.message = 'Are you sure you want to issue this box?';
+    modalRef.result
+      .then((result) => {
+        if (result) {
+          this.colourStockService.issueBox(this.params.value).subscribe(data => {
+            if (!data[0].error) {
+              this.params.action.getIssuedNonIssuedData();
+            } else {
+              this.toasterService.error(data[0].message);
+            }
+          });
+        }
+      });
   }
 }
 

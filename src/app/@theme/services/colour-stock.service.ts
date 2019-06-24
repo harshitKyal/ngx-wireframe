@@ -16,6 +16,10 @@ export class ColourStockService {
     return this.apiService.apiCaller('get', '/getIssuedNonIssuedList/' + isIssued);
   }
 
+  issueBox(obj) {
+    return this.apiService.apiCaller('get', '/issueColourBox/' + obj);
+  }
+
   addColourStock(colourStock) {
     return this.apiService.apiCaller('post', '/addColourStock', colourStock);
   }
