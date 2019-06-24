@@ -293,7 +293,9 @@ export class AddEditProgramComponent implements OnInit {
             this.programModal = data[0].data.program[0];
             this.programRecord = data[0].data.program_record;
             this.getQualityByPartyId(this.programModal.party_id);
+            this.getLotByParty(this.programModal.party_id);
             this.getShadeList(this.programModal.quality_id);
+            this.getBatchByParty(this.programModal.quality_id);
             this.rowData = [...this.programRecord]
             this.programModal.program_record = this.programRecord
           } else {
