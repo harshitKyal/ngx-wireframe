@@ -4,6 +4,8 @@ import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { UserData } from '../../../@core/data/users';
 import { AnalyticsService } from '../../../@core/utils';
 import { LayoutService } from '../../../@core/utils';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'ngx-header',
@@ -15,14 +17,21 @@ export class HeaderComponent implements OnInit {
   @Input() position = 'normal';
 
   user: any;
-
+  currentUser$: Subscription;
   userMenu = [{ title: 'Profile' }, { title: 'Log Out' }];
+  currentUser;
 
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private userService: UserData,
+    private authService: AuthService,
     private analyticsService: AnalyticsService,
     private layoutService: LayoutService) {
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+      }
+    });
   }
 
   ngOnInit() {
