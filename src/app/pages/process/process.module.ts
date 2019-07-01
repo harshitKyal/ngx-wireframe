@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ViewProcessComponent, CustomRendererProcessComponent } from './view-process/view-process.component';
 import { ProcessComponent } from './process.component';
-import { AddEditProcessComponent } from './add-edit-process/add-edit-process.component';
+import { AddEditProcessComponent, CustomRendererScouringRecordComponent, CustomRendererColdWashRecordComponent, CustomRendererDyingRecordComponent, CustomRendererRCRecordComponent } from './add-edit-process/add-edit-process.component';
 import { FormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -17,7 +17,11 @@ import { ProcessRoutingModule } from './process-routing.module';
     ProcessComponent,
     AddEditProcessComponent,
     ViewProcessComponent,
-    CustomRendererProcessComponent
+    CustomRendererProcessComponent,
+    CustomRendererScouringRecordComponent,
+    CustomRendererColdWashRecordComponent,
+    CustomRendererDyingRecordComponent,
+    CustomRendererRCRecordComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +35,11 @@ import { ProcessRoutingModule } from './process-routing.module';
     ProcessRoutingModule
   ],
   entryComponents: [
-    CustomRendererProcessComponent
+    CustomRendererProcessComponent,
+    CustomRendererScouringRecordComponent,
+    CustomRendererColdWashRecordComponent,
+    CustomRendererDyingRecordComponent,
+    CustomRendererRCRecordComponent
   ]
 })
 export class ProcessModule { }

@@ -1,3 +1,685 @@
-<p>
-  add-edit-process works!
-</p>
+<nb-card>
+  <nb-card-header>{{topHeader}}
+  </nb-card-header>
+  <nb-card-body>
+    <form #vform="ngForm">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Process Name</label>
+            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+              [(ngModel)]="processModal.process_name" name="processName" #processname="ngModel" required />
+            <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+              <div *ngIf="processname.errors && processname.errors.required">
+                Process Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>No. of Dying Bath</label>
+            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+              [(ngModel)]="processModal.no_dying_bath" name="dyingBath" #dyingbath="ngModel" required />
+            <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
+              <div *ngIf="dyingbath.errors && dyingbath.errors.required">
+                No. of Dying Bath is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>DC Mulitplying Fac.</label>
+            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+              [(ngModel)]="processModal.dc_multiplying_fac" name="dc" #Dc="ngModel" required />
+            <div *ngIf="Dc.invalid && (Dc.dirty || Dc.touched)" class="errors">
+              <div *ngIf="Dc.errors && Dc.errors.required">
+                DC Mulitplying Fac is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <br>
+      <div class="row">
+        <div class="col-md-6">
+          <nb-accordion>
+            <nb-accordion-item #item>
+              <nb-accordion-item-header>
+                SCOURING
+              </nb-accordion-item-header>
+              <nb-accordion-item-body>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Temperature</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="scouringRecord.temperature" name="scouringTemp" #ScouringTemp="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                              <div *ngIf="processname.errors && processname.errors.required">
+                                Process Name is required.
+                              </div>
+                            </div> -->
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Plc Program No.</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="scouringRecord.plc_program_no" name="scouring_program_no"
+                        #ScouringProgram="ngModel" />
+                      <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
+                                <div *ngIf="dyingbath.errors && dyingbath.errors.required">
+                                  No. of Dying Bath is required.
+                                </div>
+                              </div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Hold Time</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="scouringRecord.hold_time" name="scouringTime" #ScouringTime="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                              <div *ngIf="processname.errors && processname.errors.required">
+                                Process Name is required.
+                              </div>
+                            </div> -->
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Rate Temperature</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="scouringRecord.rate_temperature" name="scouringRateTemp"
+                        #ScouringRateTemp="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                              <div *ngIf="processname.errors && processname.errors.required">
+                                Process Name is required.
+                              </div>
+                            </div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="row table table-responsive">
+                  <ag-grid-angular style="width: 100%; height:170px" class="ag-theme-balham" [rowData]="rowScouringData"
+                    [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'
+                    *ngIf="scouringSubRecordArray.length">
+                  </ag-grid-angular>
+                </div>
+                <form #scouringform="ngForm">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Item Name</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" placeholder="Select Item Name"
+                          name="scouringitemName" autocomplete="off" [(ngModel)]="scouringSubRecord.item_name"
+                          (click)="HideShowSForm()" required #scouringItemName="ngModel">
+                        <div *ngIf="flagDivSForm" class="dropdown">
+                          <a href="javascript:void(0)" (click)="HideShowSForm()" class="float-right">[X]</a>
+                          <table class="table table-bordered pointer table-responsive">
+                            <thead>
+                              <tr>
+                                <th>Item Name</th>
+                                <th>Supplier Name</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of itemList; let i = index" (click)="selectItem(item,'scouring')"
+                                class="pointer">
+                                <td style="display:none;">{{item.entry_id}}</td>
+                                <td>{{item.item_name}}</td>
+                                <td>{{item.supplier_name}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div *ngIf="scouringItemName.invalid && (scouringItemName.dirty || scouringItemName.touched)"
+                          class="errors">
+                          <div *ngIf="scouringItemName.errors && scouringItemName.errors.required">
+                            Item Name is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label>Concentration</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" [(ngModel)]="scouringSubRecord.concentration"
+                          name="scouringConcentration" #ScouringConcentration="ngModel" required />
+                        <div
+                          *ngIf="ScouringConcentration.invalid && (ScouringConcentration.dirty || ScouringConcentration.touched)"
+                          class="errors">
+                          <div *ngIf="ScouringConcentration.errors && ScouringConcentration.errors.required">
+                            Concentration is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label>By</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" [(ngModel)]="scouringSubRecord.by"
+                          name="scouringBy" #ScouringBy="ngModel" required />
+                        <div *ngIf="ScouringBy.invalid && (ScouringBy.dirty || ScouringBy.touched)" class="errors">
+                          <div *ngIf="ScouringBy.errors && ScouringBy.errors.required">
+                            By is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Supplier Name</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" disabled
+                          [(ngModel)]="scouringSubRecord.supplier_name" name="scouringSuppName"
+                          #ScouringSuppName="ngModel" required />
+                        <div *ngIf="ScouringSuppName.invalid && (ScouringSuppName.dirty || ScouringSuppName.touched)"
+                          class="errors">
+                          <div *ngIf="ScouringSuppName.errors && ScouringSuppName.errors.required">
+                            Supplier Name is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <button size="small" [disabled]="scouringform.invalid" style="margin-top: 32px;" nbButton
+                        (click)="onAddScouringRecord(scouringform)">Add</button>
+                    </div>
+                  </div>
+                </form>
+              </nb-accordion-item-body>
+            </nb-accordion-item>
+          </nb-accordion>
+
+
+        </div>
+        <div class="col-md-6">
+          <nb-accordion>
+            <nb-accordion-item #item>
+              <nb-accordion-item-header>
+                DYING
+              </nb-accordion-item-header>
+              <nb-accordion-item-body>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Temperature</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="dyingRecord.temperature" name="dyingTemp" #DyingTemp="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                <div *ngIf="processname.errors && processname.errors.required">
+                                  Process Name is required.
+                                </div>
+                              </div> -->
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Plc Program No.</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="dyingRecord.plc_program_no" name="dying_program_no" #dyingProgram="ngModel" />
+                      <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
+                                  <div *ngIf="dyingbath.errors && dyingbath.errors.required">
+                                    No. of Dying Bath is required.
+                                  </div>
+                                </div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Hold Time</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="dyingRecord.hold_time" name="dyingTime" #DyingTime="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                <div *ngIf="processname.errors && processname.errors.required">
+                                  Process Name is required.
+                                </div>
+                              </div> -->
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Rate Temperature</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="dyingRecord.rate_temperature" name="dyingRateTemp" #DyringRateTemp="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                <div *ngIf="processname.errors && processname.errors.required">
+                                  Process Name is required.
+                                </div>
+                              </div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="row table table-responsive">
+                  <ag-grid-angular style="width: 100%; height:170px" class="ag-theme-balham" [rowData]="rowDyingData"
+                    [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'
+                    *ngIf="dyingSubRecordArray.length">
+                  </ag-grid-angular>
+                </div>
+                <form #dyingform="ngForm">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Item Name</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" placeholder="Select Item Name"
+                          name="dyingitemName" autocomplete="off" [(ngModel)]="dyingSubRecord.item_name"
+                          (click)="HideShowDForm()" required #dyingItemName="ngModel">
+                        <div *ngIf="flagDivDForm" class="dropdown">
+                          <a href="javascript:void(0)" (click)="HideShowDForm()" class="float-right">[X]</a>
+                          <table class="table table-bordered pointer table-responsive">
+                            <thead>
+                              <tr>
+                                <th>Item Name</th>
+                                <th>Supplier Name</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of itemList; let i = index" (click)="selectItem(item,'dying')"
+                                class="pointer">
+                                <td style="display:none;">{{item.entry_id}}</td>
+                                <td>{{item.item_name}}</td>
+                                <td>{{item.supplier_name}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div *ngIf="dyingItemName.invalid && (dyingItemName.dirty || dyingItemName.touched)"
+                          class="errors">
+                          <div *ngIf="dyingItemName.errors && dyingItemName.errors.required">
+                            Item Name is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label>Concentration</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" [(ngModel)]="dyingSubRecord.concentration"
+                          name="dyingConcentration" #DyingConcentration="ngModel" required />
+                        <div
+                          *ngIf="DyingConcentration.invalid && (DyingConcentration.dirty || DyingConcentration.touched)"
+                          class="errors">
+                          <div *ngIf="DyingConcentration.errors && DyingConcentration.errors.required">
+                            Concentration is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label>By</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" [(ngModel)]="dyingSubRecord.by" name="dyingBy"
+                          #DyingBy="ngModel" required />
+                        <div *ngIf="DyingBy.invalid && (DyingBy.dirty || DyingBy.touched)" class="errors">
+                          <div *ngIf="DyingBy.errors && DyingBy.errors.required">
+                            By is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Supplier Name</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" disabled
+                          [(ngModel)]="dyingSubRecord.supplier_name" name="dyingSuppName" #DyingSuppName="ngModel"
+                          required />
+                        <div *ngIf="DyingSuppName.invalid && (DyingSuppName.dirty || DyingSuppName.touched)"
+                          class="errors">
+                          <div *ngIf="DyingSuppName.errors && DyingSuppName.errors.required">
+                            Supplier Name is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <button size="small" [disabled]="dyingform.invalid" style="margin-top: 32px;" nbButton
+                        (click)="onAddDyingRecord(dyingform)">Add</button>
+                    </div>
+                  </div>
+                </form>
+              </nb-accordion-item-body>
+            </nb-accordion-item>
+          </nb-accordion>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+
+        <div class="col-md-6">
+          <nb-accordion>
+            <nb-accordion-item #item>
+              <nb-accordion-item-header>
+                RC
+              </nb-accordion-item-header>
+              <nb-accordion-item-body>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Temperature</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="rcRecord.temperature" name="rcTemp" #RcTemp="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                <div *ngIf="processname.errors && processname.errors.required">
+                                  Process Name is required.
+                                </div>
+                              </div> -->
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Plc Program No.</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="rcRecord.plc_program_no" name="rc_program_no" #RcProgram="ngModel" />
+                      <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
+                                  <div *ngIf="dyingbath.errors && dyingbath.errors.required">
+                                    No. of Dying Bath is required.
+                                  </div>
+                                </div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Hold Time</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="rcRecord.hold_time" name="rcTime" #RcTime="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                <div *ngIf="processname.errors && processname.errors.required">
+                                  Process Name is required.
+                                </div>
+                              </div> -->
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Rate Temperature</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="rcRecord.rate_temperature" name="rcRateTemp" #RcRateTemp="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                <div *ngIf="processname.errors && processname.errors.required">
+                                  Process Name is required.
+                                </div>
+                              </div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="row table table-responsive">
+                  <ag-grid-angular style="width: 100%; height:170px" class="ag-theme-balham" [rowData]="rowRCData"
+                    [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'
+                    *ngIf="rcSubRecordArray.length">
+                  </ag-grid-angular>
+                </div>
+                <form #rcform="ngForm">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Item Name</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" placeholder="Select Item Name"
+                          name="rcitemName" autocomplete="off" [(ngModel)]="rcSubRecord.item_name"
+                          (click)="HideShowRForm()" required #rcItemName="ngModel">
+                        <div *ngIf="flagDivRForm" class="dropdown">
+                          <a href="javascript:void(0)" (click)="HideShowRForm()" class="float-right">[X]</a>
+                          <table class="table table-bordered pointer table-responsive">
+                            <thead>
+                              <tr>
+                                <th>Item Name</th>
+                                <th>Supplier Name</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of itemList; let i = index" (click)="selectItem(item,'rc')"
+                                class="pointer">
+                                <td style="display:none;">{{item.entry_id}}</td>
+                                <td>{{item.item_name}}</td>
+                                <td>{{item.supplier_name}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div *ngIf="rcItemName.invalid && (rcItemName.dirty || rcItemName.touched)" class="errors">
+                          <div *ngIf="rcItemName.errors && rcItemName.errors.required">
+                            Item Name is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label>Concentration</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" [(ngModel)]="rcSubRecord.concentration"
+                          name="rcConcentration" #RcConcentration="ngModel" required />
+                        <div *ngIf="RcConcentration.invalid && (RcConcentration.dirty || RcConcentration.touched)"
+                          class="errors">
+                          <div *ngIf="RcConcentration.errors && RcConcentration.errors.required">
+                            Concentration is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label>By</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" [(ngModel)]="rcSubRecord.by" name="rcBy"
+                          #RcBy="ngModel" required />
+                        <div *ngIf="RcBy.invalid && (RcBy.dirty || RcBy.touched)" class="errors">
+                          <div *ngIf="RcBy.errors && RcBy.errors.required">
+                            By is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Supplier Name</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" disabled
+                          [(ngModel)]="rcSubRecord.supplier_name" name="rcSuppName" #RcSuppName="ngModel" required />
+                        <div *ngIf="RcSuppName.invalid && (RcSuppName.dirty || RcSuppName.touched)" class="errors">
+                          <div *ngIf="RcSuppName.errors && RcSuppName.errors.required">
+                            Supplier Name is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <button size="small" [disabled]="rcform.invalid" style="margin-top: 32px;" nbButton
+                        (click)="onAddRCRecord(rcform)">Add</button>
+                    </div>
+                  </div>
+                </form>
+              </nb-accordion-item-body>
+            </nb-accordion-item>
+          </nb-accordion>
+        </div>
+        <div class="col-md-6">
+          <nb-accordion>
+            <nb-accordion-item #item>
+              <nb-accordion-item-header>
+                COLD WASH
+              </nb-accordion-item-header>
+              <nb-accordion-item-body>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Temperature</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="coldWashRecord.temperature" name="coldWashTemp" #ColdWashTemp="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                              <div *ngIf="processname.errors && processname.errors.required">
+                                Process Name is required.
+                              </div>
+                            </div> -->
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Plc Program No.</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="coldWashRecord.plc_program_no" name="coldWash_program_no"
+                        #coldWashProgram="ngModel" />
+                      <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
+                                <div *ngIf="dyingbath.errors && dyingbath.errors.required">
+                                  No. of Dying Bath is required.
+                                </div>
+                              </div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Hold Time</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="coldWashRecord.hold_time" name="coldWashTime" #coldWashtime="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                              <div *ngIf="processname.errors && processname.errors.required">
+                                Process Name is required.
+                              </div>
+                            </div> -->
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Rate Temperature</label>
+                      <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                        [(ngModel)]="coldWashRecord.rate_temperature" name="coldWashRateTemp"
+                        #ColdWashRateTemp="ngModel" />
+                      <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                              <div *ngIf="processname.errors && processname.errors.required">
+                                Process Name is required.
+                              </div>
+                            </div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="row table table-responsive">
+                  <ag-grid-angular style="width: 100%; height:170px" class="ag-theme-balham" [rowData]="rowColdWashData"
+                    [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'
+                    *ngIf="coldWashSubRecordArray.length">
+                  </ag-grid-angular>
+                </div>
+                <form #coldwashform="ngForm">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Item Name</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" placeholder="Select Item Name"
+                          name="coldWashitemName" autocomplete="off" [(ngModel)]="coldWashSubRecord.item_name"
+                          (click)="HideShowCForm()" required #ColdWashItemName="ngModel">
+                        <div *ngIf="flagDivCForm" class="dropdown">
+                          <a href="javascript:void(0)" (click)="HideShowCForm()" class="float-right">[X]</a>
+                          <table class="table table-bordered pointer table-responsive">
+                            <thead>
+                              <tr>
+                                <th>Item Name</th>
+                                <th>Supplier Name</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of itemList; let i = index" (click)="selectItem(item,'cold_wash')"
+                                class="pointer">
+                                <td style="display:none;">{{item.entry_id}}</td>
+                                <td>{{item.item_name}}</td>
+                                <td>{{item.supplier_name}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div *ngIf="ColdWashItemName.invalid && (ColdWashItemName.dirty || ColdWashItemName.touched)"
+                          class="errors">
+                          <div *ngIf="ColdWashItemName.errors && ColdWashItemName.errors.required">
+                            Item Name is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label>Concentration</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" [(ngModel)]="coldWashSubRecord.concentration"
+                          name="coldWashConcentration" #ColdWashConcentration="ngModel" required />
+                        <div
+                          *ngIf="ColdWashConcentration.invalid && (ColdWashConcentration.dirty || ColdWashConcentration.touched)"
+                          class="errors">
+                          <div *ngIf="ColdWashConcentration.errors && ColdWashConcentration.errors.required">
+                            Concentration is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label>By</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" [(ngModel)]="coldWashSubRecord.by"
+                          name="coldWashBy" #ColdWashBy="ngModel" required />
+                        <div *ngIf="ColdWashBy.invalid && (ColdWashBy.dirty || ColdWashBy.touched)" class="errors">
+                          <div *ngIf="ColdWashBy.errors && ColdWashBy.errors.required">
+                            By is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Supplier Name</label>
+                        <input nbInput fullWidth fieldSize="small" type="text"
+                          class="form-control input-group input-group-sm" disabled
+                          [(ngModel)]="coldWashSubRecord.supplier_name" name="coldWashSuppName"
+                          #ColdWashSuppName="ngModel" required />
+                        <div *ngIf="ColdWashSuppName.invalid && (ColdWashSuppName.dirty || ColdWashSuppName.touched)"
+                          class="errors">
+                          <div *ngIf="ColdWashSuppName.errors && ColdWashSuppName.errors.required">
+                            Supplier Name is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <button size="small" [disabled]="coldwashform.invalid" style="margin-top: 32px;" nbButton
+                        (click)="onAddColdWashRecord(coldwashform)">Add</button>
+                    </div>
+                  </div>
+                </form>
+
+              </nb-accordion-item-body>
+            </nb-accordion-item>
+          </nb-accordion>
+        </div>
+      </div>
+      <hr>
+      <br>
+      <div class="box-footer">
+        <button [disabled]="vform.invalid" nbButton (click)="onCustomFormSubmit(vform)">{{subBtnName}}</button>
+        &nbsp;
+        <button nbButton type="reset" routerLink='/pages/process/view-process-list' id="Cancel">Cancel</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>
