@@ -5,8 +5,9 @@ export class Process {
     dc_multiplying_fac: any;
     created_by: any;
     updated_by: any;
-    created_date: AnalyserNode;
+    created_date: any;
     updated_date: any;
+    user_head_id: any;
     process_record: ProcessRecord[];
 }
 export class ProcessRecord {
@@ -25,7 +26,7 @@ export class ProcessSubRecord {
     item_id: any;
     item_name: any;
     concentration: any;
-    by: any;
+    item_by: any;
     supplier_name: any;
 
 
@@ -37,6 +38,7 @@ export class ProcessReq {
     no_dying_bath: any;
     dc_multiplying_fac: any;
     created_by: any;
+    user_head_id: any;
     updated_by: any;
     created_date: AnalyserNode;
     updated_date: any;
@@ -54,7 +56,7 @@ export class ProcessReqRecord {
     item_id: any;
     item_name: any;
     concentration: any;
-    by: any;
+    item_by: any;
     supplier_name: any;
 
 }

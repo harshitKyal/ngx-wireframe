@@ -168,7 +168,7 @@
                       <div class="form-group">
                         <label>By</label>
                         <input nbInput fullWidth fieldSize="small" type="text"
-                          class="form-control input-group input-group-sm" [(ngModel)]="scouringSubRecord.by"
+                          class="form-control input-group input-group-sm" [(ngModel)]="scouringSubRecord.item_by"
                           name="scouringBy" #ScouringBy="ngModel" required />
                         <div *ngIf="ScouringBy.invalid && (ScouringBy.dirty || ScouringBy.touched)" class="errors">
                           <div *ngIf="ScouringBy.errors && ScouringBy.errors.required">
@@ -325,8 +325,8 @@
                       <div class="form-group">
                         <label>By</label>
                         <input nbInput fullWidth fieldSize="small" type="text"
-                          class="form-control input-group input-group-sm" [(ngModel)]="dyingSubRecord.by" name="dyingBy"
-                          #DyingBy="ngModel" required />
+                          class="form-control input-group input-group-sm" [(ngModel)]="dyingSubRecord.item_by"
+                          name="dyingBy" #DyingBy="ngModel" required />
                         <div *ngIf="DyingBy.invalid && (DyingBy.dirty || DyingBy.touched)" class="errors">
                           <div *ngIf="DyingBy.errors && DyingBy.errors.required">
                             By is required.
@@ -482,7 +482,7 @@
                       <div class="form-group">
                         <label>By</label>
                         <input nbInput fullWidth fieldSize="small" type="text"
-                          class="form-control input-group input-group-sm" [(ngModel)]="rcSubRecord.by" name="rcBy"
+                          class="form-control input-group input-group-sm" [(ngModel)]="rcSubRecord.item_by" name="rcBy"
                           #RcBy="ngModel" required />
                         <div *ngIf="RcBy.invalid && (RcBy.dirty || RcBy.touched)" class="errors">
                           <div *ngIf="RcBy.errors && RcBy.errors.required">
@@ -637,7 +637,7 @@
                       <div class="form-group">
                         <label>By</label>
                         <input nbInput fullWidth fieldSize="small" type="text"
-                          class="form-control input-group input-group-sm" [(ngModel)]="coldWashSubRecord.by"
+                          class="form-control input-group input-group-sm" [(ngModel)]="coldWashSubRecord.item_by"
                           name="coldWashBy" #ColdWashBy="ngModel" required />
                         <div *ngIf="ColdWashBy.invalid && (ColdWashBy.dirty || ColdWashBy.touched)" class="errors">
                           <div *ngIf="ColdWashBy.errors && ColdWashBy.errors.required">

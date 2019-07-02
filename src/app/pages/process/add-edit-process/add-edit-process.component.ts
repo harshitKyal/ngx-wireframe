@@ -34,8 +34,6 @@ export class AddEditProcessComponent implements OnInit {
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
-
-
   processModal: Process;
   flagDivSForm = false;
   flagDivRForm = false;
@@ -74,7 +72,7 @@ export class AddEditProcessComponent implements OnInit {
     { headerName: 'Actions', field: 'index', width: 70 },
     { headerName: 'Item Name', field: 'item_name', width: 110 },
     { headerName: 'Concentration', field: 'concentration', width: 110 },
-    { headerName: 'By', field: 'by', width: 90 },
+    { headerName: 'By', field: 'item_by', width: 90 },
     { headerName: 'Supplier Name', field: 'supplier_name', width: 110 },
   ];
   currentUserPermission: any;
@@ -114,7 +112,90 @@ export class AddEditProcessComponent implements OnInit {
     this.getItemList();
     this.onPageLoad();
   }
+  onPageLoad() {
+    this.id = this.route.snapshot.paramMap.get('id');
+    if (this.id != null) {
+      if (this.id) {
+        this.subBtnName = 'Update';
+        this.topHeader = 'Edit Process';
 
+      } else {
+        this.topHeader = 'Process View';
+        this.viewFlag = true;
+      }
+      this.processService.getProcessById(this.id).subscribe(
+        data => {
+          if (!data[0].error) {
+            this.processModal = data[0].data.process[0];
+            this.processReqRecord = data[0].data.process_record;
+            if (this.processReqRecord.length) {
+              let scouringIndex = 0;
+              let dyingIndex = 0;
+              let rcIndex = 0;
+              let coldWashIndex = 0;
+              this.processReqRecord.forEach((ele, index) => {
+                if (ele.type === 'scouring') {
+                  if (!scouringIndex) {
+                    this.setProcessRecordOnLoad(this.scouringRecord, ele);
+                  }
+                  scouringIndex += 1;
+                  this.setProcessSubRecordOnLoad(this.scouringSubRecordArray, this.scouringSubRecord, ele, scouringIndex);
+                } else if (ele.type === 'rc') {
+                  if (!rcIndex) {
+                    this.setProcessRecordOnLoad(this.rcRecord, ele);
+                  }
+                  rcIndex += 1;
+                  this.setProcessSubRecordOnLoad(this.rcSubRecordArray, this.rcSubRecord, ele, rcIndex);
+                } else if (ele.type === 'cold_wash') {
+                  if (!coldWashIndex) {
+                    this.setProcessRecordOnLoad(this.coldWashRecord, ele);
+                  }
+                  coldWashIndex += 1;
+                  this.setProcessSubRecordOnLoad(this.coldWashSubRecordArray, this.coldWashSubRecord, ele, coldWashIndex);
+                } else if (ele.type === 'dying') {
+                  if (!dyingIndex) {
+                    this.setProcessRecordOnLoad(this.dyingRecord, ele);
+                  }
+                  dyingIndex += 1;
+                  this.setProcessSubRecordOnLoad(this.dyingSubRecordArray, this.dyingSubRecord, ele, dyingIndex);
+                }
+              })
+            }
+            this.rowColdWashData = this.coldWashSubRecordArray;
+            this.rowDyingData = this.dyingSubRecordArray;
+            this.rowRCData = this.rcSubRecordArray;
+            this.rowScouringData = this.scouringSubRecordArray;
+            this.processModal.process_record = this.processRecord
+          } else {
+            this.toasterService.error(data.message);
+          }
+        }, error => {
+          this.toasterService.error('Server Error');
+        });
+    } else {
+      this.subBtnName = 'Save';
+      this.topHeader = 'Add Process';
+    }
+  }
+  setProcessRecordOnLoad(processRecord, ele) {
+    processRecord.type = ele.index;
+    processRecord.control_id = ele.control_id;
+    processRecord.temperature = ele.temperature;
+    processRecord.plc_program_no = ele.plc_program_no;
+    processRecord.hold_time = ele.hold_time;
+    processRecord.rate_temperature = ele.rate_temperature;
+  }
+  setProcessSubRecordOnLoad(prcoessSubRecordArray, processSubRecordObj, ele, index) {
+    processSubRecordObj = new ProcessSubRecord();
+    processSubRecordObj.entry_id = ele.entry_id;
+    processSubRecordObj.index = index;
+    processSubRecordObj.item_id = ele.item_id;
+    processSubRecordObj.item_name = ele.item_name;
+    processSubRecordObj.concentration = ele.concentration;
+    processSubRecordObj.item_by = ele.item_by;
+    processSubRecordObj.supplier_name = ele.supplier_name;
+    prcoessSubRecordArray.push(processSubRecordObj);
+  }
   setScouringColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
@@ -157,6 +238,7 @@ export class AddEditProcessComponent implements OnInit {
   }
 
   getItemList() {
+    console.log('dsae');
     this.supplierService.getAllSupplierItemData().subscribe(data => {
       if (!data[0].error) {
         this.itemList = data[0].data;
@@ -199,40 +281,6 @@ export class AddEditProcessComponent implements OnInit {
     this.flagDivCForm = !this.flagDivCForm;
   }
 
-  onPageLoad() {
-    this.id = this.route.snapshot.paramMap.get('id');
-    // if (this.id != null) {
-    //   if (this.id) {
-    //     this.subBtnName = 'Update';
-    //     this.topHeader = 'Edit Process';
-
-    //   } else {
-    //     this.topHeader = 'Process View';
-    //     this.viewFlag = true;
-    //   }
-    //   this.processService.getProcessById(this.id).subscribe(
-    //     data => {
-    //       if (!data[0].error) {
-    //         this.processModal = data[0].data.process[0];
-    //         this.processRecord = data[0].data.process_record;
-    //         this.getQualityByPartyId(this.processModal.party_id);
-    //         this.getLotByParty(this.processModal.party_id);
-    //         this.getShadeList(this.processModal.quality_id);
-    //         this.getBatchByParty(this.processModal.quality_id);
-    //         this.rowData = [...this.processRecord]
-    //         this.processModal.process_record = this.processRecord
-    //       } else {
-    //         this.toasterService.error(data.message);
-    //       }
-    //     }, error => {
-    //       this.toasterService.error('Server Error');
-    //     });
-    // } else {
-    this.subBtnName = 'Save';
-    this.topHeader = 'Add Process';
-    // }
-  }
-
   numberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
     if (charCode > 31 && ((charCode < 46 || charCode > 57) || charCode == 47)) {
@@ -263,12 +311,17 @@ export class AddEditProcessComponent implements OnInit {
   }
 
   onEditScouringRecord(data) {
+    console.log('data', data);
     let i = this.scouringSubRecordArray.findIndex(v => v.index == data);
+    console.log('index', i);
+    console.log('record', this.scouringSubRecordArray)
     this.scouringSubRecord = this.scouringSubRecordArray[i];
   }
 
   deleteScouringRecord(data) {
+    console.log(data);
     let i = this.scouringSubRecordArray.findIndex(v => v.index == data);
+    console.log('index', i);
     this.scouringSubRecordArray.splice(i, 1);
     this.rowScouringData = [...this.scouringSubRecordArray]
   }
@@ -328,6 +381,7 @@ export class AddEditProcessComponent implements OnInit {
   }
 
   onEditDyingRecord(data) {
+    console.log('data', data);
     let i = this.dyingSubRecordArray.findIndex(v => v.index == data);
     this.dyingSubRecord = this.dyingSubRecordArray[i];
   }
@@ -423,7 +477,7 @@ export class AddEditProcessComponent implements OnInit {
       });
     } else {
       this.processReq.created_by = this.currentUserId;
-      // this.processModal.user_head_id = this.currentUserHeadid;
+      this.processReq.user_head_id = this.currentUserHeadid;
       console.log(this.processReq)
       this.processService.addProcess(this.processReq).subscribe(data => {
         data = data[0]
@@ -448,7 +502,7 @@ export class AddEditProcessComponent implements OnInit {
     processSingleReqRecord.item_name = ele.item_name;
     processSingleReqRecord.concentration = ele.concentration;
     processSingleReqRecord.supplier_name = ele.supplier_name;
-    processSingleReqRecord.by = ele.by;
+    processSingleReqRecord.item_by = ele.item_by;
     processSingleReqRecord.control_id = record.control_id;
     processSingleReqRecord.type = type;
     processSingleReqRecord.temperature = record.temperature;
@@ -478,6 +532,7 @@ export class CustomRendererScouringRecordComponent implements AgRendererComponen
   }
 
   editRecord() {
+    console.log('this', this.params.value)
     this.params.action.onEditScouringRecord(this.params.value)
   }
   onDeleteRecord() {
@@ -485,8 +540,9 @@ export class CustomRendererScouringRecordComponent implements AgRendererComponen
     modalRef.componentInstance.titleFrom = 'Delete record ';
     modalRef.componentInstance.message = 'Are you sure you want to delete this record?';
     modalRef.result
-      .then((result) => {
-        if (result) {
+      .then((res) => {
+        console.log('rex', res);
+        if (res) {
           this.params.action.deleteScouringRecord(this.params.value)
         }
       });
@@ -583,6 +639,7 @@ export class CustomRendererDyingRecordComponent implements AgRendererComponent {
   }
 
   editRecord() {
+    console.log('this.params', this.params.action);
     this.params.action.onEditDyingRecord(this.params.value)
   }
   onDeleteRecord() {

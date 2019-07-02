@@ -17,11 +17,7 @@ import { AuthService } from '../../../@theme/services/auth.service';
 })
 export class AddEditUserComponent implements OnInit, OnDestroy {
 
-  permissionArray = ['have_quality', 'can_add_quality', 'can_view_quality', 'can_edit_quality', 'can_delete_quality',
-    'have_user', 'can_add_user', 'can_view_user', 'can_edit_user', 'can_delete_user', 'have_party', 'can_add_party', 'can_edit_party', 'can_view_party', 'can_delete_party'
-    , 'have_stock', 'can_add_stock', 'can_edit_stock', 'can_view_stock', 'can_delete_stock'];
-
-  tableForms = ["Party", "Quality", "User", "Fabric In", "Batch", "Program", "Shade", "Supplier", "Supplier Rate", "Shade", "Program", "Colour Stock", "Process"];
+  tableForms = ["Party", "Quality", "User", "Fabric In", "Batch", "Program", "Shade", "Supplier", "Supplier Rate", "Shade", "Colour Stock", "Process"];
   designation = ['Manager', 'Master', 'Accountant', 'Staff', 'Helper']
 
 
@@ -203,49 +199,3 @@ export class AddEditUserComponent implements OnInit, OnDestroy {
     return false;
   }
 }
-
-// setPermissionById() {
-//   this.values = [];
-//   this.permissionArray.forEach((ele: any) => {
-//     if (this.userModal[ele] === '1') {
-//       this.values.push(ele);
-//     }
-//   });
-//   this.items.forEach((ele: TreeviewItem) => {
-//     if (this.values.indexOf(ele.value) > -1) {
-//       ele.checked = true;
-//     }
-//     ele.children.forEach(subelement => {
-//       if (this.values.indexOf(subelement.value) > -1) {
-//         subelement.checked = true;
-//       }
-//     })
-//   });
-// }
-// onPermissionChange(value) {
-//   this.values = value;
-//   if (this.values.length) {
-//     this.permissionArray.forEach((ele: any) => {
-//       if (this.values.indexOf(ele) > -1) {
-//         this.userModal[ele] = true;
-//       } else {
-//         this.userModal[ele] = false;
-//       }
-//     });
-//     this.values.forEach(ele => {
-//       if (ele === 'can_view_quality' || ele === 'can_add_quality' || ele === 'can_edit_quality' || ele === 'can_delete_quality') {
-//         this.userModal['have_quality'] = true;
-//       } else if (ele === 'can_view_user' || ele === 'can_add_user' || ele === 'can_edit_user' || ele === 'can_delete_user') {
-//         this.userModal['have_user'] = true;
-//       } else if (ele === 'can_view_party' || ele === 'can_add_party' || ele === 'can_edit_party' || ele === 'can_delete_party') {
-//         this.userModal['have_party'] = true;
-//       } else if (ele === 'can_view_stock' || ele === 'can_add_stock' || ele === 'can_edit_stock' || ele === 'can_delete_stock') {
-//         this.userModal['have_stock'] = true;
-//       }
-//     })
-//   } else {
-//     this.permissionArray.forEach(ele => {
-//       this.userModal[ele] = false;
-//     })
-//   }
-// }

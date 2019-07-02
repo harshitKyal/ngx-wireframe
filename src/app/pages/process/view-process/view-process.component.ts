@@ -32,15 +32,14 @@ export class ViewProcessComponent implements OnInit {
   addProcessPermission = 1;
   columnDefs = [
     { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
-    { headerName: 'Party Name', field: 'party_name', sortable: true, filter: true },
-    { headerName: 'Process By', field: 'process_given_by', sortable: true, filter: true },
-    { headerName: 'Quality Id', field: 'quality_id', sortable: true, filter: true },
-    { headerName: 'Quality Name', field: 'quality_name', sortable: true, filter: true },
-    { headerName: 'Quality Type', field: 'quality_type', sortable: true, filter: true },
-    { headerName: 'remark', field: 'remark', sortable: true, filter: true },
+    { headerName: 'Process Name', field: 'process_name', sortable: true, filter: true },
+    { headerName: 'No. of Dying Bath', field: 'no_dying_bath', sortable: true, filter: true },
+    { headerName: 'DC Mutiplying Fac', field: 'dc_multiplying_fac', sortable: true, filter: true },
+    { headerName: 'Created By', field: 'created_by', sortable: true, filter: true },
+    { headerName: 'Updated By', field: 'updated_by', sortable: true, filter: true },
   ];
   columnExportDefs = [
-    'party_name', 'process_given_by', 'quality_id', 'quality_name', 'quality_type', 'remark'];
+    'process_name', 'no_dying_bath', 'dc_multiplying_fac', 'created_by', 'updated_by'];
   currentUserId: any;
   currentUser$: Subscription;
   currentUserPermission = [];
@@ -75,7 +74,6 @@ export class ViewProcessComponent implements OnInit {
     if (this.currentUserPermission.length) {
       this.currentUserPermission.forEach(ele => {
         if (ele.form_name === 'Process') {
-          // this.addUserPermission = ele.can_add;
           this.addProcessPermission = 1;
           this.viewAllDataPermission = ele.can_view_all;
           this.viewGroupDataPermission = ele.can_view_group;
