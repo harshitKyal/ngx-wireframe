@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { UserData } from '../../../@core/data/users';
-import { AnalyticsService } from '../../../@core/utils';
 import { LayoutService } from '../../../@core/utils';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
@@ -25,7 +24,6 @@ export class HeaderComponent implements OnInit {
     private menuService: NbMenuService,
     private userService: UserData,
     private authService: AuthService,
-    private analyticsService: AnalyticsService,
     private layoutService: LayoutService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
@@ -48,9 +46,5 @@ export class HeaderComponent implements OnInit {
 
   goToHome() {
     this.menuService.navigateHome();
-  }
-
-  startSearch() {
-    this.analyticsService.trackEvent('startSearch');
   }
 }

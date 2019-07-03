@@ -207,6 +207,23 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
   }
 
   onCustomFormSubmit(form: NgForm) {
+    if (this.fabricModal.batch) {
+      let qualityMatchCount = 0;
+      if (this.fabricRecord.length) {
+        let match = this.fabricRecord[0].quality_entry_id;
+        this.fabricRecord.forEach(ele => {
+          if (ele.quality_entry_id == match) {
+            qualityMatchCount++;
+          }
+        });
+        if (qualityMatchCount == this.fabricRecord.length + 1) {
+
+        } else {
+          this.fabricModal.batch = 0;
+          this.toasterService.error('Quality should be same to add this is a Batch');
+        }
+      }
+    }
     this.fabricModal.fabric_record = this.fabricRecord;
     console.log('bill', this.fabricModal);
     // for update
