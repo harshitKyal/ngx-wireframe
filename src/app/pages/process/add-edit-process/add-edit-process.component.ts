@@ -68,7 +68,28 @@ export class AddEditProcessComponent implements OnInit {
   processReq: ProcessReq;
   processReqRecord: ProcessReqRecord[] = [];
 
-  columnDefs = [
+  scouringcolumnDefs = [
+    { headerName: 'Actions', field: 'index', width: 70 },
+    { headerName: 'Item Name', field: 'item_name', width: 110 },
+    { headerName: 'Concentration', field: 'concentration', width: 110 },
+    { headerName: 'By', field: 'item_by', width: 90 },
+    { headerName: 'Supplier Name', field: 'supplier_name', width: 110 },
+  ];
+  dyingcolumnDefs = [
+    { headerName: 'Actions', field: 'index', width: 70 },
+    { headerName: 'Item Name', field: 'item_name', width: 110 },
+    { headerName: 'Concentration', field: 'concentration', width: 110 },
+    { headerName: 'By', field: 'item_by', width: 90 },
+    { headerName: 'Supplier Name', field: 'supplier_name', width: 110 },
+  ];
+  rccolumnDefs = [
+    { headerName: 'Actions', field: 'index', width: 70 },
+    { headerName: 'Item Name', field: 'item_name', width: 110 },
+    { headerName: 'Concentration', field: 'concentration', width: 110 },
+    { headerName: 'By', field: 'item_by', width: 90 },
+    { headerName: 'Supplier Name', field: 'supplier_name', width: 110 },
+  ];
+  coldwashcolumnDefs = [
     { headerName: 'Actions', field: 'index', width: 70 },
     { headerName: 'Item Name', field: 'item_name', width: 110 },
     { headerName: 'Concentration', field: 'concentration', width: 110 },
@@ -99,16 +120,16 @@ export class AddEditProcessComponent implements OnInit {
         this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
-    this.setScouringColumns();
-    this.setRCColumns();
-    this.setColdWashColumns();
-    this.setDyingColumns();
   }
 
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
   ngOnInit() {
+    this.setScouringColumns();
+    this.setRCColumns();
+    this.setColdWashColumns();
+    this.setDyingColumns();
     this.getItemList();
     this.onPageLoad();
   }
@@ -161,6 +182,7 @@ export class AddEditProcessComponent implements OnInit {
                 }
               })
             }
+            console.log('dying', this.dyingSubRecordArray)
             this.rowColdWashData = this.coldWashSubRecordArray;
             this.rowDyingData = this.dyingSubRecordArray;
             this.rowRCData = this.rcSubRecordArray;
@@ -197,7 +219,7 @@ export class AddEditProcessComponent implements OnInit {
     prcoessSubRecordArray.push(processSubRecordObj);
   }
   setScouringColumns() {
-    this.columnDefs.forEach((column: ColDef) => {
+    this.scouringcolumnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
         column.cellRendererFramework = CustomRendererScouringRecordComponent;
         column.cellRendererParams = {
@@ -207,7 +229,7 @@ export class AddEditProcessComponent implements OnInit {
     });
   }
   setRCColumns() {
-    this.columnDefs.forEach((column: ColDef) => {
+    this.rccolumnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
         column.cellRendererFramework = CustomRendererRCRecordComponent;
         column.cellRendererParams = {
@@ -217,7 +239,7 @@ export class AddEditProcessComponent implements OnInit {
     });
   }
   setColdWashColumns() {
-    this.columnDefs.forEach((column: ColDef) => {
+    this.coldwashcolumnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
         column.cellRendererFramework = CustomRendererColdWashRecordComponent;
         column.cellRendererParams = {
@@ -227,7 +249,7 @@ export class AddEditProcessComponent implements OnInit {
     });
   }
   setDyingColumns() {
-    this.columnDefs.forEach((column: ColDef) => {
+    this.dyingcolumnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
         column.cellRendererFramework = CustomRendererDyingRecordComponent;
         column.cellRendererParams = {
@@ -293,7 +315,7 @@ export class AddEditProcessComponent implements OnInit {
     let j = 1;
     if (!this.scouringSubRecordArray.length) {
       this.scouringSubRecord.index = j;
-    } else {
+    } else if (this.scouringSubRecord.index == undefined) {
       this.scouringSubRecord.index = this.scouringSubRecordArray.length + 1;
     }
     this.scouringSubRecordArray.forEach(ele => {
@@ -331,7 +353,7 @@ export class AddEditProcessComponent implements OnInit {
     let j = 1;
     if (!this.rcSubRecordArray.length) {
       this.rcSubRecord.index = j;
-    } else {
+    } else if (this.rcSubRecord.index == undefined) {
       this.rcSubRecord.index = this.rcSubRecordArray.length + 1;
     }
     this.rcSubRecordArray.forEach(ele => {
@@ -363,7 +385,7 @@ export class AddEditProcessComponent implements OnInit {
     let j = 1;
     if (!this.dyingSubRecordArray.length) {
       this.dyingSubRecord.index = j;
-    } else {
+    } else if (this.dyingSubRecord.index == undefined) {
       this.dyingSubRecord.index = this.dyingSubRecordArray.length + 1;
     }
     this.dyingSubRecordArray.forEach(ele => {
@@ -396,7 +418,7 @@ export class AddEditProcessComponent implements OnInit {
     let j = 1;
     if (!this.coldWashSubRecordArray.length) {
       this.coldWashSubRecord.index = j;
-    } else {
+    } else if (this.coldWashSubRecord.index == undefined) {
       this.coldWashSubRecord.index = this.coldWashSubRecordArray.length + 1;
     }
     this.coldWashSubRecordArray.forEach(ele => {
