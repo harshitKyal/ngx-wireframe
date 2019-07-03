@@ -174,7 +174,7 @@ export class AddEditColourStockComponent implements OnInit, OnDestroy {
     let j = 1;
     if (this.colourStockRecord.length) {
       this.record.index = j;
-    } else {
+    } else if (this.record.index == undefined) {
       this.record.index = this.colourStockRecord.length + 1;
     }
     this.colourStockRecord.forEach(ele => {

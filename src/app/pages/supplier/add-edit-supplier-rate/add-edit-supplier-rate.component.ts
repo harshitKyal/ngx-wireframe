@@ -142,7 +142,7 @@ export class AddEditSupplierRateComponent implements OnInit {
     let j = 1;
     if (this.supplierRateList.length) {
       this.supplierRateRecord.index = j;
-    } else {
+    } else if (this.supplierRateRecord.index == undefined) {
       this.supplierRateRecord.index = this.supplierRateList.length + 1;
     }
     this.supplierRateList.forEach(ele => {

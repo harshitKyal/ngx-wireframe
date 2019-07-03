@@ -215,11 +215,11 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
     let j = 1;
     if (this.shadeRecord.length) {
       this.record.index = j;
-    } else {
+    } else if (this.record.index == undefined) {
       this.record.index = this.shadeRecord.length + 1;
     }
     this.shadeRecord.forEach(ele => {
-      if (ele.item_name == this.record.item_name) {
+      if (ele.index == this.record.index) {
         ele = this.record
         flag = 1;
       }

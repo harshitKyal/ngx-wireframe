@@ -322,7 +322,7 @@ export class AddEditProgramComponent implements OnInit {
     let j = 1;
     if (!this.programRecord.length) {
       this.record.index = j;
-    } else {
+    } else if (this.record.index == undefined) {
       this.record.index = this.programRecord.length + 1;
     }
     this.programRecord.forEach(ele => {

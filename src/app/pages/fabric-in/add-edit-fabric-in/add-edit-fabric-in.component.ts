@@ -178,7 +178,7 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
     let j = 1;
     if (this.fabricRecord.length) {
       this.record.index = j;
-    } else {
+    } else if (this.record.index == undefined) {
       this.record.index = this.fabricRecord.length + 1;
     }
     this.fabricRecord.forEach(ele => {

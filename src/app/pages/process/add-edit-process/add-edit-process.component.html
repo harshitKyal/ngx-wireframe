@@ -21,7 +21,8 @@
           <div class="form-group">
             <label>No. of Dying Bath</label>
             <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-              [(ngModel)]="processModal.no_dying_bath" name="dyingBath" #dyingbath="ngModel" required />
+              (keypress)="numberOnly($event)" [(ngModel)]="processModal.no_dying_bath" name="dyingBath"
+              #dyingbath="ngModel" required />
             <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
               <div *ngIf="dyingbath.errors && dyingbath.errors.required">
                 No. of Dying Bath is required.
@@ -33,7 +34,8 @@
           <div class="form-group">
             <label>DC Mulitplying Fac.</label>
             <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-              [(ngModel)]="processModal.dc_multiplying_fac" name="dc" #Dc="ngModel" required />
+              (keypress)="numberOnly($event)" [(ngModel)]="processModal.dc_multiplying_fac" name="dc" #Dc="ngModel"
+              required />
             <div *ngIf="Dc.invalid && (Dc.dirty || Dc.touched)" class="errors">
               <div *ngIf="Dc.errors && Dc.errors.required">
                 DC Mulitplying Fac is required.
@@ -57,7 +59,8 @@
                     <div class="form-group">
                       <label>Temperature</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="scouringRecord.temperature" name="scouringTemp" #ScouringTemp="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.temperature" name="scouringTemp"
+                        #ScouringTemp="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                               <div *ngIf="processname.errors && processname.errors.required">
                                 Process Name is required.
@@ -70,8 +73,8 @@
                     <div class="form-group">
                       <label>Plc Program No.</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="scouringRecord.plc_program_no" name="scouring_program_no"
-                        #ScouringProgram="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.plc_program_no"
+                        name="scouring_program_no" #ScouringProgram="ngModel" />
                       <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
                                 <div *ngIf="dyingbath.errors && dyingbath.errors.required">
                                   No. of Dying Bath is required.
@@ -85,7 +88,8 @@
                     <div class="form-group">
                       <label>Hold Time</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="scouringRecord.hold_time" name="scouringTime" #ScouringTime="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.hold_time" name="scouringTime"
+                        #ScouringTime="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                               <div *ngIf="processname.errors && processname.errors.required">
                                 Process Name is required.
@@ -97,8 +101,8 @@
                     <div class="form-group">
                       <label>Rate Temperature</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="scouringRecord.rate_temperature" name="scouringRateTemp"
-                        #ScouringRateTemp="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.rate_temperature"
+                        name="scouringRateTemp" #ScouringRateTemp="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                               <div *ngIf="processname.errors && processname.errors.required">
                                 Process Name is required.
@@ -152,7 +156,7 @@
                     <div class="col-md-2">
                       <div class="form-group">
                         <label>Concentration</label>
-                        <input nbInput fullWidth fieldSize="small" type="text"
+                        <input nbInput fullWidth fieldSize="small" type="text" (keypress)="numberOnly($event)"
                           class="form-control input-group input-group-sm" [(ngModel)]="scouringSubRecord.concentration"
                           name="scouringConcentration" #ScouringConcentration="ngModel" required />
                         <div
@@ -216,7 +220,8 @@
                     <div class="form-group">
                       <label>Temperature</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="dyingRecord.temperature" name="dyingTemp" #DyingTemp="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="dyingRecord.temperature" name="dyingTemp"
+                        #DyingTemp="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                                 <div *ngIf="processname.errors && processname.errors.required">
                                   Process Name is required.
@@ -229,7 +234,8 @@
                     <div class="form-group">
                       <label>Plc Program No.</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="dyingRecord.plc_program_no" name="dying_program_no" #dyingProgram="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="dyingRecord.plc_program_no" name="dying_program_no"
+                        #dyingProgram="ngModel" />
                       <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
                                   <div *ngIf="dyingbath.errors && dyingbath.errors.required">
                                     No. of Dying Bath is required.
@@ -243,7 +249,8 @@
                     <div class="form-group">
                       <label>Hold Time</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="dyingRecord.hold_time" name="dyingTime" #DyingTime="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="dyingRecord.hold_time" name="dyingTime"
+                        #DyingTime="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                                 <div *ngIf="processname.errors && processname.errors.required">
                                   Process Name is required.
@@ -255,7 +262,8 @@
                     <div class="form-group">
                       <label>Rate Temperature</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="dyingRecord.rate_temperature" name="dyingRateTemp" #DyringRateTemp="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="dyingRecord.rate_temperature" name="dyingRateTemp"
+                        #DyringRateTemp="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                                 <div *ngIf="processname.errors && processname.errors.required">
                                   Process Name is required.
@@ -311,7 +319,8 @@
                         <label>Concentration</label>
                         <input nbInput fullWidth fieldSize="small" type="text"
                           class="form-control input-group input-group-sm" [(ngModel)]="dyingSubRecord.concentration"
-                          name="dyingConcentration" #DyingConcentration="ngModel" required />
+                          (keypress)="numberOnly($event)" name="dyingConcentration" #DyingConcentration="ngModel"
+                          required />
                         <div
                           *ngIf="DyingConcentration.invalid && (DyingConcentration.dirty || DyingConcentration.touched)"
                           class="errors">
@@ -375,7 +384,8 @@
                     <div class="form-group">
                       <label>Temperature</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="rcRecord.temperature" name="rcTemp" #RcTemp="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="rcRecord.temperature" name="rcTemp"
+                        #RcTemp="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                                 <div *ngIf="processname.errors && processname.errors.required">
                                   Process Name is required.
@@ -388,7 +398,8 @@
                     <div class="form-group">
                       <label>Plc Program No.</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="rcRecord.plc_program_no" name="rc_program_no" #RcProgram="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="rcRecord.plc_program_no" name="rc_program_no"
+                        #RcProgram="ngModel" />
                       <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
                                   <div *ngIf="dyingbath.errors && dyingbath.errors.required">
                                     No. of Dying Bath is required.
@@ -402,7 +413,8 @@
                     <div class="form-group">
                       <label>Hold Time</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="rcRecord.hold_time" name="rcTime" #RcTime="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="rcRecord.hold_time" name="rcTime"
+                        #RcTime="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                                 <div *ngIf="processname.errors && processname.errors.required">
                                   Process Name is required.
@@ -414,7 +426,8 @@
                     <div class="form-group">
                       <label>Rate Temperature</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="rcRecord.rate_temperature" name="rcRateTemp" #RcRateTemp="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="rcRecord.rate_temperature" name="rcRateTemp"
+                        #RcRateTemp="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                                 <div *ngIf="processname.errors && processname.errors.required">
                                   Process Name is required.
@@ -467,7 +480,7 @@
                     <div class="col-md-2">
                       <div class="form-group">
                         <label>Concentration</label>
-                        <input nbInput fullWidth fieldSize="small" type="text"
+                        <input nbInput fullWidth fieldSize="small" type="text" (keypress)="numberOnly($event)"
                           class="form-control input-group input-group-sm" [(ngModel)]="rcSubRecord.concentration"
                           name="rcConcentration" #RcConcentration="ngModel" required />
                         <div *ngIf="RcConcentration.invalid && (RcConcentration.dirty || RcConcentration.touched)"
@@ -526,7 +539,8 @@
                     <div class="form-group">
                       <label>Temperature</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="coldWashRecord.temperature" name="coldWashTemp" #ColdWashTemp="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="coldWashRecord.temperature" name="coldWashTemp"
+                        #ColdWashTemp="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                               <div *ngIf="processname.errors && processname.errors.required">
                                 Process Name is required.
@@ -539,8 +553,8 @@
                     <div class="form-group">
                       <label>Plc Program No.</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="coldWashRecord.plc_program_no" name="coldWash_program_no"
-                        #coldWashProgram="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="coldWashRecord.plc_program_no"
+                        name="coldWash_program_no" #coldWashProgram="ngModel" />
                       <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
                                 <div *ngIf="dyingbath.errors && dyingbath.errors.required">
                                   No. of Dying Bath is required.
@@ -554,7 +568,8 @@
                     <div class="form-group">
                       <label>Hold Time</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="coldWashRecord.hold_time" name="coldWashTime" #coldWashtime="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="coldWashRecord.hold_time" name="coldWashTime"
+                        #coldWashtime="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                               <div *ngIf="processname.errors && processname.errors.required">
                                 Process Name is required.
@@ -566,8 +581,8 @@
                     <div class="form-group">
                       <label>Rate Temperature</label>
                       <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-                        [(ngModel)]="coldWashRecord.rate_temperature" name="coldWashRateTemp"
-                        #ColdWashRateTemp="ngModel" />
+                        (keypress)="numberOnly($event)" [(ngModel)]="coldWashRecord.rate_temperature"
+                        name="coldWashRateTemp" #ColdWashRateTemp="ngModel" />
                       <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
                               <div *ngIf="processname.errors && processname.errors.required">
                                 Process Name is required.
@@ -621,7 +636,7 @@
                     <div class="col-md-2">
                       <div class="form-group">
                         <label>Concentration</label>
-                        <input nbInput fullWidth fieldSize="small" type="text"
+                        <input nbInput fullWidth fieldSize="small" type="text" (keypress)="numberOnly($event)"
                           class="form-control input-group input-group-sm" [(ngModel)]="coldWashSubRecord.concentration"
                           name="coldWashConcentration" #ColdWashConcentration="ngModel" required />
                         <div
