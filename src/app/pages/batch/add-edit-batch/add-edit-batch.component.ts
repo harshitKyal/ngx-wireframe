@@ -37,7 +37,7 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
   currentUserPermission = [];
   currentUser;
   currentUserGroupUserIds: any;
-
+  currentUserHeadid: any;
   qualityList: Quality[] = [];
   batchDetailObj: BatchWeightMtrDetail[] = [];
   showDetailFlag = false;
@@ -63,6 +63,7 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
         this.currentUserId = ele.user.user_id;
         this.currentUserPermission = ele.user_permission;
         this.currentUserGroupUserIds = ele.user.group_user_ids;
+        this.currentUserHeadid = ele.user.user_head_id;
       }
     });
     this.setColumns();
@@ -281,6 +282,8 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
         this.toasterService.error('Server Error');
       });
     } else {
+      this.batchModal.created_by = this.currentUserId;
+      this.batchModal.user_head_id = this.currentUserHeadid;
       console.log(this.batchModal)
       this.batchService.addBatch(this.batchModal).subscribe(data => {
         data = data[0]

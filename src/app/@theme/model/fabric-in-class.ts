@@ -19,6 +19,7 @@ export class Fabric {
     updated_date: any;
     created_by: any;
     updated_by: any;
+    user_head_id:any;
 }
 
 export class FabricInRecord {

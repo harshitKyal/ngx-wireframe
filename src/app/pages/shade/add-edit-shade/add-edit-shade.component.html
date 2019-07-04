@@ -19,8 +19,14 @@
         <div class="col-md-2">
           <div class="form-group">
             <label>Process Name</label>
-            <input type="text" class="form-control" [(ngModel)]="shadeModal.processname" name="processName"
-              #ProcessName="ngModel" required />
+            <select class="form-control" [(ngModel)]="shadeModal.process_id" name="processId" #ProcessName="ngModel"
+              required>
+              <option disabled value="">Select Process
+              </option>
+              <option *ngFor="let process of processNameList" [value]="process.entry_id">
+                {{process.process_name}}
+              </option>
+            </select>
             <div *ngIf="ProcessName.invalid && (ProcessName.dirty || ProcessName.touched)" class="errors">
               <div *ngIf="ProcessName.errors && ProcessName.errors.required">
                 Process Name is required.
@@ -47,8 +53,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let quality of qualityList; let i = index" (
-                    click)="selectQualityId(quality)"
+                  <tr *ngFor="let quality of qualityList; let i = index" ( click)="selectQualityId(quality)"
                     class="pointer">
                     <td style="display:none;">{{quality.quality_id}}</td>
                     <td>{{quality.quality_id}}</td>
@@ -73,8 +78,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
         <div class="col-md-3">
           <div class="form-group">
             <label>Quality Type</label>
@@ -114,13 +117,13 @@
             </div>
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <div class="form-group">
             <label>Lab Colour No.</label>
             <input type="text" class="form-control" [(ngModel)]="shadeModal.lab_colour_no" name="labColourNo" />
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <div class="form-group">
             <label>Category</label>
             <input type="text" class="form-control" [(ngModel)]="shadeModal.category" name="Category" />
@@ -141,8 +144,8 @@
       </div>
       <div class="row">
         <form #sform="ngForm">
-          <div class="row col-md-12">
-            <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-2">
               <div class="form-group">
                 <label>Item Name</label>
                 <input type="text" class="form-control" placeholder="Select Item Name" name="itemName"
@@ -174,7 +177,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <div class="form-group">
                 <label>Concentration</label>
                 <input type="text" class="form-control" [(ngModel)]="record.concentration" name="conctration"
@@ -186,7 +189,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <div class="form-group">
                 <label>Supplier Name</label>
                 <input type="text" class="form-control" disabled [(ngModel)]="record.supplier_name" name="supplerName"
@@ -198,12 +201,11 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row col-md-12">
-            <div class="col-md-2">
+
+            <div *ngIf="isAdmin" class="col-md-2">
               <div class="form-group">
                 <label>Rate</label>
-                <input type="text" class="form-control" [(ngModel)]="record.rate" name="rt" #Rate="ngModel"
+                <input type="text" class="form-control" [(ngModel)]="record.rate" name="rt" #Rate="ngModel" disabled
                   (keypress)="numberOnly($event)" digits required />
                 <div *ngIf="Rate.invalid && (Rate.dirty || Rate.touched)" class="errors">
                   <div *ngIf="Rate.errors && Rate.errors.required">
@@ -212,11 +214,11 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div *ngIf="isAdmin" class="col-md-2">
               <div class="form-group">
                 <label>Amount</label>
-                <input type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt" #Amount="ngModel"
-                  (keypress)="numberOnly($event)" digits required />
+                <input disabled type="text" class="form-control" [(ngModel)]="record.amount" name="Amnt"
+                  #Amount="ngModel" (keypress)="numberOnly($event)" digits required />
                 <div *ngIf="Amount.invalid && (Amount.dirty || Amount.touched)" class="errors">
                   <div *ngIf="Amount.errors && Amount.errors.required">
                     Amount is required.

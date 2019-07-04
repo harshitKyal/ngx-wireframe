@@ -16,6 +16,8 @@ import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { DatePipe } from '@angular/common';
+import { BatchMast, BatchData } from '../../../@theme/model/batch-class';
+import { BatchService } from '../../../@theme/services/batch.service';
 
 @Component({
   selector: 'app-add-edit-fabric-in',
@@ -40,6 +42,10 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
   currentUserPermission = [];
   currentUser;
   currentUserGroupUserIds: any;
+  currentUserHeadid: any;
+  batchModal: BatchMast;
+  batchDataObj: BatchData;
+  batchDataArray: BatchData[] = [];
   columnDefs = [
     { headerName: 'Actions', field: 'index' },
     { headerName: 'Gr', field: 'gr' },
@@ -53,9 +59,11 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
 
   ];
   partyReqObj = new ViewReqObj();
+  isBatchInitialFlag = 0;
+
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
     private router: Router, private fabricService: FabricInService, private qualityService: QualityService,
-    private datePipe: DatePipe,
+    private datePipe: DatePipe, private _modalService: NgbModal, private batchService: BatchService,
     private authService: AuthService) {
     this.fabricModal = new Fabric();
     this.record = new FabricInRecord();
@@ -65,6 +73,7 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
         this.currentUserId = ele.user.user_id;
         this.currentUserPermission = ele.user_permission;
         this.currentUserGroupUserIds = ele.user.group_user_ids;
+        this.currentUserHeadid = ele.user.user_head_id;
       }
     });
     this.setColumns();
@@ -151,7 +160,8 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
                 ele.quality_name = this.qualityList[i].quality_name;
                 ele.quality_type = this.qualityList[i].quality_type;
               }
-            })
+            });
+            this.isBatchInitialFlag = this.fabricModal.batch;
             this.rowData = [...this.fabricRecord]
             this.fabricModal.fabric_record = this.fabricRecord
           } else {
@@ -216,14 +226,74 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
             qualityMatchCount++;
           }
         });
-        if (qualityMatchCount == this.fabricRecord.length + 1) {
-
+        if (qualityMatchCount == this.fabricRecord.length) {
+          this.addUpdateFabricForm(form);
+          this.batchModal = new BatchMast();
+          this.batchDataArray = [];
+          this.batchModal.quality_entry_id = match;
+          this.batchModal.remark = this.fabricModal.remark;
+          this.fabricRecord.forEach(record => {
+            let batchRecord = new BatchData();
+            batchRecord.gr = record.gr;
+            batchRecord.no_of_cones_taka = record.no_of_cones;
+            batchRecord.mtr = record.mtr;
+            batchRecord.wt = record.wt;
+            batchRecord.batch_quality_detail = [];
+            this.batchDataArray.push(batchRecord);
+          });
+          this.batchModal.batch_data = this.batchDataArray;
+          if (this.id && this.isBatchInitialFlag) {
+            // this.batchModal.updated_by = this.currentUserId;
+            // this.batchService.updateBatch(this.batchModal).subscribe(data => {
+            //   console.log(data)
+            //   if (!data[0].error) {
+            //     this.toasterService.success(data[0].message);
+            //     form.resetForm();
+            //     this.router.navigate(['/pages/batch/view-batch-list']);
+            //   } else {
+            //     this.toasterService.error(data[0].message);
+            //   }
+            // }, error => {
+            //   this.toasterService.error('Server Error');
+            // });
+          } else {
+            this.batchModal.user_head_id = this.currentUserHeadid;
+            this.batchModal.created_by = this.currentUserId;
+            console.log(this.batchModal)
+            this.batchService.addBatch(this.batchModal).subscribe(data => {
+              data = data[0]
+              if (!data.error) {
+                this.toasterService.success(data.message);
+                form.resetForm();
+                this.router.navigate(['/pages/batch/view-batch-list']);
+              } else {
+                this.toasterService.error(data.message);
+              }
+            }, error => {
+              this.toasterService.error('Server Error');
+            });
+          }
         } else {
           this.fabricModal.batch = 0;
-          this.toasterService.error('Quality should be same to add this is a Batch');
+          const modalRef = this._modalService.open(ConfirmDialogComponent);
+          modalRef.componentInstance.titleFrom = 'Cannot Be A Batch ';
+          modalRef.componentInstance.message = 'Quality should be of same ID to add this as a Batch. Do you want to still update details without batch?';
+          modalRef.result
+            .then((result) => {
+              if (result) {
+                this.addUpdateFabricForm(form);
+              } else {
+                this.toasterService.info('Quality should be of same ID to add this as a Batch');
+              }
+            });
         }
       }
+    } else {
+      this.addUpdateFabricForm(form);
     }
+  }
+
+  addUpdateFabricForm(form: NgForm) {
     this.fabricModal.fabric_record = this.fabricRecord;
     console.log('bill', this.fabricModal);
     // for update
@@ -244,6 +314,8 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
       });
     } else {
       //for add
+      this.fabricModal.created_by = this.currentUserId;
+      this.fabricModal.user_head_id = this.currentUserHeadid;
       console.log(this.fabricModal)
       this.fabricService.addFabricIn(this.fabricModal).subscribe(data => {
         data = data[0]

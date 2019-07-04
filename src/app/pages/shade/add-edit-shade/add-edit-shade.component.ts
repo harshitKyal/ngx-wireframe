@@ -18,6 +18,8 @@ import { SupplierService } from '../../../@theme/services/supplier.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { CustomRendererStockRecordComponent } from '../../fabric-in/add-edit-fabric-in/add-edit-fabric-in.component';
+import { Process } from '../../../@theme/model/process-class';
+import { ProcessService } from '../../../@theme/services/process.service';
 
 @Component({
   selector: 'ngx-add-edit-shade',
@@ -26,6 +28,7 @@ import { CustomRendererStockRecordComponent } from '../../fabric-in/add-edit-fab
 })
 export class AddEditShadeComponent implements OnInit, OnDestroy {
 
+  isAdmin = false;
   shadeModal: Shade;
   flagDivSubForm = false;
   flagDiv = false;
@@ -38,6 +41,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   record: ShadeRecord;
   qualityList: Quality[] = [];
   partyNameList: Party[] = [];
+  processNameList: Process[] = [];
   currentUserId: any;
   currentUserHeadid: any;
   currentUser$: Subscription;
@@ -57,7 +61,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   ];
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private supplierService: SupplierService,
     private router: Router, private shadeService: ShadeService, private qualityService: QualityService,
-    private authService: AuthService, private partyService: PartyService) {
+    private authService: AuthService, private partyService: PartyService, private processService: ProcessService) {
     this.shadeModal = new Shade();
     this.record = new ShadeRecord();
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -65,7 +69,9 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
         this.currentUser = ele.user;
         this.currentUserId = ele.user.user_id;
         this.currentUserGroupUserIds = ele.user.group_user_ids;
-
+        if (ele.user.user_name === "admin") {
+          this.isAdmin = true;
+        }
       }
     });
     this.setColumns();
@@ -79,6 +85,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
     this.getPartyList();
     this.getSupplierItemList();
     this.onPageLoad();
+    this.getProcessList();
   }
 
   setColumns() {
@@ -110,7 +117,23 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
         this.toasterService.error(error);
       });
   }
-
+  getProcessList() {
+    this.processNameList = [];
+    this.viewPartyReqOb.view_group = true;
+    this.viewPartyReqOb.current_user_id = this.currentUserId;
+    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
+    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
+    this.processService.getAllProcesss(this.viewPartyReqOb).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.processNameList = data[0].data;
+        } else {
+          this.toasterService.error(data[0].message);
+        }
+      }, error => {
+        this.toasterService.error(error);
+      });
+  }
   getQuality() {
     this.qualityViewReqObj.current_user_id = this.currentUserId;
     this.qualityViewReqObj.user_head_id = this.currentUser.user_head_id;

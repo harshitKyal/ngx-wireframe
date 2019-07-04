@@ -70,31 +70,31 @@ export class AddEditProcessComponent implements OnInit {
 
   scouringcolumnDefs = [
     { headerName: 'Actions', field: 'index', width: 70 },
-    { headerName: 'Item Name', field: 'item_name', width: 110 },
-    { headerName: 'Concentration', field: 'concentration', width: 110 },
-    { headerName: 'By', field: 'item_by', width: 90 },
-    { headerName: 'Supplier Name', field: 'supplier_name', width: 110 },
+    { headerName: 'Item Name', field: 'item_name' },
+    { headerName: 'Concentration', field: 'concentration' },
+    { headerName: 'By', field: 'item_by' },
+    { headerName: 'Supplier Name', field: 'supplier_name' },
   ];
   dyingcolumnDefs = [
     { headerName: 'Actions', field: 'index', width: 70 },
-    { headerName: 'Item Name', field: 'item_name', width: 110 },
-    { headerName: 'Concentration', field: 'concentration', width: 110 },
-    { headerName: 'By', field: 'item_by', width: 90 },
-    { headerName: 'Supplier Name', field: 'supplier_name', width: 110 },
+    { headerName: 'Item Name', field: 'item_name' },
+    { headerName: 'Concentration', field: 'concentration' },
+    { headerName: 'By', field: 'item_by' },
+    { headerName: 'Supplier Name', field: 'supplier_name' },
   ];
   rccolumnDefs = [
     { headerName: 'Actions', field: 'index', width: 70 },
-    { headerName: 'Item Name', field: 'item_name', width: 110 },
-    { headerName: 'Concentration', field: 'concentration', width: 110 },
-    { headerName: 'By', field: 'item_by', width: 90 },
-    { headerName: 'Supplier Name', field: 'supplier_name', width: 110 },
+    { headerName: 'Item Name', field: 'item_name' },
+    { headerName: 'Concentration', field: 'concentration' },
+    { headerName: 'By', field: 'item_by' },
+    { headerName: 'Supplier Name', field: 'supplier_name' },
   ];
   coldwashcolumnDefs = [
     { headerName: 'Actions', field: 'index', width: 70 },
-    { headerName: 'Item Name', field: 'item_name', width: 110 },
-    { headerName: 'Concentration', field: 'concentration', width: 110 },
-    { headerName: 'By', field: 'item_by', width: 90 },
-    { headerName: 'Supplier Name', field: 'supplier_name', width: 110 },
+    { headerName: 'Item Name', field: 'item_name' },
+    { headerName: 'Concentration', field: 'concentration' },
+    { headerName: 'By', field: 'item_by' },
+    { headerName: 'Supplier Name', field: 'supplier_name' },
   ];
   currentUserPermission: any;
   currentUserGroupUserIds: any;

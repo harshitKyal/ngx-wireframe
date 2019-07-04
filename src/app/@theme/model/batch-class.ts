@@ -10,6 +10,7 @@ export class BatchMast {
     created_by: any;
     updated_by: any;
     batch_data: BatchData[];
+    user_head_id: any;
     constructor() {
         this.quality_entry_id = '';
     }

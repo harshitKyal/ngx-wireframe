@@ -139,17 +139,6 @@ export class ViewProcessComponent implements OnInit {
     this.processService.getAllProcesss(this.processReqObj).subscribe(data => {
       if (!data[0].error) {
         this.processList = data[0].data;
-        // this.processList.forEach(ele => {
-        //   const i = this.qualityList.findIndex(v => v.entry_id == ele.quality_id);
-        //   if (i > -1) {
-        //     ele.quality_name = this.qualityList[i].quality_name;
-        //     ele.quality_type = this.qualityList[i].quality_type;
-        //   }
-        //   const partyIndex = this.partyNameList.findIndex(v => v.entry_id == ele.party_id);
-        //   if (partyIndex > -1) {
-        //     ele.party_name = this.partyNameList[partyIndex].party_name;
-        //   }
-        // });
         this.rowData = this.processList;
       } else {
         this.tosterService.error(data[0].message);
