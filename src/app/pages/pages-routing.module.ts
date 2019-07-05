@@ -63,6 +63,12 @@ const routes: Routes = [{
       // canLoad: [ProcessGuardService],
     },
     {
+      path: 'process-planning',
+      loadChildren: './process-planning/process-planning.module#ProcessPlanningModule',
+      // canActivate: [ProcessGuardService],
+      // canLoad: [ProcessGuardService],
+    },
+    {
       path: 'supplier',
       loadChildren: './supplier/supplier.module#SupplierModule',
       canActivate: [SupplierGuardService],

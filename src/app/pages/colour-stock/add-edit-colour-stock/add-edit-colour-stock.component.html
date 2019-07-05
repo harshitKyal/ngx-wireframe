@@ -21,7 +21,12 @@
             </div>
           </div>
         </div>
-
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Remark</label>
+            <textarea type="text" class="form-control" [(ngModel)]="colourStockModal.remark" name="Remark"></textarea>
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-2">
@@ -36,7 +41,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <div class="form-group">
             <label>Bill Date</label>
             <input type="date" class="form-control" [(ngModel)]="colourStockModal.bill_date" name="billdate"
@@ -61,7 +66,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <div class="form-group">
             <label>Challan Date</label>
             <input type="date" class="form-control" [(ngModel)]="colourStockModal.chl_date" name="chldate"
@@ -72,14 +77,6 @@
                 Challan Date is required.
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Remark</label>
-            <textarea type="text" class="form-control" [(ngModel)]="colourStockModal.remark" name="Remark"></textarea>
           </div>
         </div>
         <div class="col-md-2">

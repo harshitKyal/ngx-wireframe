@@ -72,6 +72,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Process Planning',
+    icon: 'nb-layout-default',
+    children: [
+      {
+        title: 'View Process Planning',
+        link: '/pages/process-planning/view-process-planning-list',
+      },
+    ],
+  },
+  {
     title: 'Shade',
     icon: 'nb-layout-default',
     children: [

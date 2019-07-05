@@ -5,12 +5,10 @@ import { Router, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } f
 import { PermissionService } from '../services/permission.service';
 import { AuthService } from '../services/auth.service';
 import { Route } from '@angular/compiler/src/core';
-
 @Injectable({
   providedIn: 'root'
 })
-export class ProcessGuardService {
-
+export class ProcessPlanningGuardService {
 
   currentUser: User;
   currentUser$: Subscription;
@@ -25,7 +23,7 @@ export class ProcessGuardService {
         this.currentUserPermission = data.user_permission;
         if (this.currentUserPermission.length) {
           this.currentUserPermission.forEach(ele => {
-            if (ele.form_name === 'Process') {
+            if (ele.form_name === 'Process Planning') {
               this.userPermission = new UserPermission();
               this.userPermission = ele;
             }
@@ -39,7 +37,7 @@ export class ProcessGuardService {
     if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Process. If you want to View Process ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Process Planning. If you want to View Process Planning ask admin for permission.');
       if (res) {
 
       } else {
@@ -52,7 +50,7 @@ export class ProcessGuardService {
     if (this.currentUser !== undefined && this.userPermission.can_view) {
       return true;
     } else {
-      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Process. If you want to View Process ask admin for permission.');
+      const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Process Planning. If you want to View Process Planning ask admin for permission.');
       if (res) {
 
       } else {
@@ -61,5 +59,3 @@ export class ProcessGuardService {
     }
   }
 }
-
-
