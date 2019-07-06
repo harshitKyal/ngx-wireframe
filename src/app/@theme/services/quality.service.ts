@@ -13,6 +13,9 @@ export class QualityService {
     return this.apiService.apiCaller('post', '/qualityData', data);
   }
 
+  getAllQualityFilterData(data?) {
+    return this.apiService.apiCaller('post', '/qualityFilterData', data);
+  }
   getAllQualityByPartyId(data) {
     return this.apiService.apiCaller('post', '/getQualityByPartyId', data);
   }

@@ -1,3 +1,53 @@
-<p>
-  add-edit-process-planning works!
-</p>
+<nb-card>
+  <nb-card-header>{{topHeader}}
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Party Name</label>
+          <select class="form-control" [(ngModel)]="selectedPartyId" name="partyid" (change)="onPartySelect()">
+            <option disabled value="">Select Party
+            </option>
+            <option *ngFor="let party of partyList" [value]="party.entry_id">
+              {{party.party_name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Shade</label>
+          <select class="form-control" [(ngModel)]="selectedShadeId" name="shadeid" (change)="onShadeSelect()">
+            <option disabled value="">Select Shade
+            </option>
+            <option *ngFor="let shade of shadeList" [value]="shade.entry_id">
+              {{shade.party_shade_no}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Quality Name</label>
+          <select class="form-control" [(ngModel)]="selectedQualityId" name="qualityid" (change)="onQualitySelect()">
+            <option disabled value="">Select Quality
+            </option>
+            <option *ngFor="let quality of qualityList" [value]="quality.entry_id">
+              {{quality.quality_name}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h3>
+      Program List
+    </h3>
+    <div class="row table table-responsive">
+      <ag-grid-angular style="width: 100%; height:300px" class="ag-theme-balham" [rowData]="rowData"
+        [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'>
+      </ag-grid-angular>
+    </div>
+  </nb-card-body>
+</nb-card>

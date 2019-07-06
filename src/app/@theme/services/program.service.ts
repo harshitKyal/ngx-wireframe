@@ -12,6 +12,10 @@ export class ProgramService {
     return this.apiService.apiCaller('post', '/programList', programReqObj);
   }
 
+  getProgramsByFilter(programReqObj) {
+    return this.apiService.apiCaller('post', '/programListByFilter', programReqObj);
+  }
+
   getProgramGivenByList(programReqObj) {
     return this.apiService.apiCaller('post', '/programGivenByList', programReqObj);
   }
