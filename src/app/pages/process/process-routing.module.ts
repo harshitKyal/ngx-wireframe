@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProcessComponent } from './process.component';
 import { ViewProcessComponent } from './view-process/view-process.component';
 import { AddEditProcessComponent } from './add-edit-process/add-edit-process.component';
+import { DynamicProcessComponent } from './dynamic-process/dynamic-process.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       {
         path: 'add-process',
         component: AddEditProcessComponent,
+      },
+      {
+        path: 'dynamic-process',
+        component: DynamicProcessComponent,
       },
       {
         path: 'edit-process/:id',

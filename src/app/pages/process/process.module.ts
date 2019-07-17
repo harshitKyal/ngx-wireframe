@@ -11,6 +11,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ThemeModule } from '../../@theme/theme.module';
 import { ProcessRoutingModule } from './process-routing.module';
+import { DynamicProcessComponent } from './dynamic-process/dynamic-process.component';
+import { AddStepComponent } from './add-step/add-step.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { ProcessRoutingModule } from './process-routing.module';
     CustomRendererScouringRecordComponent,
     CustomRendererColdWashRecordComponent,
     CustomRendererDyingRecordComponent,
-    CustomRendererRCRecordComponent
+    CustomRendererRCRecordComponent,
+    DynamicProcessComponent,
+    AddStepComponent
   ],
   imports: [
     CommonModule,
@@ -35,6 +39,7 @@ import { ProcessRoutingModule } from './process-routing.module';
     ProcessRoutingModule
   ],
   entryComponents: [
+    AddStepComponent,
     CustomRendererProcessComponent,
     CustomRendererScouringRecordComponent,
     CustomRendererColdWashRecordComponent,

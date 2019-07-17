@@ -23,18 +23,7 @@ const PAGES_COMPONENTS = [
   imports: [
     PagesRoutingModule,
     ThemeModule,
-    MiscellaneousModule,
-    PartyModule,
-    QualityModule,
-    FabricInModule,
-    UserModule,
-    BatchModule,
-    SupplierModule,
-    ProgramModule,
-    ShadeModule,
-    ProgramModule,
-    ColourStockModule,
-    ProcessModule
+    MiscellaneousModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,

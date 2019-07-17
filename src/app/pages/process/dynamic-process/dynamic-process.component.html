@@ -1,0 +1,315 @@
+<nb-card>
+  <nb-card-header>Dynaic Process
+  </nb-card-header>
+  <nb-card-body>
+    <form #vform="ngForm">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Process Name</label>
+            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+              [(ngModel)]="processModal.process_name" name="processName" #processname="ngModel" required />
+            <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+              <div *ngIf="processname.errors && processname.errors.required">
+                Process Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>No. of Dying Bath</label>
+            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+              (keypress)="numberOnly($event)" [(ngModel)]="processModal.no_dying_bath" name="dyingBath"
+              #dyingbath="ngModel" required />
+            <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
+              <div *ngIf="dyingbath.errors && dyingbath.errors.required">
+                No. of Dying Bath is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>DC Mulitplying Fac.</label>
+            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+              (keypress)="numberOnly($event)" [(ngModel)]="processModal.dc_multiplying_fac" name="dc" #Dc="ngModel"
+              required />
+            <div *ngIf="Dc.invalid && (Dc.dirty || Dc.touched)" class="errors">
+              <div *ngIf="Dc.errors && Dc.errors.required">
+                DC Mulitplying Fac is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <i class="fa fa-plus-circle mr-2" style="color:#4ca6ff;font-size:25px;cursor: pointer;margin: 23px;"
+            (click)="onAddStep()"></i>
+        </div>
+      </div>
+      <br>
+      <div class="col-md-12" *ngIf="stepList.length">
+        <nb-accordion *ngFor="let step of stepList">
+          <nb-accordion-item #item (click)="onStepClick(step)">
+            <nb-accordion-item-header>
+              {{step.name}}
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <!-- class="primary col-md-2" -->
+              <button nbButton (click)="onAddFunction()">Add Function</button>
+              <br>
+              <hr>
+              <br>
+              <div *ngIf="addFunctionFlag">
+                <div class="form-group col-md-6">
+                  <label>Functions</label>
+                  <select class="form-control" name="function" (change)="onFunctionSelect($event.target.value)">
+                    <option disabled value="">Select Function</option>
+                    <option *ngFor="let function of functionDropdown" [value]="function.id">{{function.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div *ngIf="currentSelectedFunction==='temp'">
+                <form #tempform="ngForm">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Temperature</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.temperature" name="scouringTemp"
+                          #ScouringTemp="ngModel" />
+                        <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                              <div *ngIf="processname.errors && processname.errors.required">
+                                Process Name is required.
+                              </div>
+                            </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Plc Program No.</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.plc_program_no"
+                          name="scouring_program_no" #ScouringProgram="ngModel" />
+                        <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
+                                <div *ngIf="dyingbath.errors && dyingbath.errors.required">
+                                  No. of Dying Bath is required.
+                                </div>
+                              </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Hold Time</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.hold_time" name="scouringTime"
+                          #ScouringTime="ngModel" />
+                        <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                              <div *ngIf="processname.errors && processname.errors.required">
+                                Process Name is required.
+                              </div>
+                            </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Rate Temperature</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.rate_temperature"
+                          name="scouringRateTemp" #ScouringRateTemp="ngModel" />
+                        <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                              <div *ngIf="processname.errors && processname.errors.required">
+                                Process Name is required.
+                              </div>
+                            </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <button size="small" [disabled]="tempform.invalid" style="margin-top: 32px;" nbButton
+                        (click)="onAddFormData(tempform)">Add</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div *ngIf="currentSelectedFunction==='pressure'">
+                <form #pressureform="ngForm">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Pressure</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.temperature" name="scouringTemp"
+                          #ScouringTemp="ngModel" />
+                        <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                <div *ngIf="processname.errors && processname.errors.required">
+                                  Process Name is required.
+                                </div>
+                              </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Plc Program No.</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.plc_program_no"
+                          name="scouring_program_no" #ScouringProgram="ngModel" />
+                        <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
+                                  <div *ngIf="dyingbath.errors && dyingbath.errors.required">
+                                    No. of Dying Bath is required.
+                                  </div>
+                                </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Hold Time</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.hold_time" name="scouringTime"
+                          #ScouringTime="ngModel" />
+                        <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                <div *ngIf="processname.errors && processname.errors.required">
+                                  Process Name is required.
+                                </div>
+                              </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Pressure Time</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.rate_temperature"
+                          name="scouringRateTemp" #ScouringRateTemp="ngModel" />
+                        <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                <div *ngIf="processname.errors && processname.errors.required">
+                                  Process Name is required.
+                                </div>
+                              </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <button size="small" [disabled]="pressureform.invalid" style="margin-top: 32px;" nbButton
+                        (click)="onAddFormData(pressureform)">Add</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div *ngIf="currentSelectedFunction==='chemical'">
+                <form #chemicalform="ngForm">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Chemical</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.temperature" name="scouringTemp"
+                          #ScouringTemp="ngModel" />
+                        <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                  <div *ngIf="processname.errors && processname.errors.required">
+                                    Process Name is required.
+                                  </div>
+                                </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Plc Program No.</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.plc_program_no"
+                          name="scouring_program_no" #ScouringProgram="ngModel" />
+                        <!-- <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
+                                    <div *ngIf="dyingbath.errors && dyingbath.errors.required">
+                                      No. of Dying Bath is required.
+                                    </div>
+                                  </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Hold Time</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.hold_time" name="scouringTime"
+                          #ScouringTime="ngModel" />
+                        <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                  <div *ngIf="processname.errors && processname.errors.required">
+                                    Process Name is required.
+                                  </div>
+                                </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label> Chemical By</label>
+                        <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+                          (keypress)="numberOnly($event)" [(ngModel)]="scouringRecord.rate_temperature"
+                          name="scouringRateTemp" #ScouringRateTemp="ngModel" />
+                        <!-- <div *ngIf="processname.invalid && (processname.dirty || processname.touched)" class="errors">
+                                  <div *ngIf="processname.errors && processname.errors.required">
+                                    Process Name is required.
+                                  </div>
+                                </div> -->
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <button size="small" [disabled]="chemicalform.invalid" style="margin-top: 32px;" nbButton
+                        (click)="onAddFormData(chemicalform)">Add</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div *ngIf="step.functionList && step.functionList.length">
+                <br>
+                <span>
+                  <h4>Functions List</h4>
+                </span>
+                <hr>
+                <nb-accordion *ngFor="let func of step.functionList">
+                  <nb-accordion-item #item1>
+                    <nb-accordion-item-header>
+                      {{func.name}}
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body *ngIf="func.value==='temp'">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <label>Temperature : {{func.temperature}}</label>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Rate Temperature : {{func.rate_temperature}}</label>
+                        </div>
+                      </div>
+                    </nb-accordion-item-body>
+                    <nb-accordion-item-body *ngIf="func.value==='pressure'">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <label>Pressure : {{func.temperature}}</label>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Pressure Time : {{func.rate_temperature}}</label>
+                        </div>
+                      </div>
+                    </nb-accordion-item-body>
+                    <nb-accordion-item-body *ngIf="func.value==='chemical'">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <label>Chemical : {{func.temperature}}</label>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Chemical By : {{func.rate_temperature}}</label>
+                        </div>
+                      </div>
+                    </nb-accordion-item-body>
+                  </nb-accordion-item>
+                </nb-accordion>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+          <hr>
+        </nb-accordion>
+      </div>
+      <br>
+      <div class="box-footer">
+        <button [disabled]="vform.invalid" nbButton (click)="onCustomFormSubmit(vform)">Save</button>
+        &nbsp;
+        <button nbButton type="reset" routerLink='/pages/process/view-process-list' id="Cancel">Cancel</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>
