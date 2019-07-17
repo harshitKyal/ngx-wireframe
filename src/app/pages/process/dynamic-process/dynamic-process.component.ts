@@ -67,4 +67,7 @@ export class DynamicProcessComponent implements OnInit {
     this.stepList[this.selectedStep - 1].functionList.push(func);
     this.currentSelectedFunction = '';
   }
+  numberOnly(event) {
+
+  }
 }
