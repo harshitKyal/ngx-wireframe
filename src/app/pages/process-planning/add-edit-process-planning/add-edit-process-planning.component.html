@@ -39,6 +39,9 @@
           </select>
         </div>
       </div>
+      <div class="col-md-2">
+        <button style="margin:23px;" nbButton type="button" (click)="onResetFilter()">Reset Filter</button>
+      </div>
     </div>
     <hr>
     <h3>
@@ -46,7 +49,8 @@
     </h3>
     <div class="row table table-responsive">
       <ag-grid-angular style="width: 100%; height:300px" class="ag-theme-balham" [rowData]="rowData"
-        [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]='10'>
+        [columnDefs]="columnDefs" (gridReady)="onGridReady($event)" (selectionChanged)="onSelectionChanged($event)"
+        [pagination]="true" [paginationPageSize]='10'>
       </ag-grid-angular>
     </div>
   </nb-card-body>

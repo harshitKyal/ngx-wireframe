@@ -54,7 +54,8 @@ export class AddEditProcessPlanningComponent implements OnInit {
   currentUserHeadid: any;
   currentUser$: Subscription;
   currentUser: User;
-
+  gridApi;
+  gridColumnApi;
   qualityReqObj = { party_id: '', entry_id: '', group_user_ids: '' };
   shadeReqObj = { quality_id: '', party_id: '', group_user_ids: '' };
   programReqObj = { quality_id: '', party_id: '', shade_id: '', group_user_ids: '' };
@@ -62,7 +63,7 @@ export class AddEditProcessPlanningComponent implements OnInit {
   selectedShadeId = '';
   selectedQualityId = '';
   columnDefs = [
-    { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
+    { headerName: 'Actions', field: '', sortable: false, width: 120, checkboxSelection: true },
     { headerName: 'Party Name', field: 'party_name', sortable: true, filter: true },
     { headerName: 'Program By', field: 'program_given_by', sortable: true, filter: true },
     { headerName: 'Quality Id', field: 'quality_id', sortable: true, filter: true },
@@ -89,7 +90,7 @@ export class AddEditProcessPlanningComponent implements OnInit {
         this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
-    this.setColumns();
+    // this.setColumns();
   }
 
   ngOnDestroy() {
@@ -103,7 +104,11 @@ export class AddEditProcessPlanningComponent implements OnInit {
     this.getProgramList();
     this.onPageLoad();
   }
-
+  onGridReady(params) {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+    // this.getUserList(this.currentUserId);
+  }
   getProgramList() {
     this.programReqObj.quality_id = this.selectedQualityId;
     this.programReqObj.shade_id = this.selectedShadeId;
@@ -129,16 +134,9 @@ export class AddEditProcessPlanningComponent implements OnInit {
       }
     });
   }
-  setColumns() {
-    this.columnDefs.forEach((column: ColDef) => {
-      if (column.field === 'index') {
-        column.cellRendererFramework = CustomRendererProcessPlanningRecordComponent;
-        column.cellRendererParams = {
-          // inRouterLink: '/user/edit-user/',
-          action: this
-        };
-      }
-    });
+  onSelectionChanged(event) {
+    const row = this.gridApi.getSelectedRows();
+    console.log(row);
   }
   getPartyList() {
     this.viewPartyReqOb.view_group = true;
@@ -268,7 +266,12 @@ export class AddEditProcessPlanningComponent implements OnInit {
       this.topHeader = 'Add Process Planning';
     }
   }
-
+  onResetFilter() {
+    this.selectedPartyId = '';
+    this.selectedQualityId = '';
+    this.selectedShadeId = '';
+    this.getProgramList();
+  }
   numberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
     if (charCode > 31 && ((charCode < 46 || charCode > 57) || charCode == 47)) {
@@ -278,23 +281,5 @@ export class AddEditProcessPlanningComponent implements OnInit {
   }
 
   onCustomFormSubmit(form: NgForm) {
-  }
-}
-@Component({
-  template: `
-  <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" ></i>`,
-  styleUrls: ['./add-edit-process-planning.component.scss']
-})
-
-export class CustomRendererProcessPlanningRecordComponent implements AgRendererComponent {
-  params: any;
-
-  constructor(private _modalService: NgbModal, private toasterService: ToastrService) {
-  }
-  agInit(params: any): void {
-    this.params = params;
-  }
-  refresh(): boolean {
-    return false;
   }
 }

@@ -5,4 +5,5 @@
  */
 export const environment = {
   production: true,
+  api: 'https://journey360.ai/api',
 };

@@ -9,7 +9,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ThemeModule } from '../../@theme/theme.module';
 import { ProcessPlanningComponent } from './process-planning.component';
 import { ViewProcessPlanningComponent, CustomRendererProcessPlanningComponent } from './view-process-planning/view-process-planning.component';
-import { AddEditProcessPlanningComponent, CustomRendererProcessPlanningRecordComponent } from './add-edit-process-planning/add-edit-process-planning.component';
+import { AddEditProcessPlanningComponent } from './add-edit-process-planning/add-edit-process-planning.component';
 import { ProcessPlanningRoutingModule } from './process-planning-routing.module';
 
 @NgModule({
@@ -18,7 +18,6 @@ import { ProcessPlanningRoutingModule } from './process-planning-routing.module'
     ViewProcessPlanningComponent,
     AddEditProcessPlanningComponent,
     CustomRendererProcessPlanningComponent,
-    CustomRendererProcessPlanningRecordComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +32,6 @@ import { ProcessPlanningRoutingModule } from './process-planning-routing.module'
   ],
   entryComponents: [
     CustomRendererProcessPlanningComponent,
-    CustomRendererProcessPlanningRecordComponent
   ]
 })
 export class ProcessPlanningModule { }
