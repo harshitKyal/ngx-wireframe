@@ -69,10 +69,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'View Process',
         link: '/pages/process/view-process-list',
       },
-      {
-        title: 'Dynamic Process',
-        link: '/pages/process/dynamic-process',
-      },
+      // {
+      //   title: 'Dynamic Process',
+      //   link: '/pages/process/dynamic-process',
+      // },
     ],
   },
   {

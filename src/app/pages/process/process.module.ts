@@ -13,6 +13,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { ProcessRoutingModule } from './process-routing.module';
 import { DynamicProcessComponent } from './dynamic-process/dynamic-process.component';
 import { AddStepComponent } from './add-step/add-step.component';
+import { AddEditFunctionComponent } from './add-edit-function/add-edit-function.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AddStepComponent } from './add-step/add-step.component';
     CustomRendererDyingRecordComponent,
     CustomRendererRCRecordComponent,
     DynamicProcessComponent,
-    AddStepComponent
+    AddStepComponent,
+    AddEditFunctionComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +46,8 @@ import { AddStepComponent } from './add-step/add-step.component';
     CustomRendererScouringRecordComponent,
     CustomRendererColdWashRecordComponent,
     CustomRendererDyingRecordComponent,
-    CustomRendererRCRecordComponent
+    CustomRendererRCRecordComponent,
+    AddEditFunctionComponent
   ]
 })
 export class ProcessModule { }

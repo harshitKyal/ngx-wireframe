@@ -17,6 +17,7 @@ import * as XLSX from 'xlsx';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
+import { DynamicProcessReq } from '../../../@theme/model/process-planning-class';
 
 @Component({
   selector: 'ngx-view-process',
@@ -25,7 +26,8 @@ import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialo
 })
 export class ViewProcessComponent implements OnInit {
 
-  processList: Process[] = [];
+  // processList: Process[] = [];
+  processList: DynamicProcessReq[] = [];
   rowData;
   gridApi;
   gridColumnApi;
@@ -136,7 +138,7 @@ export class ViewProcessComponent implements OnInit {
     else if (this.radioSelected == 3)
       this.processReqObj.view_all = true;
 
-    this.processService.getAllProcesss(this.processReqObj).subscribe(data => {
+    this.processService.getAllDynamicProcesss(this.processReqObj).subscribe(data => {
       if (!data[0].error) {
         this.processList = data[0].data;
         this.rowData = this.processList;
@@ -150,7 +152,7 @@ export class ViewProcessComponent implements OnInit {
       if (column.field === 'entry_id') {
         column.cellRendererFramework = CustomRendererProcessComponent;
         column.cellRendererParams = {
-          inRouterLink: '/pages/process/edit-process/',
+          inRouterLink: '/pages/process/edit-dynamic-process/',
           inViewLink: '/pages/process/view-process/',
           action: this
         };
@@ -164,7 +166,7 @@ export class ViewProcessComponent implements OnInit {
   }
   onAddProcess() {
     if (this.addProcessPermission) {
-      this.router.navigate(['/pages/process/add-process']);
+      this.router.navigate(['/pages/process/add-dynamic-process']);
     } else {
       const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to add process. If you want to add process ask admin for permission.');
       if (res) {
@@ -196,7 +198,6 @@ export class ViewProcessComponent implements OnInit {
 @Component({
   template: `
   <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="editProcess()"></i>
-  <i class="ft-info font-medium-1 mr-2" style="color:#4ca6ff" (click)="viewProcess()"></i>
   <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteProcess()"></i>`,
   styleUrls: ['./view-process.component.scss']
 })

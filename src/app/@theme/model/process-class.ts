@@ -40,7 +40,7 @@ export class ProcessReq {
     created_by: any;
     user_head_id: any;
     updated_by: any;
-    created_date: AnalyserNode;
+    created_date: any;
     updated_date: any;
     process_req_record: ProcessReqRecord[];
 }

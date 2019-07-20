@@ -32,5 +32,24 @@ export class ProcessService {
   deleteProcessById(id) {
     return this.apiService.apiCaller('get', '/deleteProcess/' + id);
   }
+  getAllDynamicProcesss(processReqObj) {
+    return this.apiService.apiCaller('post', '/dynamicProcessList', processReqObj);
+  }
+
+  addDynamicProcess(process) {
+    return this.apiService.apiCaller('post', '/adddynamicProcess', process);
+  }
+
+  getDynamicProcessById(id) {
+    return this.apiService.apiCaller('get', '/getdynamicProcessById/' + id);
+  }
+
+  updateDynamicProcess(process) {
+    return this.apiService.apiCaller('post', '/updatedynamicProcess', process);
+  }
+
+  deleteDynamicProcessById(id) {
+    return this.apiService.apiCaller('get', '/deletedynamicProcess/' + id);
+  }
 }
 

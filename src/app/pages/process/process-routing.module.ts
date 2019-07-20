@@ -19,7 +19,11 @@ const routes: Routes = [
         component: AddEditProcessComponent,
       },
       {
-        path: 'dynamic-process',
+        path: 'add-dynamic-process',
+        component: DynamicProcessComponent,
+      },
+      {
+        path: 'edit-dynamic-process/:id',
         component: DynamicProcessComponent,
       },
       {

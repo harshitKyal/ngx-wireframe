@@ -49,6 +49,7 @@ export class AddEditProcessPlanningComponent implements OnInit {
   qualityList: Quality[] = [];
   shadeList = [];
   programList = [];
+  batchList = [];
   qualityNameList: Quality[] = [];
   currentUserId: any;
   currentUserHeadid: any;
@@ -75,6 +76,8 @@ export class AddEditProcessPlanningComponent implements OnInit {
   currentUserGroupUserIds: any;
   viewProcessPlanningGivenByReqOb = new ViewReqObj();
   viewPartyReqOb = new ViewReqObj();
+  batchViewReqObj;
+
 
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
     private router: Router, private processPlanningService: ProcessPlanningService, private qualityService: QualityService,
@@ -137,6 +140,18 @@ export class AddEditProcessPlanningComponent implements OnInit {
   onSelectionChanged(event) {
     const row = this.gridApi.getSelectedRows();
     console.log(row);
+    this.getBatchListByProgramSelected(row);
+  }
+  getBatchListByProgramSelected(row) {
+    this.batchViewReqObj = {
+      quality_id: row[0].quality_id,
+      group_user_ids: this.currentUserGroupUserIds
+    }
+    this.batchService.getAllBatchByQualityId(this.batchViewReqObj).subscribe(data => {
+      if (!data[0].error) {
+        this.batchList = data[0].data;
+      }
+    })
   }
   getPartyList() {
     this.viewPartyReqOb.view_group = true;
@@ -279,7 +294,6 @@ export class AddEditProcessPlanningComponent implements OnInit {
     }
     return true;
   }
-
   onCustomFormSubmit(form: NgForm) {
   }
 }
