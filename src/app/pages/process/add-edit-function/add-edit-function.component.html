@@ -24,7 +24,8 @@
       <div class="col-md-5">
         <div class="form-group">
           <label>Function Position</label>
-          <select class="form-control" [(ngModel)]="funcObj.func_position" name="stepNo" #position="ngModel" required>
+          <select [disabled]="editFunction" class="form-control" [(ngModel)]="funcObj.func_position" name="stepNo"
+            #position="ngModel" required>
             <option *ngFor="let p of positionValues" [value]="p">{{p}}</option>
           </select>
           <div *ngIf="position.invalid && (position.dirty || position.touched)" class="errors">
@@ -156,7 +157,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button nbButton [disabled]="functionForm.invalid" (click)="onSubmit()">Create</button>
+    <button nbButton [disabled]="functionForm.invalid" (click)="onSubmit()">{{submitButton}}</button>
     <button nbButton (click)="activeModal.close(false)">Cancel</button>
   </div>
 </form>

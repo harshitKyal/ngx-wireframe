@@ -14,18 +14,32 @@ export class AddStepComponent implements OnInit {
   step_position = 1;
   positionValues = [];
   @Input() stepList = [];
+  @Input() editStep: any;
+  submitButton = "Add";
 
   constructor(public activeModal: NgbActiveModal) {
 
   }
 
   ngOnInit() {
-    if (this.position > 0) {
-      this.step_position = this.position;
-      for (let i = 1; i <= this.position; i++) {
-        this.positionValues.push(i);
+    if (!this.editStep) {
+      if (this.position > 0) {
+        this.step_position = this.position;
+        for (let i = 1; i <= this.position; i++) {
+          this.positionValues.push(i);
+        }
+      }
+    } else {
+      this.submitButton = "Update";
+      if (this.position > 0) {
+        this.step_position = this.position;
+        this.step_name = this.stepList[this.position - 1].step_name;
+        for (let i = 1; i <= this.stepList.length; i++) {
+          this.positionValues.push(i);
+        }
       }
     }
+
   }
   onCreate() {
     let obj = { 'name': this.step_name, 'position': this.step_position };

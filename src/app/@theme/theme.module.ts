@@ -2,6 +2,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import {
   NbActionsModule,
@@ -106,7 +107,8 @@ const NB_MODULES = [
   NbCalendarKitModule,
   RouterModule,
   NgbModule,
-  PapaParseModule
+  PapaParseModule,
+  DragDropModule
 ];
 
 const COMPONENTS = [

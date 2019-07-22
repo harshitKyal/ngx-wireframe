@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { User } from '../../../@theme/model/user-class';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { ProcessService } from '../../../@theme/services/process.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'ngx-dynamic-process',
@@ -116,7 +117,6 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
                 }
               })
             }
-
           } else {
             this.toasterService.error(data.message);
           }
@@ -128,6 +128,43 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
       this.topHeader = 'Add Process';
     }
   }
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.stepList, event.previousIndex, event.currentIndex);
+    this.stepList.forEach((ele, index) => {
+      ele.step_position = index + 1;
+    })
+  }
+  dropFunction(event: CdkDragDrop<string[]>, step_position) {
+    moveItemInArray(this.stepList[step_position - 1].functionList, event.previousIndex, event.currentIndex);
+    this.stepList[step_position - 1].functionList.forEach((ele, index) => {
+      ele.func_position = index + 1;
+    })
+  }
+  onEditStep(step) {
+    const modalRef = this._modalService.open(AddStepComponent);
+    modalRef.componentInstance.position = step.step_position;
+    modalRef.componentInstance.stepList = this.stepList;
+    modalRef.componentInstance.editStep = true;
+    modalRef.result
+      .then((result) => {
+        if (result) {
+          this.stepList[step.step_position - 1].step_name = result.name;
+        }
+      });
+  }
+  onEditFunction(func) {
+    const modalRef = this._modalService.open(AddEditFunctionComponent);
+    let functionList = this.stepList[this.selectedStep - 1].functionList;
+    modalRef.componentInstance.position = func.func_position;
+    modalRef.componentInstance.functionList = functionList;
+    modalRef.componentInstance.editFunction = true;
+    modalRef.result
+      .then((result) => {
+        if (result) {
+          functionList[func.func_position - 1] = result;
+        }
+      });
+  }
   onFunctionSelect(value) {
     this.currentSelectedFunction = value;
     this.addFunctionFlag = false;
@@ -137,6 +174,7 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
     let functionList = this.stepList[this.selectedStep - 1].functionList;
     modalRef.componentInstance.position = functionList.length + 1;
     modalRef.componentInstance.functionList = functionList;
+    modalRef.componentInstance.editFunction = false;
     modalRef.result
       .then((result) => {
         if (result) {
@@ -154,6 +192,7 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
     const modalRef = this._modalService.open(AddStepComponent);
     modalRef.componentInstance.position = this.stepList.length + 1;
     modalRef.componentInstance.stepList = this.stepList;
+    modalRef.componentInstance.editStep = false;
     modalRef.result
       .then((result) => {
         if (result) {

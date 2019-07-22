@@ -10,6 +10,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class AddEditFunctionComponent implements OnInit {
   @Input() position;
   @Input() functionList = [];
+  @Input() editFunction: any;
+  submitButton = 'Add';
   positionValues = [];
   funcObj = new FunctionObj();
   pumpObj = new PumpMotorFunctionObj();
@@ -25,12 +27,34 @@ export class AddEditFunctionComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.position > 0) {
-      this.funcObj.func_position = this.position;
-      for (let i = 1; i <= this.position; i++) {
-        this.positionValues.push(i);
+    if (!this.editFunction) {
+      if (this.position > 0) {
+        this.funcObj.func_position = this.position;
+        for (let i = 1; i <= this.position; i++) {
+          this.positionValues.push(i);
+        }
+      }
+    } else {
+      this.submitButton = "Update";
+      if (this.position > 0) {
+        this.funcObj.func_position = this.position;
+        let index = this.functionList.findIndex(v => v.func_position == this.position);
+        if (index > -1) {
+          let ele = this.functionList[index];
+          this.funcObj.func_name = ele.func_name;
+          this.funcObj.func_position = ele.func_position;
+          this.funcObj.func_value = ele.func_value;
+          this.dosingObj = ele.dosingFunction;
+          this.waterObj = ele.waterDrainFunction;
+          this.tempObj = ele.tempFunction;
+          this.pumpObj = ele.pumpMotorFunction;
+        }
+        for (let i = 1; i <= this.functionList.length; i++) {
+          this.positionValues.push(i);
+        }
       }
     }
+
   }
   onSubmit() {
     let i = this.functionDropdown.findIndex(v => v.id === this.funcObj.func_value);
