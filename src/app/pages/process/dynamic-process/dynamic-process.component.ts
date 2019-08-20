@@ -165,11 +165,24 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
         }
       });
   }
+  onDeleteStep(step) {
+    let i = this.stepList.findIndex(v => v.step_position == step.step_position);
+    this.stepList.splice(i, 1);
+    // this.rowData = [...this.colourStockRecord]
+  }
+  onDeleteFunction(func) {
+    let functionList = this.stepList[this.selectedStep - 1].functionList;
+    let i = functionList.findIndex(v => v.func_position == func.func_position);
+    functionList.splice(i, 1);
+  }
   onFunctionSelect(value) {
     this.currentSelectedFunction = value;
     this.addFunctionFlag = false;
   }
-  onAddFunction() {
+  onAddFunction(step?) {
+    if (step) {
+      this.selectedStep = step.step_position;
+    }
     const modalRef = this._modalService.open(AddEditFunctionComponent);
     let functionList = this.stepList[this.selectedStep - 1].functionList;
     modalRef.componentInstance.position = functionList.length + 1;

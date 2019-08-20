@@ -16,38 +16,12 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>No. of Dying Bath</label>
-            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-              (keypress)="numberOnly($event)" [(ngModel)]="processModal.no_dying_bath" name="dyingBath"
-              #dyingbath="ngModel" required />
-            <div *ngIf="dyingbath.invalid && (dyingbath.dirty || dyingbath.touched)" class="errors">
-              <div *ngIf="dyingbath.errors && dyingbath.errors.required">
-                No. of Dying Bath is required.
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>DC Mulitplying Fac.</label>
-            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-              (keypress)="numberOnly($event)" [(ngModel)]="processModal.dc_multiplying_fac" name="dc" #Dc="ngModel"
-              required />
-            <div *ngIf="Dc.invalid && (Dc.dirty || Dc.touched)" class="errors">
-              <div *ngIf="Dc.errors && Dc.errors.required">
-                DC Mulitplying Fac is required.
-              </div>
-            </div>
-          </div>
-        </div>
         <div>
           <i class="fa fa-plus-circle mr-2" style="color:#4ca6ff;font-size:25px;cursor: pointer;margin: 23px;"
             (click)="onAddStep()"></i>
         </div>
       </div>
-      <br>
+      <!-- <br> -->
       <div class="col-md-12" *ngIf="stepList.length">
         <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
 
@@ -55,96 +29,89 @@
             <nb-accordion-item #item (click)="onStepClick(step)">
               <nb-accordion-item-header>
                 {{step.step_name}}
-                <i class="ft-edit-2 font-medium-1 mr-5" style="color:#4ca6ff" (click)="onEditStep(step)">
+                <i class="fa fa-plus-circle" style="color:green;font-size:25px;cursor: pointer;margin-right: 69px;"
+                  (click)="onAddFunction(step)"></i>
+                <i class="ft-edit-2 font-medium-1" style="color:#4ca6ff;margin-right: 41px;" (click)="onEditStep(step)">
+                </i>
+                <i class="ft-trash font-medium-1" style="color:red;margin-right: 17px;" (click)="onDeleteStep(step)">
                 </i>
               </nb-accordion-item-header>
               <nb-accordion-item-body>
-                <!-- class="primary col-md-2" -->
-                <button nbButton (click)="onAddFunction()">Add Function</button>
-                <br>
                 <div *ngIf="step.functionList && step.functionList.length">
-                  <br>
-                  <nb-card accent="info">
-                    <nb-card-header>Function List</nb-card-header>
-                    <nb-card-body>
-                      <nb-list cdkDropList class="example-list"
-                        (cdkDropListDropped)="dropFunction($event,step.step_position)">
-                        <nb-list-item *ngFor="let func of step.functionList" cdkDragLockAxis="y" cdkDrag>
-                          <nb-card>
-                            <nb-card-header>{{func.func_name}}
-                              <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff"
-                                (click)="onEditFunction(func)">
-                              </i>
-                            </nb-card-header>
-                            <nb-card-body>
-                              <div *ngIf="func.func_value==='temp'">
-                                <div class="row">
-                                  <div class="col-md-3">
-                                    <label><b>S V (Set Value)(C) :</b> {{func.tempFunction.set_value}}</label>
-                                  </div>
-                                  <div class="col-md-3">
-                                    <label><b>Rate of Rise (C/minute) :</b> {{func.tempFunction.rate_of_rise}}</label>
-                                  </div>
-                                  <div class="col-md-3">
-                                    <label><b>Hold Time :</b> {{func.tempFunction.hold_time}}</label>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-md-6">
-                                    <label><b>Pressure (Above 80 C) :</b> {{func.tempFunction.pressure}}</label>
-                                  </div>
-                                </div>
-                              </div>
-                              <div *ngIf="func.func_value==='pump'">
-                                <div class="row">
-                                  <div class="col-md-10">
-                                    <label><b>Pump Speed (%) : </b>{{func.pumpMotorFunction.pump_speed}}</label>
-                                  </div>
-                                </div>
-                              </div>
-                              <div *ngIf="func.func_value==='dosing'">
-                                <div class="row">
-                                  <div class="col-md-5">
-                                    <label><b>Fill Side Tank :</b> {{func.dosingFunction.fill_type}}</label>
-                                  </div>
-                                  <div class="col-md-5">
-                                    <label><b>Fill Side Tank (%) :</b> {{func.dosingFunction.dosing_percentage}}</label>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-md-6" *ngIf="func.dosingFunction.have_dose">
-                                    <label><b>Dose at Temp (C) :</b> {{func.dosingFunction.dose_at_temp}}</label>
-                                  </div>
-                                </div>
-                              </div>
-                              <div *ngIf="func.func_value==='water'">
-                                <div class="row">
-                                  <div class="col-md-3">
-                                    <label><b>Water Type :</b> {{func.waterDrainFunction.water_type}}</label>
-                                  </div>
-                                  <div class="col-md-3">
-                                    <label><b>Fabric Ratio :</b> {{func.waterDrainFunction.fabric_ratio}}</label>
-                                  </div>
-                                  <div class="col-md-3">
-                                    <label><b>Jet Level :</b> {{func.waterDrainFunction.jet_level}}</label>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-md-6">
-                                    <label><b>Drain Type :</b> {{func.waterDrainFunction.drain_type}}</label>
-                                  </div>
-                                </div>
-                              </div>
-                            </nb-card-body>
-                          </nb-card>
-                        </nb-list-item>
-                      </nb-list>
-                    </nb-card-body>
-                  </nb-card>
+                  <!-- <br> -->
+                  <nb-list cdkDropList class="example-list"
+                    (cdkDropListDropped)="dropFunction($event,step.step_position)">
+                    <nb-list-item *ngFor="let func of step.functionList" cdkDragLockAxis="y" cdkDrag>
+                      <div>
+                        {{func.func_name}}
+                        <i class="ft-trash font-medium-1" style="color:red;float: right;"
+                          (click)="onDeleteFunction(func)">
+                        </i>
+                        <i class="ft-edit-2 font-medium-1" style="color:#4ca6ff;float: right;margin-right: 1.5%;"
+                          (click)="onEditFunction(func)">
+                        </i>
+                        <div *ngIf="func.func_value==='temp'">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <label><b>S V (Set Value)(C) :</b> {{func.tempFunction.set_value}}</label>
+                            </div>
+                            <div class="col-md-3">
+                              <label><b>Rate of Rise (C/minute) :</b> {{func.tempFunction.rate_of_rise}}</label>
+                            </div>
+                            <div class="col-md-3">
+                              <label><b>Hold Time :</b> {{func.tempFunction.hold_time}}</label>
+                            </div>
+                            <div class="col-md-3">
+                              <label><b>Pressure (Above 80 C) :</b> {{func.tempFunction.pressure}}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="func.func_value==='pump'">
+                          <div class="row">
+                            <div class="col-md-10">
+                              <label><b>Pump Speed (%) : </b>{{func.pumpMotorFunction.pump_speed}}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="func.func_value==='dosing'">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <label><b>Fill Side Tank :</b> {{func.dosingFunction.fill_type}}</label>
+                            </div>
+                            <div class="col-md-4">
+                              <label><b>Fill Side Tank (%) :</b> {{func.dosingFunction.dosing_percentage}}</label>
+                            </div>
+                            <div class="col-md-4" *ngIf="func.dosingFunction.have_dose">
+                              <label><b>Dose at Temp (C) :</b> {{func.dosingFunction.dose_at_temp}}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="func.func_value==='water'">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <label><b>Water Type :</b> {{func.waterDrainFunction.water_type}}</label>
+                            </div>
+                            <div class="col-md-3">
+                              <label><b>Fabric Ratio :</b> {{func.waterDrainFunction.fabric_ratio}}</label>
+                            </div>
+                            <div class="col-md-3">
+                              <label><b>Jet Level :</b> {{func.waterDrainFunction.jet_level}}</label>
+                            </div>
+                            <div class="col-md-3">
+                              <label><b>Drain Type :</b> {{func.waterDrainFunction.drain_type}}</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </nb-list-item>
+                  </nb-list>
+                  <i *ngIf="step.functionList.length>1" class="fa fa-plus-circle"
+                    style="color:green;font-size:25px;cursor: pointer;margin-left: 91%;margin-top: 1%;"
+                    (click)="onAddFunction()"></i>
                 </div>
               </nb-accordion-item-body>
             </nb-accordion-item>
-            <hr>
+            <!-- <hr> -->
           </nb-accordion>
         </div>
       </div>

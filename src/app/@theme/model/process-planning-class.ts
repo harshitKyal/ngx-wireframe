@@ -47,8 +47,6 @@ export class Step {
 export class DynamicProcessReq {
     process_name: any;
     entry_id: any;
-    no_dying_bath: any;
-    dc_multiplying_fac: any;
     created_by: any;
     user_head_id: any;
     updated_by: any;
