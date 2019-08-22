@@ -10,6 +10,7 @@ export class FunctionObj {
     pumpMotorFunction: PumpMotorFunctionObj;
     waterDrainFunction: WaterDrainFunctionObj;
     dosingFunction: DosingFunctionObj;
+    operatorFunction: OperatorMessageObj;
 }
 
 export class TempFunctionObj {
@@ -21,21 +22,30 @@ export class TempFunctionObj {
 }
 export class WaterDrainFunctionObj {
     index: any;
+    type: any = 'water';
     water_type: any = '';
     drain_type: any = '';
-    fabric_ratio: any;
+    fabric_ratio: any = 0;
     jet_level: any = false;
 }
 export class PumpMotorFunctionObj {
     index: any;
     pump_speed: any;
 }
+export class OperatorMessageObj {
+    index: any;
+    operator_code: any;
+    operator_message: any;
+    start_at_temp: any;
+}
 export class DosingFunctionObj {
     index: any;
     have_dose: any = false;
     dose_at_temp: any;
     fill_type: any = 'Pre Fill Machine Water';
-    dosing_percentage: any;
+    dosing_percentage: any = 'Level 1';
+    dose_while_heating = false;
+    dose_type: any = '';
 }
 export class Step {
     control_id: any;
@@ -74,4 +84,9 @@ export class DynamicProcessRecordReq {
     fill_type: any = 'Pre Fill Machine Water';
     dosing_percentage: any;
     pump_speed: any;
+    operator_code: any;
+    operator_message: any;
+    start_at_temp: any;
+    dose_while_heating = false;
+    dose_type: any = '';
 }

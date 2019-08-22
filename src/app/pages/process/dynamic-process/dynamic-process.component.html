@@ -85,19 +85,40 @@
                               <label><b>Dose at Temp (C) :</b> {{func.dosingFunction.dose_at_temp}}</label>
                             </div>
                           </div>
+                          <div class="row">
+                            <div class="col-md-4">
+                              <label><b>Dose Type :</b> {{func.dosingFunction.dose_type}}</label>
+                            </div>
+                            <div class="col-md-4">
+                              <label><b>Dose While Heating :</b> {{func.dosingFunction.dose_while_heating}}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="func.func_value==='operator'">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <label><b>Operator Code :</b> {{func.operatorFunction.operator_code}}</label>
+                            </div>
+                            <div class="col-md-4">
+                              <label><b>Operator Message :</b> {{func.operatorFunction.operator_message}}</label>
+                            </div>
+                            <div class="col-md-4">
+                              <label><b>Start At Temp :</b> {{func.operatorFunction.start_at_temp}}</label>
+                            </div>
+                          </div>
                         </div>
                         <div *ngIf="func.func_value==='water'">
                           <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-3" *ngIf="func.waterDrainFunction.type === 'water'">
                               <label><b>Water Type :</b> {{func.waterDrainFunction.water_type}}</label>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3" *ngIf="func.waterDrainFunction.type === 'water'">
                               <label><b>Fabric Ratio :</b> {{func.waterDrainFunction.fabric_ratio}}</label>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3" *ngIf="func.waterDrainFunction.type === 'water'">
                               <label><b>Jet Level :</b> {{func.waterDrainFunction.jet_level}}</label>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3" *ngIf="func.waterDrainFunction.type !== 'water'">
                               <label><b>Drain Type :</b> {{func.waterDrainFunction.drain_type}}</label>
                             </div>
                           </div>

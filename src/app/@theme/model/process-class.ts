@@ -28,8 +28,7 @@ export class ProcessSubRecord {
     concentration: any;
     item_by: any;
     supplier_name: any;
-
-
+    lr_or_fabric_wt: any;
 }
 
 export class ProcessReq {

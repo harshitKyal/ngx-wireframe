@@ -13,7 +13,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { ProcessRoutingModule } from './process-routing.module';
 import { DynamicProcessComponent } from './dynamic-process/dynamic-process.component';
 import { AddStepComponent } from './add-step/add-step.component';
-import { AddEditFunctionComponent } from './add-edit-function/add-edit-function.component';
+import { AddEditFunctionComponent, CustomRendererChemicalRecordComponent } from './add-edit-function/add-edit-function.component';
 
 @NgModule({
   declarations: [
@@ -21,13 +21,14 @@ import { AddEditFunctionComponent } from './add-edit-function/add-edit-function.
     AddEditProcessComponent,
     ViewProcessComponent,
     CustomRendererProcessComponent,
-    CustomRendererScouringRecordComponent,
-    CustomRendererColdWashRecordComponent,
-    CustomRendererDyingRecordComponent,
-    CustomRendererRCRecordComponent,
+    // CustomRendererScouringRecordComponent,
+    // CustomRendererColdWashRecordComponent,
+    // CustomRendererDyingRecordComponent,
+    // CustomRendererRCRecordComponent,
     DynamicProcessComponent,
     AddStepComponent,
-    AddEditFunctionComponent
+    AddEditFunctionComponent,
+    CustomRendererChemicalRecordComponent
   ],
   imports: [
     CommonModule,
@@ -43,11 +44,12 @@ import { AddEditFunctionComponent } from './add-edit-function/add-edit-function.
   entryComponents: [
     AddStepComponent,
     CustomRendererProcessComponent,
-    CustomRendererScouringRecordComponent,
-    CustomRendererColdWashRecordComponent,
-    CustomRendererDyingRecordComponent,
-    CustomRendererRCRecordComponent,
-    AddEditFunctionComponent
+    // CustomRendererScouringRecordComponent,
+    // CustomRendererColdWashRecordComponent,
+    // CustomRendererDyingRecordComponent,
+    // CustomRendererRCRecordComponent,
+    AddEditFunctionComponent,
+    CustomRendererChemicalRecordComponent
   ]
 })
 export class ProcessModule { }

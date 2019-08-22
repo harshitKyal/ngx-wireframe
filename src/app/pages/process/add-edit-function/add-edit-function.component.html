@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h4 class="modal-title" id="modal-basic-title">Add Function</h4>
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close(false)">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-md-12 form-group">
         <label>Function Name</label>
-        <select class="form-control" name="function" [(ngModel)]="funcObj.func_value" #func="ngModel">
+        <select class="form-control " name="function" [(ngModel)]="funcObj.func_value" #func="ngModel">
           <option disabled value="">Select Function</option>
           <option *ngFor="let function of functionDropdown" [value]="function.id">{{function.name}}</option>
         </select>
@@ -24,7 +24,7 @@
       <div class="col-md-5">
         <div class="form-group">
           <label>Function Position</label>
-          <select [disabled]="editFunction" class="form-control" [(ngModel)]="funcObj.func_position" name="stepNo"
+          <select [disabled]="editFunction" class="form-control " [(ngModel)]="funcObj.func_position" name="stepNo"
             #position="ngModel" required>
             <option *ngFor="let p of positionValues" [value]="p">{{p}}</option>
           </select>
@@ -56,23 +56,36 @@
       </div>
     </div>
     <div *ngIf="funcObj.func_value==='water'">
-      <span>IN</span>
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
+            <label>Control Type</label>
+            <nb-radio-group (change)="onWaterTypeChange()" fieldSize="small" class="form-control inline-block"
+              name="watertype" [(ngModel)]="waterObj.type">
+              <nb-radio value="water">Water</nb-radio>
+              <nb-radio value="drain">Drain</nb-radio>
+            </nb-radio-group>
+          </div>
+        </div>
+      </div>
+      <!-- <span *ngIf="waterObj.type === 'water'">IN</span> -->
+      <div *ngIf="waterObj.type === 'water'" class="row">
+        <div class="col-md-12">
+          <div class="form-group">
             <label>Water Type</label>
-            <nb-radio-group class="form-control" name="water" [(ngModel)]="waterObj.water_type">
+            <nb-radio-group fieldSize="small" class="form-control inline-block" name="water"
+              [(ngModel)]="waterObj.water_type">
               <nb-radio *ngFor="let w of waterList" [value]="w.id">{{w.name}}</nb-radio>
             </nb-radio-group>
           </div>
         </div>
       </div>
-      <div class="row">
+      <div *ngIf="waterObj.type === 'water'" class="row">
         <div class="col-md-5">
           <div class="form-group">
-            <label>Fabric Ratio</label>
-            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-              (keypress)="numberOnly($event)" [(ngModel)]="waterObj.fabric_ratio" name="fabricRatio" />
+            <label>Fill By Fabric Ratio</label>
+            <input nbInput fullWidth type="number" fieldSize="small" class="form-control input-group input-group-sm"
+              (keypress)="numberOnly($event)" max='10' [(ngModel)]="waterObj.fabric_ratio" name="fabricRatio" />
           </div>
         </div>
         <div class="col-md-4">
@@ -82,12 +95,13 @@
         </div>
       </div>
       <br>
-      <span>DRAIN</span>
-      <div class="row">
+      <!-- <span *ngIf="waterObj.type !== 'water'">DRAIN</span> -->
+      <div *ngIf="waterObj.type !== 'water'" class="row">
         <div class="col-md-12">
           <div class="form-group">
             <label>Drain Type</label>
-            <nb-radio-group name="water_drain" class="form-control" [(ngModel)]="waterObj.drain_type">
+            <nb-radio-group fieldSize="small" name="water_drain" class="form-control inline-block"
+              [(ngModel)]="waterObj.drain_type">
               <nb-radio *ngFor="let d of drainTypeList" [value]="d.id">{{d.name}}</nb-radio>
             </nb-radio-group>
           </div>
@@ -100,7 +114,8 @@
           <div class="form-group">
             <label>S V (Set Value)(C)</label>
             <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-              (keypress)="numberOnly($event)" [(ngModel)]="tempObj.set_value" name="setValue" />
+              (keypress)="numberOnly($event)" (change)="onSetValueChange()" [(ngModel)]="tempObj.set_value"
+              name="setValue" />
           </div>
         </div>
         <div class="col-md-5">
@@ -138,19 +153,163 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label>Fill Side Tank (%)</label>
-            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
-              (keypress)="numberOnly($event)" [(ngModel)]="dosingObj.dosing_percentage" name="dosingpercentage" />
+            <label>Fill Side Tank Level</label>
+            <select class="form-control " name="filllevel" [(ngModel)]="dosingObj.dosing_percentage">
+              <option *ngFor="let level of fillLevelList" [value]="level.id">{{level.name}}</option>
+            </select>
+            <!-- <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+              [(ngModel)]="dosingObj.dosing_percentage" name="dosingpercentage" /> -->
           </div>
         </div>
       </div>
       <br>
-      (Will dose after Operator Configurations)
+      (Will dose after Operator Confirmation)
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <nb-checkbox name="dose" [(ngModel)]="dosingObj.have_dose"> dose at Temp
+              (C) <input fieldSize="small" class="col-md-3" nbInput name="tempDosing"
+                [(ngModel)]="dosingObj.dose_at_temp"></nb-checkbox>
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="dosingObj.dose_type !== 'color'">
+          <div class="form-group">
+            <nb-checkbox name="doseHeat" [(ngModel)]="dosingObj.dose_while_heating"> Dose while Heating
+            </nb-checkbox>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-            <nb-checkbox style="margin-top:13px" name="dose" [(ngModel)]="dosingObj.have_dose"> dose at Temp (C) <input
-                class="col-md-3" nbInput name="tempDosing" [(ngModel)]="dosingObj.dose_at_temp"></nb-checkbox>
+            <label>Dose Type</label>
+            <nb-radio-group fieldSize="small" class="form-control inline-block" name="dosetype"
+              [(ngModel)]="dosingObj.dose_type" (change)="onDoseTypeChange()">
+              <nb-radio value="chemical">Chemical</nb-radio>
+              <nb-radio value="color">Color</nb-radio>
+            </nb-radio-group>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="dosingObj.dose_type != undefined && dosingObj.dose_type === 'chemical'">
+        <div class="row col-md-12 table table-responsive">
+          <ag-grid-angular style="width: 100%; height:170px" class="ag-theme-balham" [rowData]="rowChemicalData"
+            [columnDefs]="chemicalcolumnDefs" [pagination]="true" [paginationPageSize]='10'
+            *ngIf="chemicalSubRecordArray.length">
+          </ag-grid-angular>
+        </div>
+        <form #chemicalform="ngForm" class="col-md-12">
+          <div class="row col-md-12">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Item Name</label>
+                <input nbInput fullWidth fieldSize="small" type="text" class="form-control input-group input-group-sm"
+                  placeholder="Select Item Name" name="chemicalitemName" autocomplete="off"
+                  [(ngModel)]="chemicalSubRecord.item_name" (click)="HideShowSForm()" required
+                  #chemicalItemName="ngModel">
+                <div *ngIf="flagDivSForm" class="dropdown">
+                  <a href="javascript:void(0)" (click)="HideShowSForm()" class="float-right">[X]</a>
+                  <table class="table table-bordered pointer table-responsive">
+                    <thead>
+                      <tr>
+                        <th>Item Name</th>
+                        <th>Supplier Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of itemList; let i = index" (click)="selectItem(item,'chemical')"
+                        class="pointer">
+                        <td style="display:none;">{{item.entry_id}}</td>
+                        <td>{{item.item_name}}</td>
+                        <td>{{item.supplier_name}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div *ngIf="chemicalItemName.invalid && (chemicalItemName.dirty || chemicalItemName.touched)"
+                  class="errors">
+                  <div *ngIf="chemicalItemName.errors && chemicalItemName.errors.required">
+                    Item Name is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Supplier Name</label>
+                <input nbInput fullWidth fieldSize="small" type="text" class="form-control input-group input-group-sm"
+                  disabled [(ngModel)]="chemicalSubRecord.supplier_name" name="chemicalSuppName"
+                  #ChemicalSuppName="ngModel" required />
+                <div *ngIf="ChemicalSuppName.invalid && (ChemicalSuppName.dirty || ChemicalSuppName.touched)"
+                  class="errors">
+                  <div *ngIf="ChemicalSuppName.errors && ChemicalSuppName.errors.required">
+                    Supplier Name is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row col-md-12">
+            <div class="col-md-5">
+              <div class="form-group">
+                <label>Concentration</label>
+                <input nbInput fullWidth fieldSize="small" type="text" (keypress)="numberOnly($event)"
+                  class="form-control input-group input-group-sm" [(ngModel)]="chemicalSubRecord.concentration"
+                  name="chemicalConcentration" #ChemicalConcentration="ngModel" required />
+                <div
+                  *ngIf="ChemicalConcentration.invalid && (ChemicalConcentration.dirty || ChemicalConcentration.touched)"
+                  class="errors">
+                  <div *ngIf="ChemicalConcentration.errors && ChemicalConcentration.errors.required">
+                    Concentration is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <label>LR/F.WT</label>
+                <input nbInput fullWidth fieldSize="small" type="text" class="form-control input-group input-group-sm"
+                  [(ngModel)]="chemicalSubRecord.lr_or_fabric_wt" name="chemicalBy" #ChemicalBy="ngModel" required />
+                <div *ngIf="ChemicalBy.invalid && (ChemicalBy.dirty || ChemicalBy.touched)" class="errors">
+                  <div *ngIf="ChemicalBy.errors && ChemicalBy.errors.required">
+                    LR/F.WT is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <button size="small" [disabled]="chemicalform.invalid" style="margin-top: 21px;" nbButton
+                (click)="onAddChemicalRecord(chemicalform)">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div *ngIf="funcObj.func_value==='operator'">
+      <div class="row">
+        <div class="col-md-9">
+          <div class="form-group">
+            <label>Operator Message </label>
+            <select class="form-control" name="fill" [(ngModel)]="operatorObj.operator_code">
+              <option *ngFor="let message of operatorMessageList" [value]="message.id">{{message.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Start at Temp</label>
+            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+              [(ngModel)]="operatorObj.start_at_temp" name="startat" />
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="operatorObj.operator_code == '4'">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Custom Message</label>
+            <input nbInput fullWidth fieldSize="small" class="form-control input-group input-group-sm"
+              [(ngModel)]="operatorObj.operator_message" name="operatorMsg" />
           </div>
         </div>
       </div>

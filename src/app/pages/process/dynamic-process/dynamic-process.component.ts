@@ -3,7 +3,7 @@ import { Process, ProcessRecord } from '../../../@theme/model/process-class';
 import { NgForm } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddStepComponent } from '../add-step/add-step.component';
-import { Step, FunctionObj, DynamicProcessReq, DynamicProcessRecordReq, TempFunctionObj, DosingFunctionObj, PumpMotorFunctionObj, WaterDrainFunctionObj } from '../../../@theme/model/process-planning-class';
+import { Step, FunctionObj, DynamicProcessReq, DynamicProcessRecordReq, TempFunctionObj, DosingFunctionObj, PumpMotorFunctionObj, WaterDrainFunctionObj, OperatorMessageObj } from '../../../@theme/model/process-planning-class';
 import { AddEditFunctionComponent } from '../add-edit-function/add-edit-function.component';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -32,7 +32,6 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
   currentUser: User;
   currentUserGroupUserIds: any;
   dynamicProcessRecordReq: DynamicProcessRecordReq[] = [];
-  functionDropdown = [{ 'id': 'dosing', 'name': 'Dosing' }, { 'id': 'temp', 'name': 'Temperature Control' }, { 'id': 'pump', 'name': 'Pump Control' }, { 'id': 'water', 'name': 'Water In & Drain' }];
   subBtnName = '';
   topHeader = '';
 
@@ -87,6 +86,7 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
                   let tfuncObj = new TempFunctionObj();
                   let dfuncObj = new DosingFunctionObj();
                   let pfuncObj = new PumpMotorFunctionObj();
+                  let ofuncObj = new OperatorMessageObj();
                   if (ele.func_value === 'temp') {
                     tfuncObj.pressure = ele.pressure;
                     tfuncObj.set_value = ele.set_value;
@@ -97,6 +97,8 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
                     dfuncObj.dose_at_temp = ele.dose_at_temp;
                     dfuncObj.dosing_percentage = ele.dosing_percentage;
                     dfuncObj.fill_type = ele.fill_type;
+                    dfuncObj.dose_type = ele.dose_type;
+                    dfuncObj.dose_while_heating = ele.dose_while_heating;
                   } else if (ele.func_value === 'pump') {
                     pfuncObj.pump_speed = ele.pump_speed;
                   } else if (ele.func_value === 'water') {
@@ -104,6 +106,10 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
                     wfuncObj.drain_type = ele.drain_type;
                     wfuncObj.fabric_ratio = ele.fabric_ratio;
                     wfuncObj.jet_level = ele.jet_level;
+                  } else if (ele.func_value === 'operator') {
+                    ofuncObj.operator_message = ele.operator_message;
+                    ofuncObj.operator_code = ele.operator_code;
+                    ofuncObj.start_at_temp = ele.start_at_temp;
                   }
                   let funcObj = new FunctionObj();
                   funcObj.func_value = ele.func_value;
@@ -250,6 +256,11 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
             record.dosing_percentage = func.dosingFunction ? func.dosingFunction.dosing_percentage : '';
             record.have_dose = func.dosingFunction ? func.dosingFunction.have_dose : '';
             record.dose_at_temp = func.dosingFunction ? func.dosingFunction.dose_at_temp : '';
+            record.dose_type = func.dosingFunction ? func.dosingFunction.dose_type : '';
+            record.dose_while_heating = func.dosingFunction ? func.dosingFunction.dose_while_heating : false;
+            record.operator_code = func.operatorFunction ? func.operatorFunction.operator_code : '';
+            record.operator_message = func.operatorFunction ? func.operatorFunction.operator_message : '';
+            record.start_at_temp = func.operatorFunction ? func.operatorFunction.start_at_temp : '';
             this.dynamicProcessRecordReq.push(record)
           })
         }
