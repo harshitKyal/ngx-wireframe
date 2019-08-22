@@ -119,6 +119,7 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
                   funcObj.waterDrainFunction = wfuncObj;
                   funcObj.tempFunction = tfuncObj;
                   funcObj.pumpMotorFunction = pfuncObj;
+                  funcObj.operatorFunction = ofuncObj;
                   this.stepList[stepIndex].functionList.push(funcObj);
                 }
               })
