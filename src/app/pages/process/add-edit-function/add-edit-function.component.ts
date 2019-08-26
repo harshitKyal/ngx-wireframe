@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FunctionObj, PumpMotorFunctionObj, WaterDrainFunctionObj, TempFunctionObj, DosingFunctionObj, OperatorMessageObj } from '../../../@theme/model/process-planning-class';
+import { FunctionObj, PumpMotorFunctionObj, WaterDrainFunctionObj, TempFunctionObj, DosingFunctionObj, OperatorMessageObj, ChemicalReq } from '../../../@theme/model/process-planning-class';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { ToastrService } from 'ngx-toastr';
@@ -31,8 +31,8 @@ export class AddEditFunctionComponent implements OnInit {
   functionDropdown = [{ 'id': 'dosing', 'name': 'Dosing' }, { 'id': 'temp', 'name': 'Temperature Control' }, { 'id': 'pump', 'name': 'Pump Control' }, { 'id': 'water', 'name': 'Water Control' }, { 'id': 'operator', 'name': 'Operator Message' }];
   fillLevelList = [{ 'id': 'Level 1', 'name': 'Level 1' }, { 'id': 'Level 2', 'name': 'Level 2' }];
   operatorMessageList = [{ 'id': '1', 'name': 'Load Fabric' }, { 'id': '2', 'name': 'UnLoad Fabric' }, { 'id': '3', 'name': 'Close the Door' }, { 'id': '4', 'name': 'Custom Message' }]
-  chemicalSubRecordArray: ProcessSubRecord[] = [];
-  chemicalSubRecord: ProcessSubRecord;
+  chemicalSubRecordArray: ChemicalReq[] = [];
+  chemicalSubRecord: ChemicalReq;
   rowChemicalData: any;
   chemicalcolumnDefs = [
     { headerName: 'Actions', field: 'index', width: 70 },
@@ -44,7 +44,7 @@ export class AddEditFunctionComponent implements OnInit {
   flagDivSForm = false;
 
   constructor(public activeModal: NgbActiveModal) {
-    this.chemicalSubRecord = new ProcessSubRecord();
+    this.chemicalSubRecord = new ChemicalReq();
   }
 
   ngOnInit() {
@@ -75,6 +75,14 @@ export class AddEditFunctionComponent implements OnInit {
           this.funcObj.func_position = ele.func_position;
           this.funcObj.func_value = ele.func_value;
           this.dosingObj = ele.dosingFunction;
+          if (this.dosingObj.dosing_chemical.length) {
+            this.dosingObj.dosing_chemical.forEach((ele, index) => {
+              ele.index = index + 1;
+            });
+            this.chemicalSubRecordArray = this.dosingObj.dosing_chemical;
+            this.rowChemicalData = [...this.chemicalSubRecordArray];
+
+          }
           this.waterObj = ele.waterDrainFunction;
           this.tempObj = ele.tempFunction;
           this.pumpObj = ele.pumpMotorFunction;
@@ -115,6 +123,8 @@ export class AddEditFunctionComponent implements OnInit {
       this.funcObj.waterDrainFunction = this.waterObj;
     } else if (this.funcObj.func_value === 'dosing') {
       this.funcObj.dosingFunction = this.dosingObj;
+      console.log('chemical', this.chemicalSubRecordArray);
+      this.funcObj.dosingFunction.dosing_chemical = this.chemicalSubRecordArray;
     } else if (this.funcObj.func_value === 'pump') {
       this.funcObj.pumpMotorFunction = this.pumpObj;
     } else if (this.funcObj.func_value === 'operator') {
@@ -154,7 +164,7 @@ export class AddEditFunctionComponent implements OnInit {
       this.chemicalSubRecordArray.push(this.chemicalSubRecord);
     }
     this.rowChemicalData = [...this.chemicalSubRecordArray];
-    this.chemicalSubRecord = new ProcessSubRecord();
+    this.chemicalSubRecord = new ChemicalReq();
     form.resetForm();
   }
   onEditChemicalRecord(data) {

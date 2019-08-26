@@ -46,6 +46,7 @@ export class DosingFunctionObj {
     dosing_percentage: any = 'Level 1';
     dose_while_heating = false;
     dose_type: any = '';
+    dosing_chemical: ChemicalReq[] = [];
 }
 export class Step {
     control_id: any;
@@ -89,4 +90,15 @@ export class DynamicProcessRecordReq {
     start_at_temp: any;
     dose_while_heating = false;
     dose_type: any = '';
+    dosing_chemical: ChemicalReq[] = [];
+}
+export class ChemicalReq {
+    entry_id: any;
+    index: any;
+    control_id: any;
+    item_id: any;
+    item_name: any;
+    supplier_name: any;
+    concentration: any;
+    lr_or_fabric_wt: any;
 }

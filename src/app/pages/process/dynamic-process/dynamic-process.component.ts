@@ -34,7 +34,13 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
   dynamicProcessRecordReq: DynamicProcessRecordReq[] = [];
   subBtnName = '';
   topHeader = '';
-
+  chemicalcolumnDefs = [
+    { headerName: 'Item Name', field: 'item_name', width: 100 },
+    { headerName: 'Concentration', field: 'concentration', width: 130 },
+    { headerName: 'LR/F_WT', field: 'lr_or_fabric_wt', width: 100 },
+    { headerName: 'Supplier Name', field: 'supplier_name', width: 130 },
+  ];
+  rowChemicalData: any;
   constructor(private _modalService: NgbModal, private toasterService: ToastrService, private router: Router,
     private authService: AuthService, private processService: ProcessService, private route: ActivatedRoute) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -99,6 +105,8 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
                     dfuncObj.fill_type = ele.fill_type;
                     dfuncObj.dose_type = ele.dose_type;
                     dfuncObj.dose_while_heating = ele.dose_while_heating;
+                    dfuncObj.dosing_chemical = ele.dosing_chemical;
+                    this.rowChemicalData = [...dfuncObj.dosing_chemical];
                   } else if (ele.func_value === 'pump') {
                     pfuncObj.pump_speed = ele.pump_speed;
                   } else if (ele.func_value === 'water') {
@@ -262,6 +270,7 @@ export class DynamicProcessComponent implements OnInit, OnDestroy {
             record.operator_code = func.operatorFunction ? func.operatorFunction.operator_code : '';
             record.operator_message = func.operatorFunction ? func.operatorFunction.operator_message : '';
             record.start_at_temp = func.operatorFunction ? func.operatorFunction.start_at_temp : '';
+            record.dosing_chemical = func.dosingFunction ? func.dosingFunction.dosing_chemical : [];
             this.dynamicProcessRecordReq.push(record)
           })
         }
