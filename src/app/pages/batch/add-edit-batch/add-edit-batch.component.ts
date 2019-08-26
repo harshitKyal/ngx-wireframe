@@ -44,7 +44,7 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
   selectLabel = 'GR' + '    ' + 'BATCH NO' + '      ' + 'WEIGHT' + '      ' + 'METRE' + '      ' + 'NO OF CONES/TAKA';
   columnDefs = [
     { headerName: 'Gr', field: 'gr', width: 100 },
-    { headerName: 'Batch No', field: 'batch_no', width: 100 },
+    { headerName: 'Lot No', field: 'batch_no', width: 100 },
     { headerName: 'No of Cones/Taka', field: 'no_of_cones_taka', width: 100 },
     { headerName: 'Mtr', field: 'mtr', width: 100 },
     { headerName: 'Wt', field: 'wt', width: 100 },

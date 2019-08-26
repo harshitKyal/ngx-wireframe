@@ -79,7 +79,7 @@
                     <thead>
                       <tr>
                         <th>Gr</th>
-                        <th>Batch No</th>
+                        <th>Lot No</th>
                         <th>Wt</th>
                         <th>mtr</th>
                       </tr>
@@ -99,12 +99,12 @@
             </div>
             <div class="col-md-2">
               <div class="form-group">
-                <label>Batch No.</label>
-                <input type="text" class="form-control" [(ngModel)]="batchDataObj.batch_no" name="batch" #Batch="ngModel"
+                <label>Lot No.</label>
+                <input type="text" class="form-control" [(ngModel)]="batchDataObj.batch_no" name="batch" #Lot="ngModel"
                   required />
-                <div *ngIf="Batch.invalid && (Batch.dirty || Batch.touched)" class="errors">
-                  <div *ngIf="Batch.errors && Batch.errors.required">
-                    Batch No. is required.
+                <div *ngIf="Lot.invalid && (Lot.dirty || Lot.touched)" class="errors">
+                  <div *ngIf="Lot.errors && Lot.errors.required">
+                    Lot No. is required.
                   </div>
                 </div>
               </div>

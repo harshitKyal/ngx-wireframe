@@ -11,7 +11,6 @@ import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialo
 import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
-import { CustomRendererStockRecordComponent } from '../../fabric-in/add-edit-fabric-in/add-edit-fabric-in.component';
 
 @Component({
   selector: 'ngx-add-edit-supplier-rate',
@@ -64,7 +63,7 @@ export class AddEditSupplierRateComponent implements OnInit {
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
-        column.cellRendererFramework = CustomRendererStockRecordComponent;
+        column.cellRendererFramework = CustomRendererSupplierRateComponent;
         column.cellRendererParams = {
           action: this
         };

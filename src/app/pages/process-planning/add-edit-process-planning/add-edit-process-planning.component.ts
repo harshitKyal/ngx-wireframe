@@ -10,14 +10,8 @@ import { PartyService } from '../../../@theme/services/party.service';
 import { ProcessPlanningService } from '../../../@theme/services/process-planning.service';
 import { QualityService } from '../../../@theme/services/quality.service';
 import { AuthService } from '../../../@theme/services/auth.service';
-import { ColDef } from 'ag-grid-community';
 import { NgForm } from '@angular/forms';
-import { AgRendererComponent } from 'ag-grid-angular';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
-import { CustomRendererStockRecordComponent } from '../../fabric-in/add-edit-fabric-in/add-edit-fabric-in.component';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { ShadeService } from '../../../@theme/services/shade.service';
 import { FabricInService } from '../../../@theme/services/fabric-in.service';
 import { BatchService } from '../../../@theme/services/batch.service';
@@ -45,6 +39,7 @@ export class AddEditProcessPlanningComponent implements OnInit {
   topHeader = '';
   viewFlag = false;
   rowData: any;
+  rowBatchData: any;
   partyList: Party[] = [];
   qualityList: Quality[] = [];
   shadeList = [];
@@ -57,6 +52,8 @@ export class AddEditProcessPlanningComponent implements OnInit {
   currentUser: User;
   gridApi;
   gridColumnApi;
+  gridBatchApi;
+  gridBatchColumnApi;
   qualityReqObj = { party_id: '', entry_id: '', group_user_ids: '' };
   shadeReqObj = { quality_id: '', party_id: '', group_user_ids: '' };
   programReqObj = { quality_id: '', party_id: '', shade_id: '', group_user_ids: '' };
@@ -72,12 +69,20 @@ export class AddEditProcessPlanningComponent implements OnInit {
     { headerName: 'Quality Type', field: 'quality_type', sortable: true, filter: true },
     { headerName: 'remark', field: 'remark', sortable: true, filter: true },
   ];
+  batchColumnDefs = [
+    { headerName: 'Actions', field: '', sortable: false, width: 120, checkboxSelection: true },
+    { headerName: 'Batch No.', field: 'batch_no', sortable: true, filter: true },
+    { headerName: 'Total Weight', field: 'total_wt', sortable: true, filter: true },
+    { headerName: 'Total No. of Taka/Cones', field: 'total_taka', sortable: true, filter: true },
+    { headerName: 'Total Metre', field: 'total_mtr', sortable: true, filter: true },
+  ]
   currentUserPermission: any;
   currentUserGroupUserIds: any;
   viewProcessPlanningGivenByReqOb = new ViewReqObj();
   viewPartyReqOb = new ViewReqObj();
   batchViewReqObj;
-
+  selectedBatchRow: any;
+  selectedProgramRow: any;
 
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
     private router: Router, private processPlanningService: ProcessPlanningService, private qualityService: QualityService,
@@ -112,7 +117,12 @@ export class AddEditProcessPlanningComponent implements OnInit {
     this.gridColumnApi = params.columnApi;
     // this.getUserList(this.currentUserId);
   }
+  onBatchGridReady(params) {
+    this.gridBatchApi = params.api;
+    this.gridBatchColumnApi = params.columnApi;
+  }
   getProgramList() {
+    this.clearBatchList();
     this.programReqObj.quality_id = this.selectedQualityId;
     this.programReqObj.shade_id = this.selectedShadeId;
     this.programReqObj.party_id = this.selectedPartyId;
@@ -138,9 +148,35 @@ export class AddEditProcessPlanningComponent implements OnInit {
     });
   }
   onSelectionChanged(event) {
-    const row = this.gridApi.getSelectedRows();
-    console.log(row);
-    this.getBatchListByProgramSelected(row);
+    this.clearBatchList();
+    this.selectedProgramRow = this.gridApi.getSelectedRows();
+    console.log(this.selectedProgramRow);
+    this.getBatchListByProgramSelected(this.selectedProgramRow);
+  }
+  onBatchSelectionChanged(event) {
+    this.selectedBatchRow = this.gridBatchApi.getSelectedRows();
+    console.log('batch selection', this.selectedBatchRow);
+  }
+  onAddPlanning() {
+    if (this.selectedBatchRow) {
+      let obj = {
+        program_id: this.selectedProgramRow[0].entry_id,
+        batch_id: this.selectedBatchRow[0].batch_no,
+        created_by: this.currentUserId,
+        user_head_id: this.currentUserHeadid
+      }
+
+      this.processPlanningService.addProductionPlannig(obj).subscribe(data => {
+        if (!data[0].error) {
+          this.toasterService.success(data[0].message);
+          this.router.navigate(['/pages/process-planning']);
+        } else {
+          this.toasterService.error(data[0].message);
+        }
+      }, err => {
+        this.toasterService.error(err);
+      })
+    }
   }
   getBatchListByProgramSelected(row) {
     this.batchViewReqObj = {
@@ -150,6 +186,7 @@ export class AddEditProcessPlanningComponent implements OnInit {
     this.batchService.getAllBatchByQualityId(this.batchViewReqObj).subscribe(data => {
       if (!data[0].error) {
         this.batchList = data[0].data;
+        this.rowBatchData = this.batchList;
       }
     })
   }
@@ -212,15 +249,18 @@ export class AddEditProcessPlanningComponent implements OnInit {
   onPartySelect() {
     this.selectedQualityId = '';
     this.selectedShadeId = '';
+    this.clearBatchList();
     this.getQualityList();
     this.getProgramList();
     this.getShadeList();
   }
   onShadeSelect() {
+    this.clearBatchList();
     this.getProgramList();
     this.getQualityList();
   }
   onQualitySelect() {
+    this.clearBatchList();
     this.getProgramList();
   }
   getQualityList() {
@@ -253,8 +293,9 @@ export class AddEditProcessPlanningComponent implements OnInit {
       }
     })
   }
-  getBatchListByProgram() {
-
+  clearBatchList() {
+    this.batchList = [];
+    this.rowBatchData = [];
   }
   onPageLoad() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -285,6 +326,7 @@ export class AddEditProcessPlanningComponent implements OnInit {
     this.selectedPartyId = '';
     this.selectedQualityId = '';
     this.selectedShadeId = '';
+    this.clearBatchList();
     this.getProgramList();
   }
   numberOnly(event): boolean {

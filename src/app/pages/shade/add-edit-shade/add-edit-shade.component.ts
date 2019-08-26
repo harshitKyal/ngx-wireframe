@@ -17,7 +17,6 @@ import { Supplier, SupplierItemRecord } from '../../../@theme/model/supplier-cla
 import { SupplierService } from '../../../@theme/services/supplier.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
-import { CustomRendererStockRecordComponent } from '../../fabric-in/add-edit-fabric-in/add-edit-fabric-in.component';
 import { Process } from '../../../@theme/model/process-class';
 import { ProcessService } from '../../../@theme/services/process.service';
 
@@ -91,7 +90,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
-        column.cellRendererFramework = CustomRendererStockRecordComponent;
+        column.cellRendererFramework = CustomRendererShadeRecordComponent;
         column.cellRendererParams = {
           // inRouterLink: '/user/edit-user/',
           action: this

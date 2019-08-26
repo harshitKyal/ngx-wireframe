@@ -15,7 +15,6 @@ import { NgForm } from '@angular/forms';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
-import { CustomRendererStockRecordComponent } from '../../fabric-in/add-edit-fabric-in/add-edit-fabric-in.component';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { ShadeService } from '../../../@theme/services/shade.service';
@@ -106,7 +105,7 @@ export class AddEditProgramComponent implements OnInit {
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
       if (column.field === 'index') {
-        column.cellRendererFramework = CustomRendererStockRecordComponent;
+        column.cellRendererFramework = CustomRendererProgramRecordComponent;
         column.cellRendererParams = {
           // inRouterLink: '/user/edit-user/',
           action: this

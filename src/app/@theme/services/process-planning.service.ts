@@ -31,4 +31,7 @@ export class ProcessPlanningService {
   deleteprocessPlanningById(id) {
     return this.apiService.apiCaller('get', '/deleteprocessPlanning/' + id);
   }
+  addProductionPlannig(obj) {
+    return this.apiService.apiCaller('post', '/addProductionPlanning', obj);
+  }
 }
