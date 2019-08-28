@@ -57,5 +57,4 @@ export class ProcessReqRecord {
     concentration: any;
     item_by: any;
     supplier_name: any;
-
 }

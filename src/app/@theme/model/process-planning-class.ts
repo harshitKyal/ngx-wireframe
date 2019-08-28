@@ -1,7 +1,3 @@
-export class ProcessPlanning {
-
-}
-
 export class FunctionObj {
     func_name: any;
     func_value: any = '';

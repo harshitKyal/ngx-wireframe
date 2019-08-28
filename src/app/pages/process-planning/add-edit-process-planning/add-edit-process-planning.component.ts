@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProcessPlanning, ProductionPlanningReq } from '../../../@theme/model/process-planning-class';
+import { ProductionPlanningReq } from '../../../@theme/model/process-planning-class';
 import { Quality } from '../../../@theme/model/quality-class';
 import { Subscription, Subject, Observable, merge } from 'rxjs';
 import { Party } from '../../../@theme/model/party-class';
@@ -29,7 +29,6 @@ export class AddEditProcessPlanningComponent implements OnInit {
   click$ = new Subject<string>();
 
   productionPlanningObj = new ProductionPlanningReq();
-  processPlanningModal: ProcessPlanning;
   flagDivSubForm = false;
   flagDiv = false;
   flagDivBatch = false;
@@ -63,11 +62,10 @@ export class AddEditProcessPlanningComponent implements OnInit {
   columnDefs = [
     { headerName: 'Actions', field: '', sortable: false, width: 120, checkboxSelection: true },
     { headerName: 'Party Name', field: 'party_name', sortable: true, filter: true },
-    { headerName: 'Program By', field: 'program_given_by', sortable: true, filter: true },
+    { headerName: 'Shade No.', field: 'shade_no', sortable: true, filter: true },
     { headerName: 'Quality Id', field: 'quality_id', sortable: true, filter: true },
     { headerName: 'Quality Name', field: 'quality_name', sortable: true, filter: true },
     { headerName: 'Quality Type', field: 'quality_type', sortable: true, filter: true },
-    { headerName: 'remark', field: 'remark', sortable: true, filter: true },
   ];
   batchColumnDefs = [
     { headerName: 'Actions', field: '', sortable: false, width: 120, checkboxSelection: true },
@@ -88,7 +86,6 @@ export class AddEditProcessPlanningComponent implements OnInit {
     private router: Router, private processPlanningService: ProcessPlanningService, private qualityService: QualityService,
     private authService: AuthService, private shadeService: ShadeService, private fabricService: FabricInService,
     private batchService: BatchService, private programService: ProgramService) {
-    this.processPlanningModal = new ProcessPlanning();
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -160,7 +157,13 @@ export class AddEditProcessPlanningComponent implements OnInit {
   onAddPlanning() {
     if (this.selectedBatchRow) {
       this.productionPlanningObj.batch_control_id = this.selectedBatchRow[0].batch_no;
+      this.productionPlanningObj.quality_id = this.selectedBatchRow[0].quality_id;
+      this.productionPlanningObj.quantity = this.selectedBatchRow[0].total_wt;
+      this.productionPlanningObj.time = '';
       this.productionPlanningObj.program_control_id = this.selectedProgramRow[0].entry_id;
+      this.productionPlanningObj.priority = this.selectedProgramRow[0].priority;
+      this.productionPlanningObj.shade_no = this.selectedProgramRow[0].shade_no;
+      this.productionPlanningObj.color_tone = this.selectedProgramRow[0].color_tone;
       this.productionPlanningObj.created_by = this.currentUserId;
       this.productionPlanningObj.user_head_id = this.currentUserHeadid;
 

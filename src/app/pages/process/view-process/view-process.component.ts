@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Process } from '../../../@theme/model/process-class';
 import { Subscription } from 'rxjs';
 import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Quality } from '../../../@theme/model/quality-class';

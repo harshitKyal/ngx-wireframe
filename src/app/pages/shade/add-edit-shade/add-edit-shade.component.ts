@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { Process } from '../../../@theme/model/process-class';
 import { ProcessService } from '../../../@theme/services/process.service';
+import { DynamicProcessReq } from '../../../@theme/model/process-planning-class';
 
 @Component({
   selector: 'ngx-add-edit-shade',
@@ -40,7 +41,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   record: ShadeRecord;
   qualityList: Quality[] = [];
   partyNameList: Party[] = [];
-  processNameList: Process[] = [];
+  processNameList: DynamicProcessReq[] = [];
   currentUserId: any;
   currentUserHeadid: any;
   currentUser$: Subscription;
@@ -83,8 +84,8 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
     this.getQuality();
     this.getPartyList();
     this.getSupplierItemList();
-    this.onPageLoad();
     this.getProcessList();
+    this.onPageLoad();
   }
 
   setColumns() {
@@ -122,7 +123,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
     this.viewPartyReqOb.current_user_id = this.currentUserId;
     this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
     this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
-    this.processService.getAllProcesss(this.viewPartyReqOb).subscribe(
+    this.processService.getAllDynamicProcesss(this.viewPartyReqOb).subscribe(
       data => {
         if (!data[0].error) {
           this.processNameList = data[0].data;

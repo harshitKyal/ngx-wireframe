@@ -18,6 +18,9 @@ import { QualityService } from '../../../@theme/services/quality.service';
 import { element } from '@angular/core/src/render3';
 import { Party } from '../../../@theme/model/party-class';
 import { PartyService } from '../../../@theme/services/party.service';
+import { DynamicProcessReq } from '../../../@theme/model/process-planning-class';
+import { ProcessPlanningService } from '../../../@theme/services/process-planning.service';
+import { ProcessService } from '../../../@theme/services/process.service';
 
 @Component({
   selector: 'ngx-view-shade-list',
@@ -56,11 +59,12 @@ export class ViewShadeListComponent implements OnInit {
   qualityViewReqObj = new ViewReqObj();
   qualityList: Quality[] = [];
   partyNameList: Party[] = [];
+  processNameList: DynamicProcessReq[] = [];
   viewPartyReqOb = new ViewReqObj();
 
   constructor(private shadeService: ShadeService, private router: Router, private tosterService: ToastrService
     , private permissionService: PermissionService, private papa: Papa, private authService: AuthService,
-    private qualityService: QualityService, private partyService: PartyService) {
+    private qualityService: QualityService, private partyService: PartyService, private processService: ProcessService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -91,6 +95,7 @@ export class ViewShadeListComponent implements OnInit {
     }
     this.getPartyList();
     this.getQualityData();
+    this.getProcessList();
   }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
@@ -127,6 +132,20 @@ export class ViewShadeListComponent implements OnInit {
       }
     })
   }
+  getProcessList() {
+    this.processNameList = [];
+    this.viewPartyReqOb.view_group = true;
+    this.viewPartyReqOb.current_user_id = this.currentUserId;
+    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
+    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
+    this.processService.getAllDynamicProcesss(this.viewPartyReqOb).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.processNameList = data[0].data;
+        }
+      }, error => {
+      });
+  }
   getShadeData(value?) {
 
     this.shadeReqObj.view_all = false;
@@ -157,6 +176,10 @@ export class ViewShadeListComponent implements OnInit {
             // ele.party_name = this.qualityList[i].party_name;
             ele.quality_name = this.qualityList[i].quality_name;
             ele.quality_type = this.qualityList[i].quality_type;
+          }
+          const j = this.processNameList.findIndex(v => v.entry_id == ele.process_id);
+          if (j > -1) {
+            ele.process_name = this.processNameList[j].process_name;
           }
         });
         this.rowData = this.shadeList;

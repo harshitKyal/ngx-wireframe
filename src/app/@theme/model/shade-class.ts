@@ -5,6 +5,7 @@ export class Shade {
     quality_id: any;
     quality_entry_id: any;
     quality_name: any;
+    process_name:any;
     quality_type: any;
     party_name: any;
     colour_tone: any;
