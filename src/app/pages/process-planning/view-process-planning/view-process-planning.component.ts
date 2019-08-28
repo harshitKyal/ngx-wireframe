@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { AgRendererComponent } from 'ag-grid-angular';
-import { ProcessPlanning, ProductionPlanningReq } from '../../../@theme/model/process-planning-class';
+import {  ProductionPlanningReq } from '../../../@theme/model/process-planning-class';
 import { Subscription } from 'rxjs';
 import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Quality } from '../../../@theme/model/quality-class';
@@ -25,7 +25,7 @@ import * as XLSX from 'xlsx';
 })
 export class ViewProcessPlanningComponent implements OnInit {
 
-  processPlanningList: ProcessPlanning[] = [];
+  processPlanningList: any = [];
   rowData;
   gridApi;
   gridColumnApi;
