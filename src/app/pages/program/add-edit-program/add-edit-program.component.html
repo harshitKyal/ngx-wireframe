@@ -93,6 +93,23 @@
         </div>
         <div class="col-md-3">
           <div class="form-group">
+            <label>Priority</label>
+            <select class="form-control" [(ngModel)]="programModal.priority" name="Priority" #priorityId="ngModel"
+              required>
+              <option disabled value="">Select Priority</option>
+              <option *ngFor="let priority of priorityList" [value]="priority">
+                {{priority}}
+              </option>
+            </select>
+            <div *ngIf="priorityId.invalid && (priorityId.dirty || priorityId.touched)" class="errors">
+              <div *ngIf="priorityId.errors && priorityId.errors.required">
+                Priority is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
             <label>Remark</label>
             <textarea type="text" class="form-control" [(ngModel)]="programModal.remark" name="Remark"></textarea>
           </div>

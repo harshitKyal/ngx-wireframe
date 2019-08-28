@@ -1,7 +1,7 @@
 export class Program {
     entry_id: any;
     party_id: any;
-    party_name:any;
+    party_name: any;
     quality_id: any;
     quality_entry_id: any;
     quality_type: any;
@@ -13,6 +13,7 @@ export class Program {
     created_by: any;
     updated_by: any;
     user_head_id: any;
+    priority: any;
     program_record: ProgramRecord[] = [];
 }
 export class ProgramRecord {

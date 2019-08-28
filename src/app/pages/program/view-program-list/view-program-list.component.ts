@@ -33,15 +33,16 @@ export class ViewProgramListComponent implements OnInit {
   addProgramPermission = 1;
   columnDefs = [
     { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
-    { headerName: 'Party Name', field: 'party_name', sortable: true, filter: true },
-    { headerName: 'Program By', field: 'program_given_by', sortable: true, filter: true },
-    { headerName: 'Quality Id', field: 'quality_id', sortable: true, filter: true },
-    { headerName: 'Quality Name', field: 'quality_name', sortable: true, filter: true },
-    { headerName: 'Quality Type', field: 'quality_type', sortable: true, filter: true },
-    { headerName: 'remark', field: 'remark', sortable: true, filter: true },
+    { headerName: 'Party Name', field: 'party_name', sortable: true, filter: true, width: 160 },
+    { headerName: 'Program By', field: 'program_given_by', sortable: true, filter: true, width: 160 },
+    { headerName: 'Quality Id', field: 'quality_id', sortable: true, filter: true, width: 160 },
+    { headerName: 'Quality Name', field: 'quality_name', sortable: true, filter: true, width: 160 },
+    { headerName: 'Quality Type', field: 'quality_type', sortable: true, filter: true, width: 160 },
+    { headerName: 'Priority', field: 'priority', sortable: true, filter: true, width: 120 },
+    { headerName: 'remark', field: 'remark', sortable: true, filter: true, width: 120 },
   ];
   columnExportDefs = [
-    'party_name', 'program_given_by', 'quality_id', 'quality_name', 'quality_type', 'remark'];
+    'party_name', 'program_given_by', 'quality_id', 'quality_name', 'quality_type', 'remark', 'priority'];
   currentUserId: any;
   currentUser$: Subscription;
   currentUserPermission = [];

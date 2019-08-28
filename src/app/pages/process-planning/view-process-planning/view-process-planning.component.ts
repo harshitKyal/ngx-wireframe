@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { AgRendererComponent } from 'ag-grid-angular';
-import { ProcessPlanning } from '../../../@theme/model/process-planning-class';
+import { ProcessPlanning, ProductionPlanningReq } from '../../../@theme/model/process-planning-class';
 import { Subscription } from 'rxjs';
 import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Quality } from '../../../@theme/model/quality-class';
@@ -31,15 +31,14 @@ export class ViewProcessPlanningComponent implements OnInit {
   gridColumnApi;
   addProcessPlanningPermission = 1;
   columnDefs = [
-    { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
-    { headerName: 'ProcessPlanning Name', field: 'process_name', sortable: true, filter: true },
-    { headerName: 'No. of Dying Bath', field: 'no_dying_bath', sortable: true, filter: true },
-    { headerName: 'DC Mutiplying Fac', field: 'dc_multiplying_fac', sortable: true, filter: true },
+    // { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
+    { headerName: 'Program  No.', field: 'program_control_id', sortable: true, filter: true },
+    { headerName: 'Batch No.', field: 'batch_control_id', sortable: true, filter: true },
     { headerName: 'Created By', field: 'created_by', sortable: true, filter: true },
     { headerName: 'Updated By', field: 'updated_by', sortable: true, filter: true },
   ];
   columnExportDefs = [
-    'process_name', 'no_dying_bath', 'dc_multiplying_fac', 'created_by', 'updated_by'];
+    'program_control_id', 'batch_control_id', 'created_by', 'updated_by'];
   currentUserId: any;
   currentUser$: Subscription;
   currentUserPermission = [];
@@ -50,14 +49,10 @@ export class ViewProcessPlanningComponent implements OnInit {
   radioSelected: any = 1;
   currentUserGroupUserIds: any;
   processPlanningReqObj = new ViewReqObj();
-  qualityViewReqObj = new ViewReqObj();
-  qualityList: Quality[] = [];
-  partyNameList: Party[] = [];
   viewPartyReqOb = new ViewReqObj();
 
   constructor(private processPlanningService: ProcessPlanningService, private router: Router, private tosterService: ToastrService
-    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService,
-    private qualityService: QualityService, private partyService: PartyService) {
+    , private permissionService: PermissionService, private papa: Papa, private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
       if (ele != null) {
         this.currentUser = ele.user;
@@ -66,14 +61,14 @@ export class ViewProcessPlanningComponent implements OnInit {
         this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
-    this.setColumns();
+    // this.setColumns();
   }
 
 
   ngOnInit() {
-    if (this.currentUserPermission.length) {
+    if (this.currentUserPermission && this.currentUserPermission.length) {
       this.currentUserPermission.forEach(ele => {
-        if (ele.form_name === 'Process Planning') {
+        if (ele.form_name === 'Process') {
           this.addProcessPlanningPermission = 1;
           this.viewAllDataPermission = ele.can_view_all;
           this.viewGroupDataPermission = ele.can_view_group;
@@ -84,42 +79,13 @@ export class ViewProcessPlanningComponent implements OnInit {
         }
       })
     }
-    this.getQualityData();
-    this.getPartyList();
-    this.getProcessData();
+    this.getProcessPlanningData();
   }
   ngOnDestroy() {
     this.currentUser$.unsubscribe();
   }
-  getPartyList() {
-    this.partyNameList = [];
-    this.viewPartyReqOb.view_group = true;
-    this.viewPartyReqOb.current_user_id = this.currentUserId;
-    this.viewPartyReqOb.user_head_id = this.currentUser.user_head_id;
-    this.viewPartyReqOb.group_user_ids = this.currentUserGroupUserIds;
-    this.partyService.getPartyList(this.viewPartyReqOb).subscribe(
-      data => {
-        if (!data[0].error) {
-          this.partyNameList = data[0].data;
-        } else {
-          this.tosterService.error(data[0].message);
-        }
-      }, error => {
-        this.tosterService.error(error);
-      });
-  }
-  getQualityData() {
-    this.qualityViewReqObj.current_user_id = this.currentUserId;
-    this.qualityViewReqObj.user_head_id = this.currentUser.user_head_id;
-    this.qualityViewReqObj.group_user_ids = this.currentUserGroupUserIds;
-    this.qualityViewReqObj.view_group = true;
-    this.qualityService.getAllQualityData(this.qualityViewReqObj).subscribe(data => {
-      if (!data[0].error) {
-        this.qualityList = data[0].data;
-      }
-    })
-  }
-  getProcessData(value?) {
+
+  getProcessPlanningData(value?) {
     this.processPlanningReqObj.view_all = false;
     this.processPlanningReqObj.view_group = false;
     this.processPlanningReqObj.view_own = false;
@@ -144,22 +110,20 @@ export class ViewProcessPlanningComponent implements OnInit {
       }
     });
   }
-  setColumns() {
-    this.columnDefs.forEach((column: ColDef) => {
-      if (column.field === 'entry_id') {
-        column.cellRendererFramework = CustomRendererProcessPlanningComponent;
-        column.cellRendererParams = {
-          inRouterLink: '/pages/process-planning/edit-process-planning/',
-          inViewLink: '/pages/process-planning/view-process-planning/',
-          action: this
-        };
-      }
-    });
-  }
+  // setColumns() {
+  //   this.columnDefs.forEach((column: ColDef) => {
+  //     if (column.field === 'entry_id') {
+  //       column.cellRendererFramework = CustomRendererProcessPlanningComponent;
+  //       column.cellRendererParams = {
+  //         inRouterLink: '/pages/process-planning/edit-process-planning/',
+  //         action: this
+  //       };
+  //     }
+  //   });
+  // }
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    // this.getUserList(this.currentUserId);
   }
   onAddProcessPlanning() {
     if (this.addProcessPlanningPermission) {
@@ -195,7 +159,6 @@ export class ViewProcessPlanningComponent implements OnInit {
 @Component({
   template: `
   <i class="ft-edit-2 font-medium-1 mr-2" style="color:#4ca6ff" (click)="onEditProcessPlanning()"></i>
-  <i class="ft-info font-medium-1 mr-2" style="color:#4ca6ff" (click)="viewProcessPlanning()"></i>
   <i class="ft-x font-medium-1 mr-2" style="color:red" (click)="onDeleteProcessPlanning()"></i>`,
   styleUrls: ['./view-process-planning.component.scss']
 })
@@ -221,7 +184,7 @@ export class CustomRendererProcessPlanningComponent implements AgRendererCompone
   agInit(params: any): void {
     this.params = params;
     this.currentUserPermission.forEach(ele => {
-      if (ele.form_name === 'Process Planning') {
+      if (ele.form_name === 'Process') {
         if (this.params.action.radioSelected == 1) {
           this.editProcessPlanningPermission = ele.can_edit;
           this.deleteProcessPlanningPermission = ele.can_delete;

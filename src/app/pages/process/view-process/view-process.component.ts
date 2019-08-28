@@ -35,8 +35,7 @@ export class ViewProcessComponent implements OnInit {
   columnDefs = [
     { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
     { headerName: 'Process Name', field: 'process_name', sortable: true, filter: true },
-    { headerName: 'No. of Dying Bath', field: 'no_dying_bath', sortable: true, filter: true },
-    { headerName: 'DC Mutiplying Fac', field: 'dc_multiplying_fac', sortable: true, filter: true },
+    { headerName: 'Process Time(Minutes)', field: 'time', sortable: true, filter: true },
     { headerName: 'Created By', field: 'created_by', sortable: true, filter: true },
     { headerName: 'Updated By', field: 'updated_by', sortable: true, filter: true },
   ];
@@ -268,7 +267,7 @@ export class CustomRendererProcessComponent implements AgRendererComponent, OnDe
         .then((result) => {
           if (result) {
             const id = this.params.value;
-            this.processService.deleteProcessById(id).subscribe(data => {
+            this.processService.deleteDynamicProcessById(id).subscribe(data => {
               if (!data[0].error) {
                 this.params.action.getProcessData();
                 this.toasterService.success(data[0].message);

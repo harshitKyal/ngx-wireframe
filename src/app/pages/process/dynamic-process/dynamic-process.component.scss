@@ -6,3 +6,8 @@
  :host /deep/ nb-theme-default nb-accordion nb-accordion-item-header {
      padding: 0.75rem !important;
  }
+
+ .item-header {
+     background-color: lightgray;
+     border-radius: 5px;
+ }

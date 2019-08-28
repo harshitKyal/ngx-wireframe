@@ -57,6 +57,7 @@ export class Step {
 
 export class DynamicProcessReq {
     process_name: any;
+    time: any;
     entry_id: any;
     created_by: any;
     user_head_id: any;
@@ -101,4 +102,21 @@ export class ChemicalReq {
     supplier_name: any;
     concentration: any;
     lr_or_fabric_wt: any;
+}
+
+export class ProductionPlanningReq {
+    entry_id: any;
+    program_control_id: any;
+    batch_control_id: any;
+    quality_id: any;
+    shade_no: any;
+    quantity: any;
+    time: any;
+    priority: any;
+    color_tone: any;
+    created_by: any;
+    created_date: any;
+    updated_by: any;
+    updated_date: any;
+    user_head_id: any;
 }

@@ -4,11 +4,11 @@
   <nb-card-body>
     <form #vform="ngForm">
       <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-2" *ngIf="topHeader === 'Edit Batch'">
           <div class="form-group">
             <label>Batch No.</label>
-            <input type="text" class="form-control" [(ngModel)]="batchModal.batch_id" name="batchId" #BatchId="ngModel"
-              required />
+            <input type="text" disabled class="form-control" [(ngModel)]="batchModal.batch_id" name="batchId"
+              #BatchId="ngModel" required />
             <div *ngIf="BatchId.invalid && (BatchId.dirty || BatchId.touched)" class="errors">
               <div *ngIf="BatchId.errors && BatchId.errors.required">
                 Batch No is required.

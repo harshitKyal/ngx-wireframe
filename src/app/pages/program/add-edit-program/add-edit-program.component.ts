@@ -32,7 +32,7 @@ export class AddEditProgramComponent implements OnInit {
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
-
+  priorityList = ["Very High", "High", "Medium", "Low"];
   programModal: Program;
   flagDivSubForm = false;
   flagDiv = false;

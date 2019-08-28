@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProcessPlanning } from '../../../@theme/model/process-planning-class';
+import { ProcessPlanning, ProductionPlanningReq } from '../../../@theme/model/process-planning-class';
 import { Quality } from '../../../@theme/model/quality-class';
 import { Subscription, Subject, Observable, merge } from 'rxjs';
 import { Party } from '../../../@theme/model/party-class';
@@ -28,7 +28,7 @@ export class AddEditProcessPlanningComponent implements OnInit {
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
-
+  productionPlanningObj = new ProductionPlanningReq();
   processPlanningModal: ProcessPlanning;
   flagDivSubForm = false;
   flagDiv = false;
@@ -159,14 +159,12 @@ export class AddEditProcessPlanningComponent implements OnInit {
   }
   onAddPlanning() {
     if (this.selectedBatchRow) {
-      let obj = {
-        program_id: this.selectedProgramRow[0].entry_id,
-        batch_id: this.selectedBatchRow[0].batch_no,
-        created_by: this.currentUserId,
-        user_head_id: this.currentUserHeadid
-      }
+      this.productionPlanningObj.batch_control_id = this.selectedBatchRow[0].batch_no;
+      this.productionPlanningObj.program_control_id = this.selectedProgramRow[0].entry_id;
+      this.productionPlanningObj.created_by = this.currentUserId;
+      this.productionPlanningObj.user_head_id = this.currentUserHeadid;
 
-      this.processPlanningService.addProductionPlannig(obj).subscribe(data => {
+      this.processPlanningService.addProductionPlannig(this.productionPlanningObj).subscribe(data => {
         if (!data[0].error) {
           this.toasterService.success(data[0].message);
           this.router.navigate(['/pages/process-planning']);
@@ -311,6 +309,7 @@ export class AddEditProcessPlanningComponent implements OnInit {
       this.processPlanningService.getprocessPlanningById(this.id).subscribe(
         data => {
           if (!data[0].error) {
+            this.productionPlanningObj = data[0].data;
           } else {
             this.toasterService.error(data.message);
           }
