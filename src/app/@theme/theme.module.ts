@@ -38,7 +38,7 @@ import {
   NbTooltipModule,
   NbCalendarKitModule,
 } from '@nebular/theme';
-
+import { ColorPickerModule } from 'ngx-color-picker';
 import { NbSecurityModule } from '@nebular/security';
 
 import {
@@ -108,7 +108,8 @@ const NB_MODULES = [
   RouterModule,
   NgbModule,
   PapaParseModule,
-  DragDropModule
+  DragDropModule,
+  ColorPickerModule
 ];
 
 const COMPONENTS = [

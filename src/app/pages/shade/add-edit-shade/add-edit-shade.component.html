@@ -53,7 +53,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let quality of qualityList; let i = index" ( click)="selectQualityId(quality)"
+                  <tr *ngFor="let quality of qualityList; let i = index" (click)="selectQualityId(quality)"
                     class="pointer">
                     <td style="display:none;">{{quality.quality_id}}</td>
                     <td>{{quality.quality_id}}</td>
@@ -108,8 +108,8 @@
           <div class="form-group">
             <label>Color Tone</label>
             <!-- pattern -->
-            <input type="text" class="form-control" [(ngModel)]="shadeModal.colour_tone" name="tone"
-              #colortone="ngModel" required />
+            <input [(colorPicker)]="shadeModal.colour_tone" [style.background]="shadeModal.colour_tone" class="form-control"
+              [(ngModel)]="shadeModal.colour_tone" name="tone" #colortone="ngModel" required />
             <div *ngIf="colortone.invalid && (colortone.dirty || colortone.touched)" class="errors">
               <div *ngIf="colortone.errors && colortone.errors.required">
                 Color Tone is required.
