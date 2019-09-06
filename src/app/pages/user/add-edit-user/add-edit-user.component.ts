@@ -17,7 +17,7 @@ import { AuthService } from '../../../@theme/services/auth.service';
 })
 export class AddEditUserComponent implements OnInit, OnDestroy {
 
-  tableForms = ["Party", "Quality", "User", "Fabric In", "Batch", "Program", "Shade", "Supplier", "Supplier Rate", "Shade", "Colour Stock", "Process", "Process Planning"];
+  tableForms = ["Party", "Quality", "User", "Fabric In", "Batch", "Program", "Shade", "Supplier", "Supplier Rate", "Shade", "Colour Stock", "Process", "Process Planning", "Jet Planning"];
   designation = ['Manager', 'Master', 'Accountant', 'Staff', 'Helper']
 
 

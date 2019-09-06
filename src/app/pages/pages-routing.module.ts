@@ -69,6 +69,12 @@ const routes: Routes = [{
       // canLoad: [ProcessGuardService],
     },
     {
+      path: 'jet-planning',
+      loadChildren: './jet-planning/jet-planning.module#JetPlanningModule',
+      // canActivate: [ProcessGuardService],
+      // canLoad: [ProcessGuardService],
+    },
+    {
       path: 'supplier',
       loadChildren: './supplier/supplier.module#SupplierModule',
       canActivate: [SupplierGuardService],

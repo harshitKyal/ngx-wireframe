@@ -10,6 +10,7 @@ export class Supplier {
     is_active: any;
     created_by: any;
     updated_by: any;
+    user_head_id: any;
 }
 export class SupplierRate {
     supplier_control_id: any;

@@ -31,6 +31,8 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
   currentUserPermission: UserPermission[] = [];
   viewPartyReqOb = new ViewReqObj();
   currentUserGroupUserIds: any;
+  isSameQualityId = false;
+
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private partyService: PartyService,
     private router: Router, private qualityService: QualityService, private authService: AuthService) {
     this.qualityModal = new Quality();
@@ -55,6 +57,7 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
   }
 
   onPageLoad() {
+    this.isSameQualityId = false;
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id != null) {
       this.subBtnName = 'Update';
@@ -107,7 +110,18 @@ export class AddEditQualityComponent implements OnInit, OnDestroy {
         this.toasterService.error(error);
       });
   }
-
+  onQualityIdChange(value) {
+    this.qualityService.checkQualityId(value).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.isSameQualityId = data[0].data.length ? true : false;
+        } else {
+          this.toasterService.error(data[0].message);
+        }
+      }, error => {
+        this.toasterService.error(error);
+      });
+  }
   onTypeChange(event) {
     this.getSubTypeList(event);
   }

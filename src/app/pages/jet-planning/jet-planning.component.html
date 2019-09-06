@@ -1,0 +1,28 @@
+<nb-card>
+  <nb-card-header>Jet Planning
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <nb-card class="col-md-3" *ngFor="let process of processPlanningList">
+        <nb-card-body [style.background-color]="process.color_tone">
+          <div class="row">
+            <div class="col-md-6">
+              <label><b>Shade No :</b> {{process.shade_no}}</label>
+            </div>
+            <div class="col-md-6">
+              <label><b>Quantity :</b> {{process.quantity}}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label><b>Time :</b> {{process.time}}</label>
+            </div>
+            <div class="col-md-6">
+              <label><b>Priority :</b> {{process.priority}}</label>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </nb-card-body>
+</nb-card>

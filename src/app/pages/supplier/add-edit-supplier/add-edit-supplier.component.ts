@@ -4,6 +4,10 @@ import { ToastrService } from 'ngx-toastr';
 import { SupplierService } from '../../../@theme/services/supplier.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { User } from '../../../@core/data/users';
+import { UserPermission } from '../../../@theme/model/user-class';
+import { AuthService } from '../../../@theme/services/auth.service';
 
 @Component({
   selector: 'ngx-add-edit-supplier',
@@ -16,9 +20,23 @@ export class AddEditSupplierComponent implements OnInit {
   id: any;
   subBtnName = '';
   topHeader = '';
-  constructor(private toasterService: ToastrService, private route: ActivatedRoute,
+  currentUserId: any;
+  currentUserHeadid: any;
+  currentUser$: Subscription;
+  currentUser: User;
+  currentUserPermission: UserPermission[] = [];
+
+  constructor(private toasterService: ToastrService, private route: ActivatedRoute, private authService: AuthService,
     private router: Router, private supplierService: SupplierService) {
     this.supplierModal = new Supplier();
+    this.currentUser$ = this.authService.currentUser.subscribe(ele => {
+      if (ele != null) {
+        this.currentUser = ele.user;
+        this.currentUserId = ele.user.user_id;
+        this.currentUserHeadid = ele.user.user_head_id;
+        this.currentUserPermission = ele.user_permission;
+      }
+    });
   }
 
   ngOnInit() {
@@ -57,6 +75,7 @@ export class AddEditSupplierComponent implements OnInit {
 
   onCustomFormSubmit(form: NgForm) {
     if (this.id) {
+      this.supplierModal.updated_by = this.currentUserId;
       this.supplierService.updateSupplier(this.supplierModal).subscribe(data => {
         if (!data[0].error) {
           this.toasterService.success("Updated Successfully");
@@ -69,6 +88,8 @@ export class AddEditSupplierComponent implements OnInit {
         this.toasterService.error('Server Error');
       });
     } else {
+      this.supplierModal.created_by = this.currentUserId;
+      this.supplierModal.user_head_id = this.currentUserHeadid;
       console.log(this.supplierModal)
       this.supplierService.addSupplier(this.supplierModal).subscribe(data => {
         // data = data[0]

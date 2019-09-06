@@ -50,6 +50,8 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   supplierItemList: SupplierItemRecord[] = [];
   qualityViewReqObj = new ViewReqObj();
   viewPartyReqOb = new ViewReqObj();
+  isSamePartyShadeNo = false;
+
   columnDefs = [
     { headerName: 'Actions', field: 'index' },
     { headerName: 'Item Name', field: 'item_name' },
@@ -81,8 +83,8 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
     this.currentUser$.unsubscribe();
   }
   ngOnInit() {
-    this.getQuality();
     this.getPartyList();
+    this.getQuality();
     this.getSupplierItemList();
     this.getProcessList();
     this.onPageLoad();
@@ -99,7 +101,18 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+  onPartyShadeChange(value) {
+    this.shadeService.checkPartyShadeNo(value).subscribe(
+      data => {
+        if (!data[0].error) {
+          this.isSamePartyShadeNo = data[0].data.length ? true : false;
+        } else {
+          this.toasterService.error(data[0].message);
+        }
+      }, error => {
+        this.toasterService.error(error);
+      });
+  }
   getPartyList() {
     this.partyNameList = [];
     this.viewPartyReqOb.view_group = true;
@@ -142,6 +155,14 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
     this.qualityService.getAllQualityData(this.qualityViewReqObj).subscribe(data => {
       if (!data[0].error) {
         this.qualityList = data[0].data;
+        if (this.qualityList.length) {
+          this.qualityList.forEach(ele => {
+            let partyIndex = this.partyNameList.findIndex(v => v.entry_id == ele.party_id);
+            if (partyIndex > -1) {
+              ele.party_name = this.partyNameList[partyIndex].party_name;
+            }
+          })
+        }
       }
     })
   }
@@ -236,7 +257,7 @@ export class AddEditShadeComponent implements OnInit, OnDestroy {
   onAddRecord(form: NgForm) {
     let flag = 0;
     let j = 1;
-    if (this.shadeRecord.length) {
+    if (!this.shadeRecord.length) {
       this.record.index = j;
     } else if (this.record.index == undefined) {
       this.record.index = this.shadeRecord.length + 1;

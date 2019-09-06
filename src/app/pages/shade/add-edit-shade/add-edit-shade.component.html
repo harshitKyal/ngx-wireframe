@@ -8,10 +8,15 @@
           <div class="form-group">
             <label>Party Shade No.</label>
             <input type="text" class="form-control" [(ngModel)]="shadeModal.party_shade_no" name="partyShadeNo"
-              #ShadeNo="ngModel" required />
+            (change)="onPartyShadeChange($event.target.value)"  #ShadeNo="ngModel" required />
             <div *ngIf="ShadeNo.invalid && (ShadeNo.dirty || ShadeNo.touched)" class="errors">
               <div *ngIf="ShadeNo.errors && ShadeNo.errors.required">
                 Party Shade No. is required.
+              </div>
+            </div>
+            <div *ngIf="(ShadeNo.dirty || ShadeNo.touched)" class="errors">
+              <div *ngIf="isSamePartyShadeNo">
+                Party Shade No. already Exists.
               </div>
             </div>
           </div>
@@ -235,7 +240,7 @@
       </div>
 
       <div class="box-footer">
-        <button [disabled]="vform.invalid" nbButton (click)="onCustomFormSubmit(vform)">{{subBtnName}}</button>
+        <button [disabled]="vform.invalid || isSamePartyShadeNo" nbButton (click)="onCustomFormSubmit(vform)">{{subBtnName}}</button>
         &nbsp;
         <button nbButton type="reset" routerLink='/pages/shade/view-shade-list' id="Cancel">Cancel</button>
       </div>

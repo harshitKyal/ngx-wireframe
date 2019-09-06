@@ -27,6 +27,9 @@ export class QualityService {
   getQualityById(id) {
     return this.apiService.apiCaller('get', '/getQualityDataById/' + id);
   }
+  checkQualityId(id) {
+    return this.apiService.apiCaller('get', '/checkQualityId/' + id);
+  }
 
   getTypeList() {
     return this.apiService.apiCaller('get', '/qualityTypeList');

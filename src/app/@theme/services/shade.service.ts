@@ -11,7 +11,7 @@ export class ShadeService {
   getAllShades(shadeReqObj) {
     return this.apiService.apiCaller('post', '/shadeList', shadeReqObj);
   }
-  getShadesByFilter(shadeReqObj){
+  getShadesByFilter(shadeReqObj) {
     return this.apiService.apiCaller('post', '/shadeFilterList', shadeReqObj);
   }
 
@@ -25,6 +25,10 @@ export class ShadeService {
 
   getShadeById(id) {
     return this.apiService.apiCaller('get', '/getShadeById/' + id);
+  }
+
+  checkPartyShadeNo(id) {
+    return this.apiService.apiCaller('get', '/checkPartyShadeNo/' + id);
   }
 
   updateShade(shade) {

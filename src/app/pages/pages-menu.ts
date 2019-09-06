@@ -86,6 +86,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Jet Planning',
+    icon: 'nb-layout-default',
+    children: [
+      {
+        title: 'View Jet Planning',
+        link: '/pages/jet-planning',
+      },
+    ],
+  },
+  {
     title: 'Shade',
     icon: 'nb-layout-default',
     children: [

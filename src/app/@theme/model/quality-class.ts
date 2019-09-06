@@ -5,6 +5,7 @@ export class Quality {
     quality_type: any = '';
     quality_sub_type: any = '';
     party_id: any = '';
+    party_name: any;
     wt_per100m: any;
     remark: any;
     created_date: any;

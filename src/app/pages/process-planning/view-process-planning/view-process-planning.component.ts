@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 import { AgRendererComponent } from 'ag-grid-angular';
-import {  ProductionPlanningReq } from '../../../@theme/model/process-planning-class';
+import { ProductionPlanningReq } from '../../../@theme/model/process-planning-class';
 import { Subscription } from 'rxjs';
 import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Quality } from '../../../@theme/model/quality-class';
@@ -31,7 +31,7 @@ export class ViewProcessPlanningComponent implements OnInit {
   gridColumnApi;
   addProcessPlanningPermission = 1;
   columnDefs = [
-    // { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
+    { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
     { headerName: 'Program  No.', field: 'program_control_id', sortable: true, filter: true },
     { headerName: 'Batch No.', field: 'batch_control_id', sortable: true, filter: true },
     { headerName: 'Created By', field: 'created_by', sortable: true, filter: true },
@@ -61,7 +61,7 @@ export class ViewProcessPlanningComponent implements OnInit {
         this.currentUserGroupUserIds = ele.user.group_user_ids;
       }
     });
-    // this.setColumns();
+    this.setColumns();
   }
 
 
@@ -110,17 +110,17 @@ export class ViewProcessPlanningComponent implements OnInit {
       }
     });
   }
-  // setColumns() {
-  //   this.columnDefs.forEach((column: ColDef) => {
-  //     if (column.field === 'entry_id') {
-  //       column.cellRendererFramework = CustomRendererProcessPlanningComponent;
-  //       column.cellRendererParams = {
-  //         inRouterLink: '/pages/process-planning/edit-process-planning/',
-  //         action: this
-  //       };
-  //     }
-  //   });
-  // }
+  setColumns() {
+    this.columnDefs.forEach((column: ColDef) => {
+      if (column.field === 'entry_id') {
+        column.cellRendererFramework = CustomRendererProcessPlanningComponent;
+        column.cellRendererParams = {
+          inRouterLink: '/pages/process-planning/edit-process-planning/',
+          action: this
+        };
+      }
+    });
+  }
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
@@ -231,7 +231,7 @@ export class CustomRendererProcessPlanningComponent implements AgRendererCompone
             const id = this.params.value;
             this.processPlanningService.deleteprocessPlanningById(id).subscribe(data => {
               if (!data[0].error) {
-                this.params.action.getProcessData();
+                this.params.action.getProcessPlanningData();
                 this.toasterService.success(data[0].message);
               } else {
                 this.toasterService.error(data[0].message);

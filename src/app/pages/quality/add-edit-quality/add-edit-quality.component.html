@@ -7,11 +7,16 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Quality Id</label>
-            <input type="text" class="form-control" [(ngModel)]="qualityModal.quality_id" name="qualityId"
-              #QualityId="ngModel" required />
+            <input type="text" class="form-control" [(ngModel)]="qualityModal.quality_id"
+              (change)="onQualityIdChange($event.target.value)" name="qualityId" #QualityId="ngModel" required />
             <div *ngIf="QualityId.invalid && (QualityId.dirty || QualityId.touched)" class="errors">
               <div *ngIf="QualityId.errors && QualityId.errors.required">
                 Quality Id is required.
+              </div>
+            </div>
+            <div *ngIf="(QualityId.dirty || QualityId.touched)" class="errors">
+              <div *ngIf="isSameQualityId">
+                Quality Id already Exists.
               </div>
             </div>
           </div>
@@ -103,7 +108,7 @@
         </div>
       </div>
       <div class="box-footer">
-        <button nbButton translate>{{subBtnName}}</button> &nbsp;
+        <button nbButton translate [disabled]="vform.invalid || isSameQualityId">{{subBtnName}}</button> &nbsp;
         <button nbButton type="reset" routerLink='/pages/quality/view-quality' class="btn btn-default"
           id="Cancel">Cancel</button>
       </div>

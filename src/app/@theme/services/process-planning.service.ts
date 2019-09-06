@@ -23,7 +23,10 @@ export class ProcessPlanningService {
   deleteprocessPlanningById(id) {
     return this.apiService.apiCaller('get', '/deleteProduction/' + id);
   }
-  addProductionPlannig(obj) {
+  addProductionPlanning(obj) {
     return this.apiService.apiCaller('post', '/addProductionPlanning', obj);
+  }
+  editProductionPlanning(obj) {
+    return this.apiService.apiCaller('post', '/updateProductionPlanning', obj);
   }
 }
