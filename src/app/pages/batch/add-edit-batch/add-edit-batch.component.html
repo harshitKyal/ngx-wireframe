@@ -7,7 +7,7 @@
         <div class="col-md-2" *ngIf="topHeader === 'Edit Batch'">
           <div class="form-group">
             <label>Batch No.</label>
-            <input type="text" disabled class="form-control" [(ngModel)]="batchModal.batch_id" name="batchId"
+            <input type="text" disabled class="form-control" [(ngModel)]="batchModal.entry_id" name="batchId"
               #BatchId="ngModel" required />
             <div *ngIf="BatchId.invalid && (BatchId.dirty || BatchId.touched)" class="errors">
               <div *ngIf="BatchId.errors && BatchId.errors.required">
@@ -20,15 +20,15 @@
           <div class="form-group">
             <label>Quality Id</label>
             <!-- pattern -->
-            <select class="form-control" [(ngModel)]="batchModal.quality_entry_id" name="quality_id" #quality="ngModel"
+            <select class="form-control" [(ngModel)]="batchModal.quality_entry_id" name="quality_id" #qualityid="ngModel"
               (change)="onQualitySelect($event.target.value)" required>
               <option disabled value="">Select Quality Id
               </option>
               <option *ngFor="let quality of qualityList" [value]="quality.entry_id">{{quality.quality_id}}
               </option>
             </select>
-            <div *ngIf="quality.invalid && (quality.dirty || quality.touched)" class="errors">
-              <div *ngIf="quality.errors && quality.errors.required">
+            <div *ngIf="qualityid.invalid && (qualityid.dirty || qualityid.touched)" class="errors">
+              <div *ngIf="qualityid.errors && qualityid.errors.required">
                 Quality Id is required.
               </div>
             </div>
@@ -37,7 +37,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Quality Name</label>
-            <input type="text" class="form-control" [(ngModel)]="batchModal.quality_name" name="quallityname"
+            <input disabled type="text" class="form-control" [(ngModel)]="batchModal.quality_name" name="quallityname"
               #qualityName="ngModel" required />
             <div *ngIf="qualityName.invalid && (qualityName.dirty || qualityName.touched)" class="errors">
               <div *ngIf="qualityName.errors && qualityName.errors.required">
@@ -49,7 +49,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Quality Type</label>
-            <input type="text" class="form-control" [(ngModel)]="batchModal.quality_type" name="qualitytype"
+            <input disabled type="text" class="form-control" [(ngModel)]="batchModal.quality_type" name="qualitytype"
               #qualityType="ngModel" required />
             <div *ngIf="qualityType.invalid && (qualityType.dirty || qualityType.touched)" class="errors">
               <div *ngIf="qualityType.errors && qualityType.errors.required">
@@ -88,7 +88,7 @@
                       <tr *ngFor="let gr of grList; let i = index" (click)="selectGr(gr)" class="pointer">
                         <td style="display:none;">{{gr.gr}}</td>
                         <td>{{gr.gr}}</td>
-                        <td>{{gr.batch_no}}</td>
+                        <td>{{gr.lot_no}}</td>
                         <td>{{gr.wt}}</td>
                         <td>{{gr.mtr}}</td>
                       </tr>
@@ -100,7 +100,7 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label>Lot No.</label>
-                <input type="text" class="form-control" [(ngModel)]="batchDataObj.batch_no" name="batch" #Lot="ngModel"
+                <input type="text" class="form-control" [(ngModel)]="batchDataObj.lot_no" name="batch" #Lot="ngModel"
                   required />
                 <div *ngIf="Lot.invalid && (Lot.dirty || Lot.touched)" class="errors">
                   <div *ngIf="Lot.errors && Lot.errors.required">

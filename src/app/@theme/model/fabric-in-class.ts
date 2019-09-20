@@ -1,7 +1,7 @@
 export class Fabric {
     entry_id: any;
     stock_id: any;
-    stock_in_type: any;
+    stock_in_type: any = 'Fabric';
     batch: any;
     party_id: any = '';
     party_name: any;
@@ -19,7 +19,7 @@ export class Fabric {
     updated_date: any;
     created_by: any;
     updated_by: any;
-    user_head_id:any;
+    user_head_id: any;
 }
 
 export class FabricInRecord {

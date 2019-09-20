@@ -55,7 +55,7 @@ import {
   EvaIconsPipe,
 } from './pipes';
 import {
-  SampleLayoutComponent,
+  SampleLayoutComponent, SamplePlcLayoutComponent,
 } from './layouts';
 import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
@@ -117,6 +117,7 @@ const COMPONENTS = [
   FooterComponent,
   SearchInputComponent,
   SampleLayoutComponent,
+  SamplePlcLayoutComponent,
   ConfirmDialogComponent,
   PermissionComponent
 ];

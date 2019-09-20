@@ -172,7 +172,7 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
         });
     } else {
       this.subBtnName = 'Save';
-      this.topHeader = 'Add Bill';
+      this.topHeader = 'Add Fabric In';
     }
   }
 
@@ -265,7 +265,7 @@ export class AddEditFabricInComponent implements OnInit, OnDestroy {
               if (!data.error) {
                 this.toasterService.success(data.message);
                 form.resetForm();
-                this.router.navigate(['/pages/batch/view-batch-list']);
+                this.router.navigate(['/pages/fabric-in/view-fabric-in-list']);
               } else {
                 this.toasterService.error(data.message);
               }

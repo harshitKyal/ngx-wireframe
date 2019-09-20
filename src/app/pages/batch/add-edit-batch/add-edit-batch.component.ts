@@ -12,6 +12,7 @@ import { ViewReqObj } from '../../../@theme/model/user-class';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@theme/services/auth.service';
 import { BatchService } from '../../../@theme/services/batch.service';
+import { ConfirmDialogComponent } from '../../../@theme/components/confirm-dialog/confirm-dialog.component';
 declare var $;
 @Component({
   selector: 'app-add-edit-batch',
@@ -30,6 +31,7 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
   viewFlag = false;
   rowData: any;
   grList = [];
+  grListCopy = [];
   batchDataArray: BatchData[] = [];
   qualityViewReqObj = new ViewReqObj();
   currentUserId: any;
@@ -44,17 +46,19 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
   selectLabel = 'GR' + '    ' + 'BATCH NO' + '      ' + 'WEIGHT' + '      ' + 'METRE' + '      ' + 'NO OF CONES/TAKA';
   columnDefs = [
     { headerName: 'Gr', field: 'gr', width: 100 },
-    { headerName: 'Lot No', field: 'batch_no', width: 100 },
+    { headerName: 'Lot No', field: 'lot_no', width: 100 },
     { headerName: 'No of Cones/Taka', field: 'no_of_cones_taka', width: 100 },
     { headerName: 'Mtr', field: 'mtr', width: 100 },
     { headerName: 'Wt', field: 'wt', width: 100 },
     { headerName: 'Actions', field: 'index', width: 100 },
 
   ];
+  selectedQuality: any;
+
   unit = [{ 'id': 'wt', 'value': 'Weight' }, { 'id': 'mtr', 'value': 'Metre' }];
   items: BatchWeightMtrDetail[] = [];
   constructor(private toasterService: ToastrService, private route: ActivatedRoute, private qualityService: QualityService,
-    private router: Router, private batchService: BatchService, private authService: AuthService) {
+    private router: Router, private batchService: BatchService, private authService: AuthService, private _modalService: NgbModal) {
     this.batchModal = new BatchMast();
     this.batchDataObj = new BatchData();
     this.currentUser$ = this.authService.currentUser.subscribe(ele => {
@@ -90,23 +94,53 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
     this.batchDataObj.wt = this.grList[i].wt;
     this.batchDataObj.mtr = this.grList[i].mtr;
     this.batchDataObj.no_of_cones_taka = this.grList[i].no_of_cones;
-    this.batchDataObj.batch_no = this.grList[i].batch_no;
+    this.batchDataObj.lot_no = this.grList[i].lot_no;
   }
 
   onQualitySelect(value) {
     const i = this.qualityList.findIndex(v => v.entry_id == value);
-    this.batchModal.quality_name = this.qualityList[i].quality_name;
-    this.batchModal.quality_type = this.qualityList[i].quality_type;
+    if (i > -1) {
+      this.batchModal.quality_name = this.qualityList[i].quality_name;
+      this.batchModal.quality_type = this.qualityList[i].quality_type;
+    }
     // console.log('in on quality select ' , value)
-    this.getGrListByQualityId(value);
+    if (this.rowData.length) {
+      const modalRef = this._modalService.open(ConfirmDialogComponent);
+      modalRef.componentInstance.titleFrom = 'Change Quality';
+      modalRef.componentInstance.message = 'Are you sure you want to change the quality? This will delete prevoius Batch GR Details?';
+      modalRef.result
+        .then((result) => {
+          if (result) {
+            this.setBatchGrData(value);
+          } else {
+            this.batchModal.quality_entry_id = this.selectedQuality;
+            const i = this.qualityList.findIndex(v => v.entry_id == this.selectedQuality);
+            if (i > -1) {
+              this.batchModal.quality_name = this.qualityList[i].quality_name;
+              this.batchModal.quality_type = this.qualityList[i].quality_type;
+            }
+          }
+        });
+    } else {
+      this.setBatchGrData(value);
+    }
   }
 
+  setBatchGrData(value) {
+    this.selectedQuality = value;
+    this.rowData = [];
+    if (this.batchDataArray.length) {
+      this.rowData = this.batchDataArray.filter(v => v.quality_id == value);
+    }
+    this.getGrListByQualityId(value);
+  }
   getGrListByQualityId(qualityid) {
     this.batchService.getGrListByQualityId(qualityid).subscribe(data => {
       if (!data[0].error) {
         this.grList = data[0].data;
+        this.grListCopy = [...this.grList];
         // console.log("in qq")
-        // console.log(this.grList)
+        console.log(this.grList)
       }
     })
   }
@@ -158,7 +192,9 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
             this.batchDataArray = data[0].data.batch_data
             this.batchDataArray.forEach((ele, index) => {
               ele.index = index + 1;
+              ele.quality_id = this.batchModal.quality_entry_id;
             });
+            this.selectedQuality = this.batchModal.quality_entry_id;
             this.getGrListByQualityId(this.batchModal.quality_entry_id);
             this.rowData = [...this.batchDataArray]
             this.batchModal.batch_data = this.batchDataArray
@@ -182,6 +218,7 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
     return true;
   }
   onAddRecord(form: NgForm) {
+    this.batchDataObj.quality_id = this.batchModal.quality_entry_id;
     let flag = 0;
     let j = 1;
     if (!this.batchDataArray.length) {
@@ -189,7 +226,7 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
     } else {
       this.batchDataArray.forEach(ele => {
         if (ele.gr == this.batchDataObj.gr) {
-          if (this.items.length) {
+          if (this.items && this.items.length) {
             this.items.forEach((ele, index) => {
               if (ele.entry_id === undefined) {
                 let obj = new BatchWeightMtrDetail();
@@ -220,28 +257,14 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
         }
       }
     }
-    // if (this.items.length) {
-    //   this.batchDataObj.batch_quality_detail = [];
-    //   this.items.forEach((ele, index) => {
-    //     let obj = new BatchWeightMtrDetail();
-    //     obj.quantity = ele.value;
-    //     this.batchDataObj.batch_quality_detail.push(obj);
-    //   });
-    // }
-    // this.batchDataObj.batch_quality_detail = this.batchDetailObj;
-    // this.batchDataArray.forEach(ele => {
-    //   if (ele.gr == this.batchDataObj.gr) {
-    //     ele = this.batchDataObj
-    //     flag = 1;
-    //   }
-    // });
-    // if (!flag) {
-    //   this.batchDataArray.push(this.batchDataObj);
-    // }
+    if (!flag) {
+      this.batchDataArray.push(this.batchDataObj);
+    }
     this.batchDetailObj = [];
-    this.rowData = [...this.batchDataArray];
+    this.rowData = this.batchDataArray.filter(v => v.quality_id == this.batchModal.quality_entry_id);
     this.batchDataObj = new BatchData();
     form.resetForm();
+    this.grList = this.grListCopy.filter(v=> '');
   }
 
   onEditRecord(data) {
@@ -260,11 +283,11 @@ export class AddEditBatchComponent implements OnInit, OnDestroy {
   deleteRecord(data) {
     let i = this.batchDataArray.findIndex(v => v.index == data);
     this.batchDataArray.splice(i, 1);
-    this.rowData = [...this.batchDataArray]
+    this.rowData = this.batchDataArray.filter(v => v.quality_id == this.batchModal.quality_entry_id);
   }
 
   onCustomFormSubmit(form: NgForm) {
-    this.batchModal.batch_data = this.batchDataArray;
+    this.batchModal.batch_data = this.rowData;
     console.log('batch', this.batchModal);
     // for update
     if (this.id) {

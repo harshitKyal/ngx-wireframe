@@ -10,6 +10,9 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: './auth/auth.module#NgxAuthModule',
   },
+  {
+    path: 'plc', loadChildren: './plc/plc.module#PlcModule', canActivate: [AuthGuard]
+  },
   { path: '', redirectTo: 'pages', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
   {

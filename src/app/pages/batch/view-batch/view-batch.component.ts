@@ -29,7 +29,7 @@ export class ViewBatchComponent implements OnInit, OnDestroy {
   addBatchPermission = 1;
   columnDefs = [
     { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
-    { headerName: 'Batch No.', field: 'batch_id', sortable: true, filter: true },
+    { headerName: 'Batch No.', field: 'entry_id', sortable: true, filter: true },
     { headerName: 'Quality Id', field: 'quality_id', sortable: true, filter: true },
     { headerName: 'Quality Name', field: 'quality_name', sortable: true, filter: true },
     { headerName: 'Quality Type', field: 'quality_type', sortable: true, filter: true },
@@ -44,7 +44,7 @@ export class ViewBatchComponent implements OnInit, OnDestroy {
   viewGroupDataPermission = false;
   radioSelected: any = 1;
 
-  currentUserGroupUserIds : any;
+  currentUserGroupUserIds: any;
   batchReqObj = new ViewReqObj();
 
   constructor(private batchService: BatchService, private router: Router, private tosterService: ToastrService
@@ -84,20 +84,20 @@ export class ViewBatchComponent implements OnInit, OnDestroy {
   }
   getBatchData(value?) {
 
-    this.batchReqObj.view_all = false ;
-    this.batchReqObj.view_group= false ;
-    this.batchReqObj.view_own = false ;
-    
+    this.batchReqObj.view_all = false;
+    this.batchReqObj.view_group = false;
+    this.batchReqObj.view_own = false;
+
     if (value)
       this.radioSelected = value;
 
     //check which radio button is selected
     if (this.radioSelected == 1)
-      this.batchReqObj.view_own = true ;
+      this.batchReqObj.view_own = true;
     else if (this.radioSelected == 2)
-      this.batchReqObj.view_group = true ;
+      this.batchReqObj.view_group = true;
     else if (this.radioSelected == 3)
-      this.batchReqObj.view_all = true ;
+      this.batchReqObj.view_all = true;
 
     this.batchService.getAllBatchs(this.batchReqObj).subscribe(data => {
       if (!data[0].error) {
@@ -110,7 +110,7 @@ export class ViewBatchComponent implements OnInit, OnDestroy {
   }
   setColumns() {
     this.columnDefs.forEach((column: ColDef) => {
-      if (column.field === 'entry_id') {
+      if (column.field === 'entry_id' && column.headerName === 'Actions') {
         column.cellRendererFramework = CustomRendererBatchComponent;
         column.cellRendererParams = {
           inRouterLink: '/pages/batch/edit-batch/',

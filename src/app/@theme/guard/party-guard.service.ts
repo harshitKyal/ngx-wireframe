@@ -13,9 +13,9 @@ export class PartyGuardService implements CanLoad, CanActivate {
   currentUser: User;
   currentUser$: Subscription;
   currentUserPermission = [];
-  userPermission: UserPermission;
+  userPermission = new UserPermission();
 
-  constructor(private router: Router, private activateroute: ActivatedRoute,private permissionService:PermissionService,
+  constructor(private router: Router, private activateroute: ActivatedRoute, private permissionService: PermissionService,
     private authService: AuthService) {
     this.currentUser$ = this.authService.currentUser.subscribe(data => {
       if (data != null) {
@@ -36,7 +36,7 @@ export class PartyGuardService implements CanLoad, CanActivate {
   canLoad(route: Route) {
     const isLoggedIn = localStorage.getItem('isLogged');
     const user: User = JSON.parse(localStorage.getItem('currentUser'));
-    if (this.currentUser !== undefined && this.userPermission.can_view) {
+    if (this.currentUser !== undefined && this.userPermission && this.userPermission.can_view) {
       return true;
     } else {
       const res = this.permissionService.callPermissionView('Ask for Permission', 'You do not have access permission to View Party. If you want to View Party ask admin for permission.');

@@ -20,13 +20,15 @@ export class BatchData {
     entry_id: any;
     control_id: any;
     gr: any;
-    batch_no: any;
+    lot_no: any;
     no_of_cones_taka: any;
     mtr: any;
     wt: any;
+    quality_id: any;
     batch_quality_detail: BatchWeightMtrDetail[];
     unit: any;
     index: any;
+    gr_status: any = 'unused';
     constructor() {
         // this.gr = '';
         this.unit = '';

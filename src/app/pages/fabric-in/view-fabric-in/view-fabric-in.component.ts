@@ -31,7 +31,7 @@ export class ViewFabricInComponent implements OnInit, OnDestroy {
   addFabricPermission = 1;
   columnDefs = [
     { headerName: 'Actions', field: 'entry_id', sortable: false, width: 120 },
-    { headerName: 'Stock Id', field: 'stock_id', sortable: true, filter: true, width: 100 },
+    // { headerName: 'Stock Id', field: 'stock_id', sortable: true, filter: true, width: 100 },
     { headerName: 'Stock In Type', field: 'stock_in_type', sortable: true, filter: true, width: 100 },
     { headerName: 'Party Name', field: 'party_name', sortable: true, filter: true },
     { headerName: 'Bill No.', field: 'bill_no', sortable: true, filter: true, width: 100 },
@@ -43,7 +43,7 @@ export class ViewFabricInComponent implements OnInit, OnDestroy {
     // { headerName: 'GSTIN', field: 'GSTIN', sortable: true, filter: true },
   ];
   columnExportDefs = [
-    'stock_id', 'stock_in_type', 'party_name', 'bill_no', 'bill_date', 'chl_no', 'chl_date', 'batch',];
+    'stock_in_type', 'party_name', 'bill_no', 'bill_date', 'chl_no', 'chl_date', 'batch',];
   currentUserId: any;
   currentUser$: Subscription;
   currentUserPermission = [];

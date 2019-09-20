@@ -17,6 +17,7 @@ export class LoginComponent {
     userPermission = [];
     itemList = MENU_ITEMS;
     @ViewChild('f') loginForm: NgForm;
+    plcDemo = false;
     loginReq: LoginModal;
     constructor(private router: Router, private authService: AuthService, private toasterService: ToastrService,
         private route: ActivatedRoute) {
@@ -29,27 +30,31 @@ export class LoginComponent {
             data => {
                 console.log((data))
                 if (!data[0].error && data[0].data.hasRows) {
-                    this.userPermission = [];
-                    this.userPermission = data[0].data.user_permission;
-                    if (this.userPermission.length) {
-                        var flag = 0;
-                        this.userPermission.forEach(ele => {
-                            if (!flag) {
-                                if (ele.can_view) {
-                                    this.itemList.forEach(subele => {
-                                        if (!flag) {
-                                            if (subele.title === ele.form_name) {
-                                                this.router.navigate([subele.children[0].link]);
-                                                flag = 1;
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                        this.toasterService.success('User Logged In Succesfully!');
+                    if (this.plcDemo) {
+                        this.router.navigate(['/plc']);
                     } else {
-                        this.router.navigate(['/auth']);
+                        this.userPermission = [];
+                        this.userPermission = data[0].data.user_permission;
+                        if (this.userPermission.length) {
+                            var flag = 0;
+                            this.userPermission.forEach(ele => {
+                                if (!flag) {
+                                    if (ele.can_view) {
+                                        this.itemList.forEach(subele => {
+                                            if (!flag) {
+                                                if (subele.title === ele.form_name) {
+                                                    this.router.navigate([subele.children[0].link]);
+                                                    flag = 1;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                            this.toasterService.success('User Logged In Succesfully!');
+                        } else {
+                            this.router.navigate(['/auth']);
+                        }
                     }
                 } else {
                     this.router.navigate(['/auth']);
