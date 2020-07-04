@@ -12,7 +12,7 @@ import { StatusCardComponent } from './status-card/status-card.component';
   imports: [
     CommonModule,
     PlcRoutingModule,
-    ThemeModule
+    ThemeModule,
   ]
 })
 export class PlcModule { }

@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class ApiService {
 
   uri = '';
+  urimodbus = '';
   // private api = environment.api;
   constructor(private http: HttpClient) { }
 
@@ -44,12 +45,22 @@ export class ApiService {
   public apiCaller(type: string, url: string, data?: any): any {
     //  this.uri = this.api + url;
     this.uri = 'http://localhost:8100' + url;
-    // this.uri = 'http://api.testautotech.xyz' + url;
 
     if (type === 'get') {
       return this.get(this.uri);
     } else {
       return this.post(this.uri, data);
+    }
+
+  }
+  public modbusapiCaller(type: string, url: string, data?: any): any {
+    //  this.uri = this.api + url;
+    this.urimodbus = 'http://localhost:8100' + url;
+
+    if (type === 'get') {
+      return this.get(this.urimodbus);
+    } else {
+      return this.post(this.urimodbus, data);
     }
 
   }

@@ -35,22 +35,27 @@
         @include btn-hero-primary-gradient();
         @include btn-hero-primary-bevel-glow-shadow();
       }
+
       &.success {
         @include btn-hero-success-gradient();
         @include btn-hero-success-bevel-glow-shadow();
       }
+
       &.info {
         @include btn-hero-info-gradient();
         @include btn-hero-info-bevel-glow-shadow();
       }
+
       &.warning {
         @include btn-hero-warning-gradient();
         @include btn-hero-warning-bevel-glow-shadow();
       }
+
       &.danger {
         @include btn-hero-danger-gradient();
         @include btn-hero-danger-bevel-glow-shadow();
       }
+
       &.secondary {
         @include btn-hero-secondary-bg();
         @include btn-hero-secondary-bevel-glow-shadow();
@@ -58,6 +63,7 @@
       }
 
       @include nb-for-theme(corporate) {
+
         &.primary,
         &.success,
         &.info,
@@ -76,18 +82,23 @@
         &.primary {
           background-image: btn-hero-primary-light-gradient();
         }
+
         &.success {
           background-image: btn-hero-success-light-gradient();
         }
+
         &.info {
           background-image: btn-hero-info-light-gradient();
         }
+
         &.warning {
           background-image: btn-hero-warning-light-gradient();
         }
+
         &.danger {
           background-image: btn-hero-danger-light-gradient();
         }
+
         &.secondary {
           background-image: btn-hero-secondary-light-gradient();
         }
@@ -100,7 +111,11 @@
       .icon {
         color: nb-theme(card-fg);
 
-        &.primary, &.success, &.info, &.warning, &.danger {
+        &.primary,
+        &.success,
+        &.info,
+        &.warning,
+        &.danger {
           box-shadow: none;
           background-image: linear-gradient(to right, transparent, transparent);
         }
@@ -136,7 +151,7 @@
       font-size: 1rem;
       font-weight: nb-theme(font-weight-light);
       text-transform: uppercase;
-      color: nb-theme(card-fg);
+      color: nb-theme(card-fg-heading);
     }
   }
 

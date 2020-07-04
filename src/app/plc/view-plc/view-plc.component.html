@@ -1,21 +1,139 @@
-<div class="row">
-  <div class="col-md-4"></div>
-  <div class="form-control-group col-md-4">
-    <label class="label" for="email">Duration of Light</label>
-    <input nbInput fullWidth type="number" name="sec" placeholder="Enter duration in seconds" autofocus
-      [(ngModel)]="time">
-  </div>
-</div>
-<br>
-<br>
-<div class="row">
-  <div class="col-md-4"></div>
-  <div class="col-xxxl-3 col-md-4">
-    <ngx-status-card [title]="lightCard.title" [type]="lightCard.type">
-      <i [ngClass]="lightCard.iconClass"></i>
-    </ngx-status-card>
-  </div>
-</div>
-<!-- <button nbButton fullWidth status="success" (click)="onClick()">
-  ON
-</button> -->
+<nb-card>
+  <nb-tabset fullWidth>
+    <nb-tab tabTitle="Example 1">
+      <!-- <div class="row mt-5">
+        <div class="col-md-4"></div>
+        <div class="form-control-group col-md-4">
+          <label class="label" for="email">Duration of Light</label>
+          <input nbInput fullWidth type="number" name="sec" placeholder="Enter duration in seconds" autofocus
+            [(ngModel)]="time">
+        </div>
+      </div> -->
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-xxxl-3 col-md-4">
+          <ngx-status-card (onClickEvent)="onClick($event)" [on]="lightCard.onOffButton" [title]="lightCard.title"
+            [type]="lightCard.type">
+            <i [ngClass]="lightCard.iconClass"></i>
+          </ngx-status-card>
+        </div>
+      </div>
+    </nb-tab>
+    <nb-tab tabTitle="Example 2">
+      <br>
+      <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="form-control-group column col-md-6">
+          <nb-card>
+            <nb-card-header>Production Parameters
+              <button nbButton style="margin-left:319px" [disabled]="!prodStatusChange"
+                (click)="onChangeButton()">Change</button>
+            </nb-card-header>
+            <nb-card-body>
+              <div class="row col-md-12">
+                <div class="col-md-4">
+                  <input nbInput fullWidth type="text" name="sec1" [(ngModel)]="ftime">
+                </div>
+                <div class="col-md-4">
+                  <input nbInput fullWidth type="text" name="sec2" [(ngModel)]="stime">
+                </div>
+                <div class="col-md-4">
+                  <input nbInput fullWidth type="text" name="sec3" [(ngModel)]="ttime">
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+
+        </div>
+
+      </div>
+      <br>
+      <div class="row" *ngIf="!prodStatusChange">
+        <div class="col-md-3">
+        </div>
+        <div class="form-control-group column col-md-6">
+          <nb-card>
+            <nb-card-header>Production Status
+            </nb-card-header>
+            <nb-card-body>
+              {{currentStatus}}
+            </nb-card-body>
+          </nb-card>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="form-control-group column col-md-6">
+          <nb-card>
+            <nb-card-header>Reports
+            </nb-card-header>
+            <nb-card-body>
+              <table class="table table-responsive" *ngIf="reportList.length">
+                <tr>
+                  <th>Operator Id</th>
+                  <th>Raw Material 1</th>
+                  <th>Raw Material 2</th>
+                  <th>Raw Material 3</th>
+                  <!-- <th>Start Time</th> -->
+                  <!-- <th>End Time</th> -->
+                  <th>Status</th>
+                </tr>
+                <tr *ngFor="let i of reportList">
+                  <td>{{i.operatorId}}</td>
+                  <td>{{i.rawMaterialA}}</td>
+                  <td>{{i.rawMaterialB}}</td>
+                  <td>{{i.rawMaterialC}}</td>
+                  <!-- <td>{{i.startTime}}</td> -->
+                  <!-- <td>{{i.stopTime}}</td> -->
+                  <td>{{i.statusName}}</td>
+                </tr>
+              </table>
+              <span *ngIf="!reportList.length">
+                No data to show!
+              </span>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="form-control-group column col-md-6">
+          <nb-card>
+            <nb-card-header>Stock
+            </nb-card-header>
+            <nb-card-body>
+              <table class="table table-responsive">
+                <tr>
+                  <th>
+                    Raw Material
+                  </th>
+                  <th>
+                    Total Quantity
+                  </th>
+                  <th>
+                    Available Quantity
+                  </th>
+                  <th>
+                    Used Quantity
+                  </th>
+                </tr>
+                <tr *ngFor="let item of rawUnused">
+                  <td> {{item.name}}</td>
+                  <td>{{item.quantity}}</td>
+                  <td>{{item.quantity - item.usedQ}}</td>
+                  <td>{{item.usedQ}}</td>
+                </tr>
+              </table>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </nb-tab>
+  </nb-tabset>
+</nb-card>

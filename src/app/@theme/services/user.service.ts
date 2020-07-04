@@ -85,4 +85,20 @@ export class UserService {
     return [qualityCategory, userCategory, partyCategory, stockCategory];
   }
 
+  updateLocalModbus(data) {
+    return this.apiService.modbusapiCaller('post', '/scanOcList/updateLocalModbus', data);
+  }
+  getLocalModbus() {
+    return this.apiService.modbusapiCaller('get', '/scanOcList/getLocalModbus');
+  }
+
+  addRawMaterial(obj) {
+    return this.apiService.modbusapiCaller('post', '/scanOcList/addRawMaterial', obj);
+  }
+  getRawMaterialStatus() {
+    return this.apiService.modbusapiCaller('get', '/scanOcList/getProgramStatus');
+  }
+  getReport() {
+    return this.apiService.modbusapiCaller('get', '/scanOcList/getProgramData');
+  }
 }

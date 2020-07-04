@@ -10,5 +10,5 @@
 
 export const environment = {
   production: false,
-  api: 'https://journey360.ai/api',
+  api: 'http://localhost:8100',
 };
