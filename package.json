@@ -92,7 +92,7 @@
     "tinymce": "4.5.7",
     "typeface-exo": "0.0.22",
     "web-animations-js": "2.2.5",
-    "xlsx": "^0.14.2",
+    "xlsx": "^0.17.0",
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
